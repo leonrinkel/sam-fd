@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "sam-fd")(type "KiCad")(uri "${KIPRJMOD}/sam-fd.kicad_sym")(options "")(descr ""))
+)
