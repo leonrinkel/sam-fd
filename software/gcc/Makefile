@@ -1,274 +1,122 @@
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
+PROJ_NAME := flux
 
-ifdef SystemRoot
-	SHELL = cmd.exe
-	MK_DIR = mkdir
-else
-	ifeq ($(shell uname), Linux)
-		MK_DIR = mkdir -p
-	endif
+CC := arm-none-eabi-gcc
+LD := arm-none-eabi-gcc
+OBJCOPY := arm-none-eabi-objcopy
+SIZE := arm-none-eabi-size
 
-	ifeq ($(shell uname | cut -d _ -f 1), CYGWIN)
-		MK_DIR = mkdir -p
-	endif
+CFLAGS := \
+	-mcpu=cortex-m0plus \
+	-mthumb \
+	-mlong-calls \
+	-Os \
+	-ffunction-sections \
+	-g3 \
+	-std=gnu99 \
+	-Wall \
+	-D__SAMC21E16A__ \
+	-DDEBUG \
 
-	ifeq ($(shell uname | cut -d _ -f 1), MINGW32)
-		MK_DIR = mkdir -p
-	endif
+LDFLAGS := \
+	-mcpu=cortex-m0plus \
+	-mthumb \
+	--specs=nano.specs \
+	-Wl,--start-group \
+	-Wl,--end-group \
+	-Wl,--gc-sections \
+	-T"../samc21/gcc/gcc/samc21e16a_flash.ld" \
+	-L"../samc21/gcc/gcc" \
+	-lm \
 
-	ifeq ($(shell uname | cut -d _ -f 1), MINGW64)
-		MK_DIR = mkdir -p
-	endif
+SRC_DIR := ..
+INC_DIR := ..
+OUT_DIR := out
 
-	ifeq ($(shell uname | cut -d _ -f 1), DARWIN)
-		MK_DIR = mkdir -p
-	endif
-endif
+OUT_ELF := $(OUT_DIR)/$(PROJ_NAME).elf
+OUT_BIN := $(OUT_DIR)/$(PROJ_NAME).bin
+OUT_HEX := $(OUT_DIR)/$(PROJ_NAME).hex
 
-# List the subdirectories for creating object files
-SUB_DIRS +=  \
- \
-hpl/pm \
-hpl/osc32kctrl \
-hpl/can \
-hpl/systick \
-hpl/dmac \
-stdio_redirect \
-samc21/gcc/gcc \
-hal/src \
-samc21/gcc \
-hpl/mclk \
-hal/utils/src \
-hpl/sercom \
-examples \
-hpl/gclk \
-stdio_redirect/gcc \
-hpl/oscctrl \
-hpl/core \
-hpl/divas
+OBJS := \
+	$(OUT_DIR)/hal/src/hal_io.o \
+	$(OUT_DIR)/hal/src/hal_can_async.o \
+	$(OUT_DIR)/hal/utils/src/utils_syscalls.o \
+	$(OUT_DIR)/hal/src/hal_delay.o \
+	$(OUT_DIR)/hal/utils/src/utils_list.o \
+	$(OUT_DIR)/hal/utils/src/utils_assert.o \
+	$(OUT_DIR)/hal/src/hal_usart_sync.o \
+	$(OUT_DIR)/hal/src/hal_init.o \
+	$(OUT_DIR)/hal/src/hal_gpio.o \
+	$(OUT_DIR)/hal/utils/src/utils_event.o \
+	$(OUT_DIR)/hal/src/hal_sleep.o \
+	$(OUT_DIR)/hal/src/hal_atomic.o \
+	$(OUT_DIR)/hpl/systick/hpl_systick.o \
+	$(OUT_DIR)/hpl/can/hpl_can.o \
+	$(OUT_DIR)/hpl/oscctrl/hpl_oscctrl.o \
+	$(OUT_DIR)/hpl/core/hpl_init.o \
+	$(OUT_DIR)/hpl/core/hpl_core_m0plus_base.o \
+	$(OUT_DIR)/hpl/dmac/hpl_dmac.o \
+	$(OUT_DIR)/hpl/pm/hpl_pm.o \
+	$(OUT_DIR)/hpl/mclk/hpl_mclk.o \
+	$(OUT_DIR)/hpl/gclk/hpl_gclk.o \
+	$(OUT_DIR)/hpl/osc32kctrl/hpl_osc32kctrl.o \
+	$(OUT_DIR)/hpl/sercom/hpl_sercom.o \
+	$(OUT_DIR)/hpl/divas/hpl_divas.o \
+	$(OUT_DIR)/samc21/gcc/system_samc21.o \
+	$(OUT_DIR)/samc21/gcc/gcc/startup_samc21.o \
+	$(OUT_DIR)/stdio_start.o \
+	$(OUT_DIR)/stdio_redirect/stdio_io.o \
+	$(OUT_DIR)/stdio_redirect/gcc/write.o \
+	$(OUT_DIR)/stdio_redirect/gcc/read.o \
+	$(OUT_DIR)/main.o \
+	$(OUT_DIR)/atmel_start.o \
+	$(OUT_DIR)/driver_init.o \
+	$(OUT_DIR)/led.o \
 
-# List the object files
-OBJS +=  \
-hal/src/hal_io.o \
-samc21/gcc/system_samc21.o \
-stdio_redirect/stdio_io.o \
-hpl/systick/hpl_systick.o \
-hal/src/hal_can_async.o \
-hpl/can/hpl_can.o \
-stdio_redirect/gcc/write.o \
-hal/utils/src/utils_syscalls.o \
-stdio_redirect/gcc/read.o \
-samc21/gcc/gcc/startup_samc21.o \
-hal/src/hal_delay.o \
-hpl/oscctrl/hpl_oscctrl.o \
-hpl/core/hpl_init.o \
-hal/utils/src/utils_list.o \
-hpl/core/hpl_core_m0plus_base.o \
-hal/utils/src/utils_assert.o \
-hpl/dmac/hpl_dmac.o \
-hpl/pm/hpl_pm.o \
-hal/src/hal_usart_sync.o \
-hpl/mclk/hpl_mclk.o \
-hpl/gclk/hpl_gclk.o \
-stdio_start.o \
-hal/src/hal_init.o \
-main.o \
-hpl/osc32kctrl/hpl_osc32kctrl.o \
-examples/driver_examples.o \
-driver_init.o \
-hpl/sercom/hpl_sercom.o \
-hal/src/hal_gpio.o \
-hpl/divas/hpl_divas.o \
-hal/utils/src/utils_event.o \
-hal/src/hal_sleep.o \
-atmel_start.o \
-hal/src/hal_atomic.o
+OUT_DIRS := \
+	$(OUT_DIR) \
+	$(sort $(dir $(OBJS))) \
 
-OBJS_AS_ARGS +=  \
-"hal/src/hal_io.o" \
-"samc21/gcc/system_samc21.o" \
-"stdio_redirect/stdio_io.o" \
-"hpl/systick/hpl_systick.o" \
-"hal/src/hal_can_async.o" \
-"hpl/can/hpl_can.o" \
-"stdio_redirect/gcc/write.o" \
-"hal/utils/src/utils_syscalls.o" \
-"stdio_redirect/gcc/read.o" \
-"samc21/gcc/gcc/startup_samc21.o" \
-"hal/src/hal_delay.o" \
-"hpl/oscctrl/hpl_oscctrl.o" \
-"hpl/core/hpl_init.o" \
-"hal/utils/src/utils_list.o" \
-"hpl/core/hpl_core_m0plus_base.o" \
-"hal/utils/src/utils_assert.o" \
-"hpl/dmac/hpl_dmac.o" \
-"hpl/pm/hpl_pm.o" \
-"hal/src/hal_usart_sync.o" \
-"hpl/mclk/hpl_mclk.o" \
-"hpl/gclk/hpl_gclk.o" \
-"stdio_start.o" \
-"hal/src/hal_init.o" \
-"main.o" \
-"hpl/osc32kctrl/hpl_osc32kctrl.o" \
-"examples/driver_examples.o" \
-"driver_init.o" \
-"hpl/sercom/hpl_sercom.o" \
-"hal/src/hal_gpio.o" \
-"hpl/divas/hpl_divas.o" \
-"hal/utils/src/utils_event.o" \
-"hal/src/hal_sleep.o" \
-"atmel_start.o" \
-"hal/src/hal_atomic.o"
+INCS := \
+	-I"$(INC_DIR)/" \
+	-I"$(INC_DIR)/CMSIS/Core/Include" \
+	-I"$(INC_DIR)/config" \
+	-I"$(INC_DIR)/hal/include" \
+	-I"$(INC_DIR)/hal/utils/include" \
+	-I"$(INC_DIR)/hpl/can" \
+	-I"$(INC_DIR)/hpl/core" \
+	-I"$(INC_DIR)/hpl/divas" \
+	-I"$(INC_DIR)/hpl/dmac" \
+	-I"$(INC_DIR)/hpl/gclk" \
+	-I"$(INC_DIR)/hpl/mclk" \
+	-I"$(INC_DIR)/hpl/osc32kctrl" \
+	-I"$(INC_DIR)/hpl/oscctrl" \
+	-I"$(INC_DIR)/hpl/pm" \
+	-I"$(INC_DIR)/hpl/port" \
+	-I"$(INC_DIR)/hpl/sercom" \
+	-I"$(INC_DIR)/hpl/systick" \
+	-I"$(INC_DIR)/hri" \
+	-I"$(INC_DIR)/samc21/include" \
+	-I"$(INC_DIR)/stdio_redirect" \
 
-# List the directories containing header files
-DIR_INCLUDES +=  \
--I"../" \
--I"../config" \
--I"../examples" \
--I"../hal/include" \
--I"../hal/utils/include" \
--I"../hpl/can" \
--I"../hpl/core" \
--I"../hpl/divas" \
--I"../hpl/dmac" \
--I"../hpl/gclk" \
--I"../hpl/mclk" \
--I"../hpl/osc32kctrl" \
--I"../hpl/oscctrl" \
--I"../hpl/pm" \
--I"../hpl/port" \
--I"../hpl/sercom" \
--I"../hpl/systick" \
--I"../hri" \
--I"../" \
--I"../config" \
--I"../stdio_redirect" \
--I"../" \
--I"../CMSIS/Core/Include" \
--I"../samc21/include"
+.PHONY: all clean
 
-# List the dependency files
-DEPS := $(OBJS:%.o=%.d)
+all: $(OUT_DIRS) $(OUT_ELF) $(OUT_BIN) $(OUT_HEX)
 
-DEPS_AS_ARGS +=  \
-"stdio_redirect/stdio_io.d" \
-"hal/utils/src/utils_event.d" \
-"hal/src/hal_io.d" \
-"hal/src/hal_can_async.d" \
-"hpl/systick/hpl_systick.d" \
-"hal/utils/src/utils_syscalls.d" \
-"hpl/can/hpl_can.d" \
-"stdio_redirect/gcc/write.d" \
-"samc21/gcc/gcc/startup_samc21.d" \
-"hpl/core/hpl_core_m0plus_base.d" \
-"hal/utils/src/utils_list.d" \
-"hpl/dmac/hpl_dmac.d" \
-"hal/utils/src/utils_assert.d" \
-"hal/src/hal_delay.d" \
-"hpl/core/hpl_init.d" \
-"hpl/pm/hpl_pm.d" \
-"stdio_start.d" \
-"hpl/gclk/hpl_gclk.d" \
-"samc21/gcc/system_samc21.d" \
-"hal/src/hal_init.d" \
-"hal/src/hal_usart_sync.d" \
-"hpl/mclk/hpl_mclk.d" \
-"driver_init.d" \
-"stdio_redirect/gcc/read.d" \
-"hpl/osc32kctrl/hpl_osc32kctrl.d" \
-"main.d" \
-"examples/driver_examples.d" \
-"hpl/divas/hpl_divas.d" \
-"hal/src/hal_sleep.d" \
-"hpl/sercom/hpl_sercom.d" \
-"hal/src/hal_gpio.d" \
-"hal/src/hal_atomic.d" \
-"hpl/oscctrl/hpl_oscctrl.d" \
-"atmel_start.d"
+$(OUT_DIRS):
+	@mkdir -p $@
 
-OUTPUT_FILE_NAME :=AtmelStart
-QUOTE := "
-OUTPUT_FILE_PATH +=$(OUTPUT_FILE_NAME).elf
-OUTPUT_FILE_PATH_AS_ARGS +=$(OUTPUT_FILE_NAME).elf
+$(OUT_ELF): $(OBJS)
+	$(LD) -o $@ $^ $(LDFLAGS)
+	$(SIZE) $@
 
-vpath %.c ../
-vpath %.s ../
-vpath %.S ../
+$(OUT_BIN): $(OUT_ELF)
+	$(OBJCOPY) -O binary $< $@
 
-# All Target
-all: $(SUB_DIRS) $(OUTPUT_FILE_PATH)
+$(OUT_HEX): $(OUT_ELF)
+	$(OBJCOPY) -O ihex $< $@
 
-# Linker target
-
-$(OUTPUT_FILE_PATH): $(OBJS)
-	@echo Building target: $@
-	@echo Invoking: ARM/GNU Linker
-	$(QUOTE)arm-none-eabi-gcc$(QUOTE) -o $(OUTPUT_FILE_NAME).elf $(OBJS_AS_ARGS) -Wl,--start-group -lm -Wl,--end-group -mthumb \
--Wl,-Map="$(OUTPUT_FILE_NAME).map" --specs=nano.specs -Wl,--gc-sections -mcpu=cortex-m0plus \
- \
--T"../samc21/gcc/gcc/samc21e16a_flash.ld" \
--L"../samc21/gcc/gcc"
-	@echo Finished building target: $@
-
-	"arm-none-eabi-objcopy" -O binary "$(OUTPUT_FILE_NAME).elf" "$(OUTPUT_FILE_NAME).bin"
-	"arm-none-eabi-objcopy" -O ihex -R .eeprom -R .fuse -R .lock -R .signature  \
-        "$(OUTPUT_FILE_NAME).elf" "$(OUTPUT_FILE_NAME).hex"
-	"arm-none-eabi-objcopy" -j .eeprom --set-section-flags=.eeprom=alloc,load --change-section-lma \
-        .eeprom=0 --no-change-warnings -O binary "$(OUTPUT_FILE_NAME).elf" \
-        "$(OUTPUT_FILE_NAME).eep" || exit 0
-	"arm-none-eabi-objdump" -h -S "$(OUTPUT_FILE_NAME).elf" > "$(OUTPUT_FILE_NAME).lss"
-	"arm-none-eabi-size" "$(OUTPUT_FILE_NAME).elf"
-
-	
-
-# Compiler targets
-
-
-
-
-%.o: %.c
-	@echo Building file: $<
-	@echo ARM/GNU C Compiler
-	$(QUOTE)arm-none-eabi-gcc$(QUOTE) -x c -mthumb -DDEBUG -Os -ffunction-sections -mlong-calls -g3 -Wall -c -std=gnu99 \
--D__SAMC21E16A__ -mcpu=cortex-m0plus  \
-$(DIR_INCLUDES) \
--MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"  -o "$@" "$<"
-	@echo Finished building: $<
-
-%.o: %.s
-	@echo Building file: $<
-	@echo ARM/GNU Assembler
-	$(QUOTE)arm-none-eabi-as$(QUOTE) -x c -mthumb -DDEBUG -Os -ffunction-sections -mlong-calls -g3 -Wall -c -std=gnu99 \
--D__SAMC21E16A__ -mcpu=cortex-m0plus  \
-$(DIR_INCLUDES) \
--MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"  -o "$@" "$<"
-	@echo Finished building: $<
-
-%.o: %.S
-	@echo Building file: $<
-	@echo ARM/GNU Preprocessing Assembler
-	$(QUOTE)arm-none-eabi-gcc$(QUOTE) -x c -mthumb -DDEBUG -Os -ffunction-sections -mlong-calls -g3 -Wall -c -std=gnu99 \
--D__SAMC21E16A__ -mcpu=cortex-m0plus  \
-$(DIR_INCLUDES) \
--MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"  -o "$@" "$<"
-	@echo Finished building: $<
-
-# Detect changes in the dependent files and recompile the respective object files.
-ifneq ($(MAKECMDGOALS),clean)
-ifneq ($(strip $(DEPS)),)
--include $(DEPS)
-endif
-endif
-
-$(SUB_DIRS):
-	$(MK_DIR) "$@"
+$(OUT_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) -c -o $@ $< $(CFLAGS) $(INCS)
 
 clean:
-	rm -f $(OBJS_AS_ARGS)
-	rm -f $(OUTPUT_FILE_PATH)
-	rm -f $(DEPS_AS_ARGS)
-	rm -f $(OUTPUT_FILE_NAME).a $(OUTPUT_FILE_NAME).hex $(OUTPUT_FILE_NAME).bin \
-        $(OUTPUT_FILE_NAME).lss $(OUTPUT_FILE_NAME).eep $(OUTPUT_FILE_NAME).map \
-        $(OUTPUT_FILE_NAME).srec
+	@rm -rf $(OUT_DIR)/*
