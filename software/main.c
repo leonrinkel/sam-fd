@@ -22,6 +22,8 @@ int main(void)
 	/* Initialize MCU, drivers and middleware */
 	atmel_start_init();
 
+	printf("hello world\r\n");
+
 	/* Configure RX activity LED */
 	rx_act_led.pin    = RX_ACT;
 	rx_act_led.wiring = led_wired_active_low;
@@ -58,11 +60,11 @@ int main(void)
 	/* CAN_ERR indicates pwon flag */
 	if (gpio_get_pin_level(CAN_ERR) == false)
 	{
-		/* Device has been cold-started */
+		printf("device has been cold-started\r\n");
 	}
 	else
 	{
-		/* Device has been reset */
+		printf("device has been reset\r\n");
 	}
 
 	/* Prepare CAN message to send */
@@ -83,6 +85,8 @@ int main(void)
 		/* Send CAN message every 1s */
 		if (cycle % 1000 == 0)
 		{
+			printf("sending message now\r\n");
+
 			msg_data[0] = cycle & 0xff;
 			msg_data[1] = 0x42;
 			msg_data[2] = 0x69;
