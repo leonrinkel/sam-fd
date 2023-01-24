@@ -1139,7 +1139,7 @@
       (reference "J3") (unit 1) (value "DB9_Male_MountingHoles") (footprint "Connector_Dsub:DSUB-9_Male_Horizontal_P2.77x2.84mm_EdgePinOffset9.90mm_Housed_MountingHolesOffset11.32mm")
     )
     (path "/4d3d5ec4-a6b6-479e-aa10-c1dfbd1ffac3/b14bbe72-76b2-4b48-a4e2-e5c94c0b6cb8"
-      (reference "L1") (unit 1) (value "39nH") (footprint "Inductor_SMD:L_0402_1005Metric")
+      (reference "L1") (unit 1) (value "39nH") (footprint "Inductor_SMD:L_0805_2012Metric")
     )
     (path "/ff90b0b5-5e27-465e-bb86-e6d71b893ac4"
       (reference "R1") (unit 1) (value "68Ω") (footprint "Resistor_SMD:R_0402_1005Metric")
