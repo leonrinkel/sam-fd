@@ -387,6 +387,11 @@
     (uuid ff10576a-7686-46bb-b125-90a07e5cbebb)
   )
 
+  (text "TODO: ROUTE UART RX/TX" (at 152.4 113.03 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 845e94aa-2a02-4aeb-81fb-a50a8c60d911)
+  )
+
   (label "CAN_RX" (at 140.97 73.66 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 432cde10-9598-442d-96d1-d48f9fd7576b)
