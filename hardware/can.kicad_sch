@@ -4,6 +4,15 @@
 
   (paper "A4")
 
+  (title_block
+    (title "sam-fd")
+    (date "2023-01-27")
+    (rev "2")
+    (company "Leon Rinkel")
+    (comment 1 "leon@rinkel.me")
+    (comment 2 "https://git.leon.fyi/leonrinkel/sam-fd")
+  )
+
   (lib_symbols
     (symbol "Connector:DB9_Male_MountingHoles" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
       (property "Reference" "J" (id 0) (at 0 16.51 0)
@@ -677,7 +686,6 @@
   (no_connect (at 191.77 115.57) (uuid 28450574-9d62-4fc3-8caa-66618663ff94))
   (no_connect (at 191.77 105.41) (uuid 462fc8bb-2d9d-468f-b95b-7325c73bfb61))
   (no_connect (at 191.77 97.79) (uuid 6e5bbd6d-70e6-4d28-bf66-6d65e135de5a))
-  (no_connect (at 199.39 123.19) (uuid 775b7748-5f91-45e5-ad5e-059bcbfacdca))
   (no_connect (at 191.77 100.33) (uuid 79cdaebf-a552-4384-8b7d-9dc38952592f))
   (no_connect (at 191.77 118.11) (uuid 9ea663ac-989b-445e-8e06-52521cd558fc))
 
@@ -801,6 +809,10 @@
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid b18fc799-a946-4abd-9de2-7f713f942394)
   )
+  (wire (pts (xy 199.39 123.19) (xy 199.39 130.81))
+    (stroke (width 0) (type default) (color 0 0 0 0))
+    (uuid b5c4311b-e341-4b9e-b57d-a112094766d1)
+  )
   (wire (pts (xy 184.15 113.03) (xy 191.77 113.03))
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid b709bc47-6f06-49fa-b819-b695b8219eee)
@@ -882,6 +894,22 @@
   (hierarchical_label "CAN_RX" (shape output) (at 102.87 113.03 180)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid a43781b2-fb0c-42f5-8ed6-ac9088a90dee)
+  )
+
+  (symbol (lib_id "power:GND") (at 199.39 130.81 0) (unit 1)
+    (in_bom yes) (on_board yes)
+    (uuid 00526671-6e94-4aa8-8e7b-d40e5fed4673)
+    (property "Reference" "#PWR0152" (id 0) (at 199.39 137.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (id 1) (at 199.39 134.62 0))
+    (property "Footprint" "" (id 2) (at 199.39 130.81 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (id 3) (at 199.39 130.81 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 64fc8af6-70ba-41fc-b543-b4d7e5972fd9))
   )
 
   (symbol (lib_id "power:GND") (at 146.05 96.52 0) (unit 1)

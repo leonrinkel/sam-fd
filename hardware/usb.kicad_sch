@@ -4,6 +4,15 @@
 
   (paper "A4")
 
+  (title_block
+    (title "sam-fd")
+    (date "2023-01-27")
+    (rev "2")
+    (company "Leon Rinkel")
+    (comment 1 "leon@rinkel.me")
+    (comment 2 "https://git.leon.fyi/leonrinkel/sam-fd")
+  )
+
   (lib_symbols
     (symbol "Connector:USB_B_Micro" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
       (property "Reference" "J" (id 0) (at -5.08 11.43 0)
@@ -1577,7 +1586,7 @@
     (uuid 8a911966-ef2b-4b44-953e-f53fc17ca5cf)
     (property "Reference" "J2" (id 0) (at 57.15 81.28 0))
     (property "Value" "USB_B_Micro" (id 1) (at 57.15 83.82 0))
-    (property "Footprint" "Connector_USB:USB_Micro-B_Molex_47346-0001" (id 2) (at 60.96 95.25 0)
+    (property "Footprint" "sam-fd:USB_Micro-B_Molex_47346-0001" (id 2) (at 60.96 95.25 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "./datasheets/0473460001_IO_CONNECTORS-229243.pdf" (id 3) (at 60.96 95.25 0)
