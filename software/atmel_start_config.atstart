@@ -333,18 +333,18 @@ drivers:
     functionality: System
     api: HAL:HPL:GCLK
     configuration:
-      $input: 400000
+      $input: 32000000
       $input_id: External Crystal Oscillator 0.4-32MHz (XOSC)
-      RESERVED_InputFreq: 400000
+      RESERVED_InputFreq: 32000000
       RESERVED_InputFreq_id: External Crystal Oscillator 0.4-32MHz (XOSC)
-      _$freq_output_Generic clock generator 0: 48000000
+      _$freq_output_Generic clock generator 0: 32000000
       _$freq_output_Generic clock generator 1: 48000000
       _$freq_output_Generic clock generator 2: 48000000
-      _$freq_output_Generic clock generator 3: 400000
-      _$freq_output_Generic clock generator 4: 400000
-      _$freq_output_Generic clock generator 5: 400000
-      _$freq_output_Generic clock generator 6: 400000
-      _$freq_output_Generic clock generator 7: 400000
+      _$freq_output_Generic clock generator 3: 32000000
+      _$freq_output_Generic clock generator 4: 32000000
+      _$freq_output_Generic clock generator 5: 32000000
+      _$freq_output_Generic clock generator 6: 32000000
+      _$freq_output_Generic clock generator 7: 32000000
       enable_gclk_gen_0: true
       enable_gclk_gen_0__externalclock: 1000000
       enable_gclk_gen_1: true
@@ -403,7 +403,7 @@ drivers:
       gclk_arch_gen_7_runstdby: false
       gclk_gen_0_div: 1
       gclk_gen_0_div_sel: false
-      gclk_gen_0_oscillator: 48MHz Internal Oscillator (OSC48M)
+      gclk_gen_0_oscillator: External Crystal Oscillator 0.4-32MHz (XOSC)
       gclk_gen_1_div: 1
       gclk_gen_1_div_sel: false
       gclk_gen_1_oscillator: 48MHz Internal Oscillator (OSC48M)
@@ -435,11 +435,11 @@ drivers:
     functionality: System
     api: HAL:HPL:MCLK
     configuration:
-      $input: 48000000
+      $input: 32000000
       $input_id: Generic clock generator 0
-      RESERVED_InputFreq: 48000000
+      RESERVED_InputFreq: 32000000
       RESERVED_InputFreq_id: Generic clock generator 0
-      _$freq_output_CPU: 48000000
+      _$freq_output_CPU: 32000000
       cpu_clock_source: Generic clock generator 0
       cpu_div: '1'
       enable_cpu_clock: true
@@ -501,16 +501,16 @@ drivers:
     functionality: System
     api: HAL:HPL:OSCCTRL
     configuration:
-      $input: 32768
+      $input: 12000000
       $input_id: 32kHz External Crystal Oscillator (XOSC32K)
-      RESERVED_InputFreq: 32768
+      RESERVED_InputFreq: 12000000
       RESERVED_InputFreq_id: 32kHz External Crystal Oscillator (XOSC32K)
       _$freq_output_48MHz Internal Oscillator (OSC48M): 48000000
-      _$freq_output_External Crystal Oscillator 0.4-32MHz (XOSC): 400000
+      _$freq_output_External Crystal Oscillator 0.4-32MHz (XOSC): '32000000'
       _$freq_output_Fractional Digital Phase Locked Loop (FDPLL96M): 47998976
       enable_fdpll96m: false
       enable_osc48m: true
-      enable_xosc: false
+      enable_xosc: true
       fdpll96m_arch_enable: false
       fdpll96m_arch_filter: Default filter mode
       fdpll96m_arch_lbypass: false
@@ -529,17 +529,17 @@ drivers:
       osc48m_arch_runstdby: false
       osc48m_arch_startup: 21.333us
       osc48m_div: 0
-      xosc_arch_ampgc: false
-      xosc_arch_cfden: false
+      xosc_arch_ampgc: true
+      xosc_arch_cfden: true
       xosc_arch_cfdeo: false
-      xosc_arch_enable: false
-      xosc_arch_gain: 2MHz
+      xosc_arch_enable: true
+      xosc_arch_gain: 8MHz
       xosc_arch_ondemand: true
       xosc_arch_runstdby: false
-      xosc_arch_startup: 31us
+      xosc_arch_startup: 1953us
       xosc_arch_swben: false
-      xosc_arch_xtalen: false
-      xosc_frequency: 400000
+      xosc_arch_xtalen: true
+      xosc_frequency: 32000000
     optional_signals: []
     variant: null
     clocks:
@@ -572,7 +572,7 @@ drivers:
       domain_group: null
   TARGET_IO:
     user_label: TARGET_IO
-    definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::SERCOM2::driver_config_definition::UART::HAL:Driver:USART.Sync
+    definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::SERCOM0::driver_config_definition::UART::HAL:Driver:USART.Sync
     functionality: USART
     api: HAL:Driver:USART_Sync
     configuration:
@@ -597,14 +597,14 @@ drivers:
       usart_tx_enable: true
     optional_signals: []
     variant:
-      specification: TXPO=1, RXPO=3, CMODE=0
+      specification: TXPO=1, RXPO=1, CMODE=0
       required_signals:
-      - name: SERCOM2/PAD/2
-        pad: PA14
-        label: TX
-      - name: SERCOM2/PAD/3
-        pad: PA15
+      - name: SERCOM0/PAD/1
+        pad: PA05
         label: RX
+      - name: SERCOM0/PAD/2
+        pad: PA06
+        label: TX
     clocks:
       domain_group:
         nodes:
@@ -640,8 +640,8 @@ drivers:
       can_btp_sjw: 24
       can_btp_tseg1: 71
       can_btp_tseg2: 24
-      can_cccr_brse: false
-      can_cccr_fdoe: false
+      can_cccr_brse: true
+      can_cccr_fdoe: true
       can_dbtp_dbrp: 1
       can_dbtp_dsjw: 6
       can_dbtp_dtseg1: 17
@@ -695,38 +695,32 @@ drivers:
         configuration:
           can_gclk_selection: Generic clock generator 2
 pads:
-  BTN:
+  PA05:
     name: PA05
     definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::pad::PA05
-    mode: Digital input
-    user_label: BTN
+    mode: Peripheral IO
+    user_label: PA05
     configuration: null
-  RX_ACT:
+  PA06:
+    name: PA06
+    definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::pad::PA06
+    mode: Peripheral IO
+    user_label: PA06
+    configuration: null
+  TX_ACT:
     name: PA09
     definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::pad::PA09
-    mode: Digital output
-    user_label: RX_ACT
-    configuration:
-      pad_initial_level: High
-  TX_ACT:
-    name: PA10
-    definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::pad::PA10
     mode: Digital output
     user_label: TX_ACT
     configuration:
       pad_initial_level: High
-  PA14:
-    name: PA14
-    definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::pad::PA14
-    mode: Peripheral IO
-    user_label: PA14
-    configuration: null
-  PA15:
-    name: PA15
-    definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::pad::PA15
-    mode: Peripheral IO
-    user_label: PA15
-    configuration: null
+  RX_ACT:
+    name: PA10
+    definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::pad::PA10
+    mode: Digital output
+    user_label: RX_ACT
+    configuration:
+      pad_initial_level: High
   CAN_ERR:
     name: PA17
     definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::pad::PA17
@@ -750,6 +744,12 @@ pads:
     definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::pad::PA25
     mode: Peripheral IO
     user_label: PA25
+    configuration: null
+  CAN_STB:
+    name: PA27
+    definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::pad::PA27
+    mode: Digital output
+    user_label: CAN_STB
     configuration: null
 toolchain_options: []
 static_files: []

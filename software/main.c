@@ -39,38 +39,28 @@ int main(void)
 
 	/* Configure CAN filter 0 */
 	filter.id   = 0x123;
-	filter.mask = 0;
+	filter.mask = 0xFFFFFFFF;
 	can_async_set_filter(&CAN_0, 0, CAN_FMT_STDID, &filter);
 
 	/* Configure CAN filter 1 */
 	filter.id   = 0x456;
-	filter.mask = 0;
+	filter.mask = 0xFFFFFFFF;
 	can_async_set_filter(&CAN_0, 1, CAN_FMT_STDID, &filter);
 
 	/* Enable CAN peripheral */
 	can_async_enable(&CAN_0);
 
-	/* Wait at least 1ms + 50µs for transceiver to enter listen-only mode */
-	delay_ms(2);
 	/* Enable transceiver */
-	gpio_set_pin_level(CAN_EN, true);
-	/* Wait at least 50µs for transceiver to enter normal mode */
-	delay_ms(1);
+	gpio_set_pin_level(CAN_EN, 1);
+	gpio_set_pin_level(CAN_STB, 1);
 
-	/* CAN_ERR indicates pwon flag */
-	if (gpio_get_pin_level(CAN_ERR) == false)
-	{
-		printf("device has been cold-started\r\n");
-	}
-	else
-	{
-		printf("device has been reset\r\n");
-	}
+	/* Wait for transceiver to enter normal mode */
+	delay_ms(10);
 
 	/* Prepare CAN message to send */
 	msg.type = CAN_TYPE_DATA;
 	msg.fmt  = CAN_FMT_STDID;
-	msg.id   = 0x2AA;
+	msg.id   = 0x123;
 	msg.len  = 3;
 	msg.data = msg_data;
 	msg_data[0] = 0xAA;

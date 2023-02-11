@@ -8,14 +8,14 @@
 // <i> Indicates whether configuration for XOSC is enabled or not
 // <id> enable_xosc
 #ifndef CONF_XOSC_CONFIG
-#define CONF_XOSC_CONFIG 0
+#define CONF_XOSC_CONFIG 1
 #endif
 
 // <o> Frequency <400000-32000000>
 // <i> Oscillation frequency of the resonator connected to the External Multipurpose Crystal Oscillator.
 // <id> xosc_frequency
 #ifndef CONF_XOSC_FREQUENCY
-#define CONF_XOSC_FREQUENCY 400000
+#define CONF_XOSC_FREQUENCY 32000000
 #endif
 
 // <h> External Multipurpose Crystal Oscillator Control
@@ -23,7 +23,7 @@
 // <i> Indicates whether External Multipurpose Crystal Oscillator is enabled or not
 // <id> xosc_arch_enable
 #ifndef CONF_XOSC_ENABLE
-#define CONF_XOSC_ENABLE 0
+#define CONF_XOSC_ENABLE 1
 #endif
 
 // <o> Start-Up Time
@@ -45,14 +45,14 @@
 // <0xF=>1000000us
 // <id> xosc_arch_startup
 #ifndef CONF_XOSC_STARTUP
-#define CONF_XOSC_STARTUP 0x0
+#define CONF_XOSC_STARTUP 0x6
 #endif
 
 // <q> Automatic Amplitude Gain Control
 // <i> Indicates whether Automatic Amplitude Gain Control is enabled or not
 // <id> xosc_arch_ampgc
 #ifndef CONF_XOSC_AMPGC
-#define CONF_XOSC_AMPGC 0
+#define CONF_XOSC_AMPGC 1
 #endif
 
 // <o> External Multipurpose Crystal Oscillator Gain
@@ -63,7 +63,7 @@
 // <0x4=>30MHz
 // <id> xosc_arch_gain
 #ifndef CONF_XOSC_GAIN
-#define CONF_XOSC_GAIN 0x0
+#define CONF_XOSC_GAIN 0x2
 #endif
 
 // <q> On Demand Control
@@ -91,7 +91,7 @@
 // <i> Indicates whether Clock Failure Detector is enabled or not
 // <id> xosc_arch_cfden
 #ifndef CONF_XOSC_CFDEN
-#define CONF_XOSC_CFDEN 0
+#define CONF_XOSC_CFDEN 1
 #endif
 
 // <q> Clock Failure Detector Event Out
@@ -105,7 +105,7 @@
 // <i> Indicates whether the connections between the I/O pads and the external clock or crystal oscillator is enabled or not
 // <id> xosc_arch_xtalen
 #ifndef CONF_XOSC_XTALEN
-#define CONF_XOSC_XTALEN 0
+#define CONF_XOSC_XTALEN 1
 #endif
 //</h>
 //</e>

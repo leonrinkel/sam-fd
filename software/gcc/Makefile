@@ -1,4 +1,4 @@
-PROJ_NAME := flux
+PROJ_NAME := sam-fd
 
 CC := arm-none-eabi-gcc
 LD := arm-none-eabi-gcc
