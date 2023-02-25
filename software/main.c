@@ -26,11 +26,11 @@ int main(void)
 
 	/* Configure RX activity LED */
 	rx_act_led.pin    = RX_ACT;
-	rx_act_led.wiring = led_wired_active_low;
+	rx_act_led.wiring = led_wired_active_high;
 	register_led(&rx_act_led);
 	/* Configure TX activity LED */
 	tx_act_led.pin    = TX_ACT;
-	tx_act_led.wiring = led_wired_active_low;
+	tx_act_led.wiring = led_wired_active_high;
 	register_led(&tx_act_led);
 
 	/* Register CAN callbacks */
