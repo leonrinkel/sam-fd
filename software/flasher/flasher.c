@@ -128,8 +128,8 @@ int main(int argc, char* argv[])
 	}
 
 	/* Change TTY baudrate */
-	cfsetospeed(&tty, B9600);
-	cfsetispeed(&tty, B9600);
+	cfsetospeed(&tty, B115200);
+	cfsetispeed(&tty, B115200);
 
 	/* Set TTY attributes */
 	if (tcsetattr(portfd, TCSANOW, &tty) != 0)
