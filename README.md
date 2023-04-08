@@ -16,7 +16,7 @@ Configure and build using the commands below. On Windows you might want to use `
 mkdir build
 cd build
 cmake ..
-make
+cmake --build .
 ```
 
 ## Flashing
@@ -28,3 +28,8 @@ flasher/build/flasher \
     /dev/ttyUSB0 \ # port to open
     application/build/application.bin # file to flash
 ```
+
+## License
+
+Please see [hardware/LICENSE](hardware/LICENSE) and [software/LICENSE](software/LICENSE). The software side of this project is based on [Atmel START](https://start.atmel.com) generated code which is mostly licensed under the [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0) license.
+

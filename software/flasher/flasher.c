@@ -225,6 +225,9 @@ int main(int argc, char* argv[])
 		goto cleanup;
 	}
 
+	printf("flashing...");
+	fflush(stdout);
+
 	/* Iterate pages to write */
 	for (int page = START_PAGE; page < NUM_PAGES; page++)
 	{
@@ -331,12 +334,17 @@ int main(int argc, char* argv[])
 			goto cleanup;
 		}
 
+		printf(".");
+		fflush(stdout);
+
 		if (file_nread < PAGE_SIZE)
 		{
 			/* End of file */
 			break;
 		}
 	}
+
+	printf("done\n");
 
 cleanup:
 
