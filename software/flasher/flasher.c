@@ -84,7 +84,6 @@ int main(int argc, char* argv[])
 	int ret = EXIT_SUCCESS; /** Exit code to return */
 
 	char* arg_port; /** Serial port to open */
-	char* arg_baud; /** Baudrate to set TODO */
 	char* arg_file; /** Path to flash file */
 
 	int portfd = 0; /** File descriptor of serial port */
@@ -97,18 +96,17 @@ int main(int argc, char* argv[])
 	uint8_t cmd_resp; /** Response read from serial port */
 
 	/* Parse CLI args */
-	if (argc != 4)
+	if (argc != 3)
 	{
 		fprintf(stderr,
-			"usage: flasher <port> <baud> <file>\n"
-			"e.g.: flasher /dev/ttyUSB0 9600 application.bin\n"
+			"usage: flasher <port> <file>\n"
+			"e.g.: flasher /dev/ttyUSB0 application.bin\n"
 		);
 		ret = EXIT_FAILURE;
 		goto cleanup;
 	}
 	arg_port = argv[1];
-	arg_baud = argv[2];
-	arg_file = argv[3];
+	arg_file = argv[2];
 
 	/* Open serial port */
 	portfd = open(arg_port, O_RDWR | O_NOCTTY | O_SYNC);
