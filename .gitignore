@@ -1,4 +1,4 @@
 **/.DS_Store
 /software/application/build
-/software/bootloader/gcc/out
+/software/bootloader/build
 /software/flasher/flasher
