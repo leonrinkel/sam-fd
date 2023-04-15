@@ -4,6 +4,9 @@
 			"path": "application"
 		},
 		{
+			"path": "baremetal"
+		},
+		{
 			"path": "bootloader"
 		},
 		{
