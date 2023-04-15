@@ -9,9 +9,10 @@
 
 #include "types.hpp"
 
+/** Structure of the processor interrupt vector table. */
 struct vector_table
 {
-	void* p_stack;
+	void* p_stack; /**< Initial stack pointer value. */
 
 	/**
 	 * Reset is invoked on power up or a warm reset. The exception model treats

@@ -1,5 +1,5 @@
 /**
- * \file   src/mclk.hpp
+ * \file   src/mclk.cpp
  * \author Rinkel, Leon <leon@rinkel.me>
  *
  * Implementation of stuff related to the main clock controller.
@@ -60,6 +60,7 @@ mclk::mclk(struct mclk::initializer init)
 {
 }
 
+/** Helper macro to reduce LOC in mclk::get_peripheral_clock_enable. */
 #define MCLK_GET_ENABLE(X, Y)             \
 	case mclk::peripheral::X:             \
 	{                                     \
@@ -133,6 +134,7 @@ enum mclk::clock_enable mclk::get_peripheral_clock_enable(
 	}
 }
 
+/** Helper macro to reduce LOC in mclk::set_peripheral_clock_enable. */
 #define MCLK_SET_ENABLE(X, Y)                   \
 	case mclk::peripheral::X:                   \
 	{                                           \

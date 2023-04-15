@@ -22,7 +22,6 @@ int main(void)
 	samfd().run();
 }
 
-
 /**
  * Handles the reset exception.
  *
@@ -79,8 +78,24 @@ void reset_handler(void)
 	}
 }
 
+/** NMI handler.
+ *
+ * A Non-Maskable Interrupt (NMI) can be signalled by a peripheral or
+ * triggered by software. This is the highest priority exception other than
+ * reset. It is permanently enabled and has a fixed priority of –2. NMIs
+ * cannot be:
+ * - Masked or prevented from activation by any other exception.
+ * - Preempted by any exception other than Reset.
+ */
 void __attribute__((interrupt)) nmi_handler(void) {}
 
+/**
+ * HardFault handler.
+ *
+ * A HardFault is an exception that occurs because of an error. HardFaults
+ * have a fixed priority of –1, meaning they have higher priority than any
+ * exception with configurable priority.
+ */
 void __attribute__((interrupt)) hard_fault_handler(void)
 {
 	/* Infinite loop so that we can see we hard faulted. */
@@ -90,38 +105,119 @@ void __attribute__((interrupt)) hard_fault_handler(void)
 	}
 }
 
+/**
+ * SV call handler.
+ *
+ * A Supervisor Call (SVC) is an exception that is triggered by the SVC
+ * instruction. In an OS environment, applications can use SVC instructions
+ * to access OS kernel functions and device drivers.
+ */
 void __attribute__((interrupt)) sv_call_handler(void) {}
+
+/**
+ * PendSV handler.
+ *
+ * PendSV is an interrupt-driven request for system-level service. In an OS
+ * environment, use PendSV for context switching when no other exception is
+ * active.
+ */
 void __attribute__((interrupt)) pend_sv_handler(void) {}
+
+/**
+ * SysTick handler.
+ *
+ * If the device implements the SysTick timer, a SysTick exception is
+ * generated when the SysTick timer reaches zero. Software can also
+ * generate a SysTick exception. In an OS environment, the processor can
+ * use this exception as system tick.
+ */
 void __attribute__((interrupt)) sys_tick_handler(void) {}
+
+/** System IRQ handler */
 void __attribute__((interrupt)) system_handler(void) {}
+
+/** WDT IRQ handler */
 void __attribute__((interrupt)) wdt_handler(void) {}
+
+/** RTC IRQ handler */
 void __attribute__((interrupt)) rtc_handler(void) {}
+
+/** EIC IRQ handler */
 void __attribute__((interrupt)) eic_handler(void) {}
+
+/** FREQM IRQ handler */
 void __attribute__((interrupt)) freqm_handler(void) {}
+
+/** TSENS IRQ handler */
 void __attribute__((interrupt)) tsens_handler(void) {}
+
+/** NVMCTRL IRQ handler */
 void __attribute__((interrupt)) nvmctrl_handler(void) {}
+
+/** DMAC IRQ handler */
 void __attribute__((interrupt)) dmac_handler(void) {}
+
+/** EVSYS IRQ handler */
 void __attribute__((interrupt)) evsys_handler(void) {}
+
+/** SERCOM0 IRQ handler */
 void __attribute__((interrupt)) sercom0_handler(void) {}
+
+/** SERCOM1 IRQ handler */
 void __attribute__((interrupt)) sercom1_handler(void) {}
+
+/** SERCOM2 IRQ handler */
 void __attribute__((interrupt)) sercom2_handler(void) {}
+
+/** SERCOM3 IRQ handler */
 void __attribute__((interrupt)) sercom3_handler(void) {}
+
+/** CAN0 IRQ handler */
 void __attribute__((interrupt)) can0_handler(void) {}
+
+/** TCC0 IRQ handler */
 void __attribute__((interrupt)) tcc0_handler(void) {}
+
+/** TCC1 IRQ handler */
 void __attribute__((interrupt)) tcc1_handler(void) {}
+
+/** TCC2 IRQ handler */
 void __attribute__((interrupt)) tcc2_handler(void) {}
+
+/** TC0 IRQ handler */
 void __attribute__((interrupt)) tc0_handler(void) {}
+
+/** TC1 IRQ handler */
 void __attribute__((interrupt)) tc1_handler(void) {}
+
+/** TC2 IRQ handler */
 void __attribute__((interrupt)) tc2_handler(void) {}
+
+/** TC3 IRQ handler */
 void __attribute__((interrupt)) tc3_handler(void) {}
+
+/** TC4 IRQ handler */
 void __attribute__((interrupt)) tc4_handler(void) {}
+
+/** ADC0 IRQ handler */
 void __attribute__((interrupt)) adc0_handler(void) {}
+
+/** ADC1 IRQ handler */
 void __attribute__((interrupt)) adc1_handler(void) {}
+
+/** AC IRQ handler */
 void __attribute__((interrupt)) ac_handler(void) {}
+
+/** DAC IRQ handler */
 void __attribute__((interrupt)) dac_handler(void) {}
+
+/** SDADC IRQ handler */
 void __attribute__((interrupt)) sdadc_handler(void) {}
+
+/** PTC IRQ handler */
 void __attribute__((interrupt)) ptc_handler(void) {}
 
+/** Processor interrupt vector table. */
 __attribute__((section(".vectors")))
 const struct vector_table vectors =
 {

@@ -1,5 +1,5 @@
 /**
- * \file   inc/type.hpp
+ * \file   inc/types.hpp
  * \author Rinkel, Leon <leon@rinkel.me>
  *
  * Definitions of some commonly used types.
