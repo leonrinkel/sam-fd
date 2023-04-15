@@ -1,5 +1,6 @@
 **/.DS_Store
 /software/application/build
 /software/baremetal/build
+/software/baremetal/doc
 /software/bootloader/build
 /software/flasher/build
