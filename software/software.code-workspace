@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "application"
+		},
+		{
+			"path": "bootloader"
+		},
+		{
+			"path": "flasher"
+		}
+	],
+	"settings": {}
+}
