@@ -263,3 +263,33 @@ const struct vector_table vectors =
 		/* IRQ 30 */ ptc_handler,
 	},
 };
+
+const volatile struct cpuid::_cpuid* cpuid::cpuid_ro(void)
+{
+	return ((const volatile struct cpuid::_cpuid*) _cpuid_register_address);
+}
+
+uint8_t cpuid::get_revision(void)
+{
+	return cpuid_ro()->revision;
+}
+
+enum cpuid::partno cpuid::get_partno(void)
+{
+	return static_cast<enum cpuid::partno>(cpuid_ro()->partno);
+}
+
+enum cpuid::architecture cpuid::get_architecture(void)
+{
+	return static_cast<enum cpuid::architecture>(cpuid_ro()->architecture);
+}
+
+uint8_t cpuid::get_variant(void)
+{
+	return cpuid_ro()->variant;
+}
+
+enum cpuid::implementer cpuid::get_implementer(void)
+{
+	return static_cast<enum cpuid::implementer>(cpuid_ro()->implementer);
+}

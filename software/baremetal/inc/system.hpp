@@ -82,3 +82,95 @@ struct vector_table
 	 */
 	exception_handler_t irq[32];
 };
+
+/**
+ * Helper class for reading and interpreting CPU identification.
+ */
+class cpuid
+{
+private:
+
+	/** Address of the CPUID register. */
+	static const uint32_t _cpuid_register_address = 0xe000ed00;
+
+	/**
+	 * Packed struct representing the CPUID register structure.
+	 */
+	struct _cpuid
+	{
+		/** Minor revision number m in the rnpm revision status. */
+		uint32_t revision:4;
+		/** Indicates part number, e.g. Cortex-M0+. */
+		uint32_t partno:12;
+		/** Indicates the architecture, e.g. ARMv6-M. */
+		uint32_t architecture:4;
+		/** Major revision number n in the rnpm revision status. */
+		uint32_t variant:4;
+		/** Implementer code, e.g. Arm Limited. */
+		uint32_t implementer:8;
+	} __attribute__((packed, aligned(4)));
+	static_assert(sizeof(struct cpuid::_cpuid) == 4);
+
+	/**
+	 * Provides read-only access to the CPUID register.
+	 * \returns Pointer to the CPUID register.
+	 */
+	static const volatile struct cpuid::_cpuid* cpuid_ro(void);
+
+public:
+
+	/**
+	 * Reads revision field from CPUID register.
+	 * \returns Minor revision number m in the rnpm revision status.
+	 */
+	static uint8_t get_revision(void);
+
+	/**
+	 * Enum to specify CPU part number, e.g. Cortex-M0+.
+	 */
+	enum class partno
+	{
+		cortex_m0plus = 0xc60, /**< Cortex-M0+ */
+	};
+
+	/**
+	 * Reads partno field from the CPUID register.
+	 * \returns Part number, e.g. Cortex-M0+.
+	 */
+	static enum partno get_partno(void);
+
+	/**
+	 * Enum to specify CPU architecture, e.g. ARMv6-M architecture.
+	 */
+	enum class architecture
+	{
+		armv6_m = 0xc, /**< ARMv6-M architecture */
+	};
+
+	/**
+	 * Reads architecture field from CPUID register.
+	 * \returns Architecture, e.g. ARMv6-M.
+	 */
+	static enum cpuid::architecture get_architecture(void);
+
+	/**
+	 * Reads variant field from CPUID register.
+	 * \returns Major revision number n in the rnpm revision status.
+	 */
+	static uint8_t get_variant(void);
+
+	/**
+	 * Enum to specify CPU implementer, e.g. Arm Limited.
+	 */
+	enum class implementer
+	{
+		arm = 0x41, /**< Arm Limited */
+	};
+
+	/**
+	 * Reads implementer field from CPUID register.
+	 * \returns  Implementer code, e.g. Arm.
+	 */
+	static enum cpuid::implementer get_implementer(void);
+
+};
