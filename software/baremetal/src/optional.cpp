@@ -9,6 +9,7 @@
 #include "optional.hpp"
 
 #include "port.hpp"
+#include "gclk.hpp"
 
 template<class T>
 optional<T>::optional(
@@ -49,3 +50,6 @@ template class optional<enum port::mux_enable>;
 template class optional<enum port::buffer_enable>;
 template class optional<enum port::pull_enable>;
 template class optional<enum port::drive_strength>;
+template class optional<enum gclk::generator_selection>;
+template class optional<enum gclk::channel_enable>;
+template class optional<enum gclk::write_lock>;

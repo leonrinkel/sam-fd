@@ -22,6 +22,7 @@ add_compile_options(
 	-Wall
 	-Wextra
 	-Wno-packed-bitfield-compat
+	-Wno-missing-field-initializers
 )
 
 add_link_options(
@@ -33,6 +34,7 @@ add_link_options(
 )
 
 add_executable(baremetal
+	src/gclk.cpp
 	src/mclk.cpp
 	src/optional.cpp
 	src/port.cpp

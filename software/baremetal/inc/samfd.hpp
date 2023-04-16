@@ -9,6 +9,7 @@
 
 #include "mclk.hpp"
 #include "port.hpp"
+#include "gclk.hpp"
 
 /**
  * Wrapper class around the programs main entrypoint.
@@ -21,6 +22,8 @@ private:
 	mclk _mclk;
 	/** Instance of the I/O pin controller port A. */
 	port _port_pa;
+	/** Instance of the generic clock controller. */
+	gclk _gclk;
 
 	/** Pin the TX led is attached to. */
 	const port::pin _tx_led_pin = port::pin::pin9;
