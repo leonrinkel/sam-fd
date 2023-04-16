@@ -13,12 +13,14 @@ option(BUILD_DOC "Build documentation" ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS -fno-exceptions)
+set(CMAKE_CXX_FLAGS "-fno-exceptions -ffreestanding -fno-jump-tables")
+
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3")
+set(CMAKE_CXX_FLAGS_RELEASE "-Os -g0")
 
 add_compile_options(
 	-mcpu=cortex-m0plus
 	-mthumb
-	-O0
 	-Wall
 	-Wextra
 	-Wno-packed-bitfield-compat

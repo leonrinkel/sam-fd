@@ -20,6 +20,7 @@
 int main(void)
 {
 	samfd().run();
+	return 0;
 }
 
 /**
