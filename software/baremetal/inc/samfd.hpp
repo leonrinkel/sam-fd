@@ -29,6 +29,10 @@ private:
 	const port::pin _tx_led_pin = port::pin::pin9;
 	/** Pin the RX led is attached to. */
 	const port::pin _rx_led_pin = port::pin::pin10;
+	/** UART RX pin. */
+	const port::pin _uart_rx_pin = port::pin::pin5;
+	/** UART TX pin. */
+	const port::pin _uart_tx_pin = port::pin::pin6;
 
 public:
 

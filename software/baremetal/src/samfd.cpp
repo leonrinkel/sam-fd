@@ -43,6 +43,12 @@ void samfd::run(void)
 		}
 	);
 
+	/* Configure UART RX/TX pins to use the port multiplexer. */
+	_port_pa.set_pin_configuration(_uart_rx_pin,
+		{ .pmuxen = port::mux_enable::enabled });
+	_port_pa.set_pin_configuration(_uart_tx_pin,
+		{ .pmuxen = port::mux_enable::enabled });
+
 	while(true)
 	{
 		/* Flash TX led very short. */

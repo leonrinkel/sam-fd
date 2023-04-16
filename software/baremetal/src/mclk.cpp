@@ -61,13 +61,9 @@ mclk::mclk(struct mclk::initializer init)
 }
 
 /** Helper macro to reduce LOC in mclk::get_peripheral_clock_enable. */
-#define MCLK_GET_ENABLE(X, Y)             \
-	case mclk::peripheral::X:             \
-	{                                     \
-		return (Y) ?                      \
-			mclk::clock_enable::enabled : \
-			mclk::clock_enable::stopped;  \
-	}                                     \
+#define MCLK_GET_ENABLE(X, Y)                      \
+	case mclk::peripheral::X:                      \
+		return static_cast<mclk::clock_enable>(Y); \
 
 enum mclk::clock_enable mclk::get_peripheral_clock_enable(
 	enum mclk::peripheral p) const
