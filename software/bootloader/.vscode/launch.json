@@ -1,0 +1,34 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "(gdb) Launch",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/build/bootloader.elf",
+			"targetArchitecture": "arm",
+			"useExtendedRemote": true,
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"miDebuggerPath": "arm-none-eabi-gdb",
+			"miDebuggerServerAddress": "localhost:3333",
+			"debugServerPath": "openocd",
+			"debugServerArgs": "-f ${workspaceFolder}/openocd.cfg",
+			"serverStarted": "Info : Listening on port 3333 for gdb connections",
+			"filterStderr": true,
+			"filterStdout": true,
+			"customLaunchSetupCommands": [
+				{ "text": "file ${workspaceFolder}/build/bootloader.elf" },
+				{ "text": "target extended-remote localhost:3333" },
+				{ "text": "monitor reset halt" }
+			]
+		}
+	]
+}
