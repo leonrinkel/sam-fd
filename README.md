@@ -1,21 +1,68 @@
 # sam-fd
 
+ATSAMC21 based CAN-FD interface
+
 ## Building
 
-`cd` to what you want to build:
+Building requires CMake and Make (e.g. GNU Make or NMake from Visual Studio). On Windows, CMake might be included with Visual Studio, but can also be installed separately. Configure and build using the commands below. On Windows you might want to use `cmake .. -G "MinGW Makefiles"` or `cmake .. -G "NMake Makefiles"` variants instead. Building bootloader and the application also requires the GNU ARM toolchain (`arm-none-eabi`).
+
+### Building Bootloader
 
 ```sh
-cd software/bootloader # or
-cd software/application # or
-cd software/flasher
-```
-
-Configure and build using the commands below. On Windows you might want to use `cmake .. -G "MinGW Makefiles"` instead.
-
-```sh
+cd software/bootloader
 mkdir build
 cd build
-cmake ..
+```
+
+Configure:
+```sh
+cmake .. --toolchain ../toolchain.cmake # or
+cmake .. --toolchain ../toolchain.cmake -G "MinGW Makefiles" # or
+cmake .. --toolchain ../toolchain.cmake -G "NMake Makefiles"
+```
+
+Build:
+```sh
+cmake --build .
+```
+
+### Building Application
+
+```sh
+cd software/application
+mkdir build
+cd build
+```
+
+Configure:
+```sh
+cmake .. --toolchain ../toolchain.cmake # or
+cmake .. --toolchain ../toolchain.cmake -G "MinGW Makefiles" # or
+cmake .. --toolchain ../toolchain.cmake -G "NMake Makefiles"
+```
+
+Build:
+```sh
+cmake --build .
+```
+
+### Building Flasher
+
+```sh
+cd software/flasher
+mkdir build
+cd build
+```
+
+Configure:
+```sh
+cmake .. # or
+cmake .. -G "MinGW Makefiles" # or
+cmake .. -G "NMake Makefiles"
+```
+
+Build:
+```sh
 cmake --build .
 ```
 
