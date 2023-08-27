@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
-#include <unistd.h>
 
 #if defined __linux__ || defined __APPLE__
 #include <termios.h>
+#include <unistd.h>
 #elif defined _WIN32
 #include <windows.h>
 #endif
@@ -275,7 +275,7 @@ int main(int argc, char* argv[])
 			goto cleanup;
 		}
 
-#elif defined __WIN32
+#elif defined _WIN32
 
 	if (!WriteFile(
 		hSerial, &cmd, sizeof(struct write_cmd), &port_nwritten, NULL))
