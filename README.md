@@ -2,6 +2,8 @@
 
 ATSAMC21 based CAN-FD interface
 
+![Render of the interface PCB](hardware/sam-fd.png)
+
 ## Building
 
 Building requires CMake and Make (e.g. GNU Make or NMake from Visual Studio). On Windows, CMake might be included with Visual Studio, but can also be installed separately. Configure and build using the commands below. On Windows you might want to use `cmake .. -G "MinGW Makefiles"` or `cmake .. -G "NMake Makefiles"` variants instead. Building bootloader and the application also requires the GNU ARM toolchain (`arm-none-eabi`).
