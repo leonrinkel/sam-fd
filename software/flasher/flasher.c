@@ -1,15 +1,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <fcntl.h>
 #include <string.h>
 
-#if defined __linux__ || defined __APPLE__
-#include <termios.h>
-#include <unistd.h>
-#elif defined _WIN32
-#include <windows.h>
-#endif
+#include "serial.h"
 
 #define APP_OFFSET 0x1000 /* Where the application is in flash */
 #define PAGE_SIZE 256 /* Flash is organized in rows of 1024 bytes */
@@ -97,22 +91,6 @@ int main(int argc, char* argv[])
 	size_t file_nread; /** Number of bytes read from flash file */
 	uint8_t cmd_resp; /** Response read from serial port */
 
-#if defined __linux__ || defined __APPLE__
-
-	struct termios tty; /** Serial port attributes */
-	ssize_t port_nwritten; /** Number of bytes written via serial port */
-	ssize_t port_nread; /** Number of bytes read via serial port */
-
-#elif defined _WIN32
-
-	HANDLE hSerial = NULL; /** Serial port handle */
-	LPSTR errormsg; /** Error message string */
-	DCB serialParams = {0}; /** Serial port parameters */
-	DWORD port_nwritten; /** Number of bytes written via serial port */
-	DWORD port_nread; /** Number of bytes read via serial port */
-
-#endif
-
 	/* Parse CLI args */
 	if (argc != 3)
 	{
@@ -127,94 +105,11 @@ int main(int argc, char* argv[])
 	arg_port = argv[1];
 	arg_file = argv[2];
 
-#if defined __linux__ || defined __APPLE__
-
-	/* Open serial port */
-	portfd = open(arg_port, O_RDWR | O_NOCTTY | O_SYNC);
-	if (portfd < 0)
+	if (!serial_open(arg_port))
 	{
-		perror("open()");
 		ret = EXIT_FAILURE;
 		goto cleanup;
 	}
-
-	/* Read TTY attrs */
-	if (tcgetattr(portfd, &tty) != 0)
-	{
-		perror("tcgetattr()");
-		ret = EXIT_FAILURE;
-		goto cleanup;
-	}
-
-	/* Change TTY baudrate */
-	cfsetospeed(&tty, B115200);
-	cfsetispeed(&tty, B115200);
-
-	/* Set TTY attributes */
-	if (tcsetattr(portfd, TCSANOW, &tty) != 0)
-	{
-		perror("tcsetattr()");
-		ret = EXIT_FAILURE;
-		goto cleanup;
-	}
-
-#elif defined _WIN32
-
-	/* Open serial port */
-	hSerial = CreateFile(
-		arg_port, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
-	if (hSerial == INVALID_HANDLE_VALUE)
-	{
-		FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-			FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPSTR) &errormsg, 0, NULL
-		);
-		fprintf(stderr, "CreateFile(): %s", errormsg);
-		LocalFree(errormsg);
-
-		ret = EXIT_FAILURE;
-		goto cleanup;
-	}
-
-	/* Read serial params */
-	serialParams.DCBlength = sizeof(DCB);
-	if (!GetCommState(hSerial, &serialParams))
-	{
-		FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-			FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPSTR) &errormsg, 0, NULL
-		);
-		fprintf(stderr, "GetCommState(): %s", errormsg);
-		LocalFree(errormsg);
-
-		ret = EXIT_FAILURE;
-		goto cleanup;
-	}
-
-	/* Change serial baudrate */
-	serialParams.BaudRate = 115200;
-
-	/* Set serial params */
-	if (!SetCommState(hSerial, &serialParams))
-	{
-		FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-			FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPSTR) &errormsg, 0, NULL
-		);
-		fprintf(stderr, "SetCommState(): %s", errormsg);
-		LocalFree(errormsg);
-
-		ret = EXIT_FAILURE;
-		goto cleanup;
-	}
-
-#endif
 
 	/* Open file to flash */
 	file = fopen(arg_file, "rb");
@@ -246,85 +141,17 @@ int main(int argc, char* argv[])
 		cmd.crc = 0;
 		cmd.crc = crc32((void*) &cmd, sizeof(struct write_cmd));
 
-#if defined __linux__ || defined __APPLE__
-
-		/* Write command */
-		port_nwritten = write(
-			portfd, (uint8_t*) &cmd, sizeof(struct write_cmd));
-		if (port_nwritten != sizeof(struct write_cmd))
+		if (!serial_write((uint8_t*) &cmd, sizeof(struct write_cmd)))
 		{
-			perror("write()");
 			ret = EXIT_FAILURE;
 			goto cleanup;
 		}
 
-		/* Flush buffer */
-		if (fsync(portfd) < 0)
+		if (!serial_read((uint8_t*) &cmd_resp, sizeof(uint8_t)))
 		{
-			perror("fsync()");
 			ret = EXIT_FAILURE;
 			goto cleanup;
 		}
-
-		/* Wait for response */
-		port_nread = read(portfd, &cmd_resp, sizeof(uint8_t));
-		if (port_nread != sizeof(uint8_t))
-		{
-			perror("read()");
-			ret = EXIT_FAILURE;
-			goto cleanup;
-		}
-
-#elif defined _WIN32
-
-	if (!WriteFile(
-		hSerial, &cmd, sizeof(struct write_cmd), &port_nwritten, NULL))
-	{
-		FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-			FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPSTR) &errormsg, 0, NULL
-		);
-		fprintf(stderr, "WriteFile(): %s", errormsg);
-		LocalFree(errormsg);
-
-		ret = EXIT_FAILURE;
-		goto cleanup;
-	}
-
-	if (!FlushFileBuffers(hSerial))
-	{
-		FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-			FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPSTR) &errormsg, 0, NULL
-		);
-		fprintf(stderr, "FlushFileBuffers(): %s", errormsg);
-		LocalFree(errormsg);
-
-		ret = EXIT_FAILURE;
-		goto cleanup;
-	}
-
-	if (!ReadFile(
-		hSerial, &cmd_resp, sizeof(uint8_t), &port_nread, NULL))
-	{
-		FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-			FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPSTR) &errormsg, 0, NULL
-		);
-		fprintf(stderr, "ReadFile(): %s", errormsg);
-		LocalFree(errormsg);
-
-		ret = EXIT_FAILURE;
-		goto cleanup;
-	}
-
-#endif
 
 		/* Check response */
 		if (cmd_resp != 0x42)
@@ -348,23 +175,7 @@ int main(int argc, char* argv[])
 
 cleanup:
 
-#if defined __linux__ || defined __APPLE__
-
-	/* Close serial port */
-	if (portfd != 0)
-	{
-		close(portfd);
-	}
-
-#elif defined _WIN32
-
-	/* Close serial port */
-	if (hSerial != NULL)
-	{
-		CloseHandle(hSerial);
-	}
-
-#endif
+	serial_close();
 
 	/* Close flash file */
 	if (file != NULL)

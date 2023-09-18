@@ -5,4 +5,9 @@ project(flasher
 	VERSION 0.1
 )
 
-add_executable(flasher flasher.c)
+add_executable(
+	${PROJECT_NAME}
+	flasher.c
+	serial_unix.c
+	serial_windows.c
+)
