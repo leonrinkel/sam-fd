@@ -3,20 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "protocol.h"
 #include "serial.h"
-
-#define APP_OFFSET 0x1000 /* Where the application is in flash */
-#define PAGE_SIZE 256 /* Flash is organized in rows of 1024 bytes */
-#define NUM_PAGES 256 /* There are 256 pages */
-#define START_PAGE (APP_OFFSET / PAGE_SIZE) /* Start writing from here */
-
-/** Structure of a write command */
-struct write_cmd
-{
-	uint32_t page; /** Page number to write */
-	uint8_t data[PAGE_SIZE]; /** Data to write */
-	uint32_t crc; /** CRC32 of command */
-};
 
 const uint32_t crc32_tab[] = {
 	0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
@@ -87,7 +75,7 @@ int main(int argc, char* argv[])
 
 	int portfd = 0; /** File descriptor of serial port */
 	FILE* file = NULL; /** File descriptor of bin file to flash */
-	struct write_cmd cmd; /** Write command to transmit */
+	struct flasher_cmd cmd; /** Command to transmit */
 	size_t file_nread; /** Number of bytes read from flash file */
 	uint8_t cmd_resp; /** Response read from serial port */
 
@@ -127,21 +115,24 @@ int main(int argc, char* argv[])
 	for (int page = START_PAGE; page < NUM_PAGES; page++)
 	{
 		/* Read page from file */
-		cmd.page = page;
-		file_nread = fread(cmd.data, 1, PAGE_SIZE, file);
+		cmd.typed.write.page = page;
+		file_nread = fread(cmd.typed.write.data, 1, PAGE_SIZE, file);
 
 		/* Pad partial page */
 		if (file_nread < PAGE_SIZE)
 		{
-			memset(cmd.data + file_nread, 0, PAGE_SIZE - file_nread);
+			memset(cmd.typed.write.data + file_nread,
+				0, PAGE_SIZE - file_nread);
 		}
 
 		/* Fill command args */
-		cmd.page = page;
-		cmd.crc = 0;
-		cmd.crc = crc32((void*) &cmd, sizeof(struct write_cmd));
+		cmd.type = write_cmd_type;
+		cmd.typed.write.page = page;
+		cmd.typed.write.crc = 0;
+		cmd.typed.write.crc =
+			crc32((void*) &cmd.typed.write, sizeof(struct write_cmd));
 
-		if (!serial_write((uint8_t*) &cmd, sizeof(struct write_cmd)))
+		if (!serial_write((uint8_t*) &cmd, sizeof(struct flasher_cmd)))
 		{
 			ret = EXIT_FAILURE;
 			goto cleanup;
@@ -169,6 +160,31 @@ int main(int argc, char* argv[])
 			/* End of file */
 			break;
 		}
+	}
+
+	printf("done\nbooting...");
+	fflush(stdout);
+
+	cmd.type = boot_cmd_type;
+	cmd.typed.boot.mode = 0x42; /* Does not matter yet */
+	if (!serial_write((uint8_t*) &cmd, sizeof(struct flasher_cmd)))
+	{
+		ret = EXIT_FAILURE;
+		goto cleanup;
+	}
+
+	if (!serial_read((uint8_t*) &cmd_resp, sizeof(uint8_t)))
+	{
+		ret = EXIT_FAILURE;
+		goto cleanup;
+	}
+
+	/* Check response */
+	if (cmd_resp != 0x42)
+	{
+		fprintf(stderr, "invalid response 0x%02x\n", cmd_resp);
+		ret = EXIT_FAILURE;
+		goto cleanup;
 	}
 
 	printf("done\n");

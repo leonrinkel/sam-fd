@@ -1,9 +1,6 @@
 #include <atmel_start.h>
 
-#define APP_OFFSET 0x1000 /* Where the application is in flash */
-#define PAGE_SIZE 256 /* Flash is organized in rows of 1024 bytes */
-#define NUM_PAGES 256 /* There are 256 pages */
-#define START_PAGE (APP_OFFSET / PAGE_SIZE) /* Only allow writing from here */
+#include "protocol.h"
 
 static struct io_descriptor* serial;
 
@@ -33,34 +30,30 @@ int main(void)
 	}
 }
 
-/** Structure of a write command */
-struct write_cmd
-{
-	uint32_t page; /** Page number to write */
-	uint8_t data[PAGE_SIZE]; /** Data to write */
-	uint32_t crc; /** CRC32 of command */
-};
-
 void run_flasher(void)
 {
 	int32_t nread; /** Number of bytes read from serial */
-	struct write_cmd cmd; /** Write command read from serial */
+	struct flasher_cmd cmd; /** Command read from serial */
 	uint32_t crc_from_cmd; /** CRC read from serial */
 	uint32_t calculated_crc; /** CRC calculated from command */
 
 	while (true)
 	{
 		/* Read command */
-		nread = io_read(serial, (uint8_t*) &cmd, sizeof(struct write_cmd));
-		if (nread != sizeof(struct write_cmd))
+		nread = io_read(serial, (uint8_t*) &cmd, sizeof(struct flasher_cmd));
+		if (nread != sizeof(struct flasher_cmd))
 		{
 			continue;
 		}
 
+		switch (cmd.type)
+		{
+		case write_cmd_type:
+		{
 		/* Check page parameter */
 		if (
-			cmd.page < START_PAGE ||
-			cmd.page >= NUM_PAGES
+				cmd.typed.write.page < START_PAGE ||
+				cmd.typed.write.page >= NUM_PAGES
 		)
 		{
 			goto failure;
@@ -68,11 +61,11 @@ void run_flasher(void)
 
 		/* Calculate CRC */
 
-		crc_from_cmd = cmd.crc;
-		cmd.crc = 0;
+			crc_from_cmd = cmd.typed.write.crc;
+			cmd.typed.write.crc = 0;
 
 		calculated_crc = 0xFFFFFFFF;
-		crc_sync_crc32(&CRC_0, (uint32_t*) &cmd,
+			crc_sync_crc32(&CRC_0, (uint32_t*) &cmd.typed.write,
 			sizeof(struct write_cmd) / sizeof(uint32_t), &calculated_crc);
 		calculated_crc ^= 0xFFFFFFFF;
 
@@ -83,10 +76,27 @@ void run_flasher(void)
 		}
 
 		/* Write flash */
-		flash_write(&FLASH_0, cmd.page * PAGE_SIZE, cmd.data, PAGE_SIZE);
+			flash_write(&FLASH_0, cmd.typed.write.page * PAGE_SIZE,
+				cmd.typed.write.data, PAGE_SIZE);
 
 		/* Successful response */
 		io_write(serial, (uint8_t[]) { 0x42 }, 1);
+		}
+			break;
+
+		case boot_cmd_type:
+			/* Successful response */
+			io_write(serial, (uint8_t[]) { 0x42 }, 1);
+
+			/* Bootmode is not actually used yet */
+			run_application();
+
+			break;
+
+		default:
+			/* Unknown command type */
+			goto failure;
+		}
 	}
 
 failure:
