@@ -21,6 +21,7 @@ add_compile_options(
 	-std=gnu99
 	-D__SAMC21E16A__
 	-mcpu=cortex-m0plus
+	-Wno-array-bounds
 )
 
 add_link_options(

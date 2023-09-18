@@ -5,10 +5,28 @@
 
 #include "protocol.h"
 
+#define HEADER_OFFSET 0x0F00u /* Where the application header is in flash */
+#define HEADER_MAGIC 0x13374269u /* Magic number to mark valid header */
+
 static struct io_descriptor* serial;
 
+void try_booting(void);
 void run_flasher(void);
 void run_application(void);
+
+/** Structure of the application header */
+union app_header
+{
+	uint8_t bytes[PAGE_SIZE];
+	struct
+	{
+		uint32_t magic; /** Magic number to mark valid header */
+		uint8_t valid; /** Whether application is valid or not */
+		uint32_t crc; /** Application CRC */
+		uint32_t length; /** Application length */
+		uint16_t version; /** Application version */
+	} data;
+};
 
 int main(void)
 {
@@ -20,8 +38,38 @@ int main(void)
 	usart_sync_enable(&USART_0);
 	crc_sync_enable(&CRC_0);
 
+	/* Letzzzz goooooo */
+	try_booting();
+}
+
+void try_booting(void)
+{
+	volatile union app_header* current_header =
+		(union app_header*) HEADER_OFFSET;
+	union app_header header_to_write;
+
+	/* Check if application header initialized */
+	if (current_header->data.magic != HEADER_MAGIC)
+	{
+		/* Initialize with default values */
+		header_to_write.data.magic = HEADER_MAGIC;
+		header_to_write.data.valid = 0;
+		header_to_write.data.crc = 0;
+		header_to_write.data.length = 0;
+		header_to_write.data.version = 0;
+		flash_write(&FLASH_0, HEADER_OFFSET,
+			header_to_write.bytes, PAGE_SIZE);
+	}
+
+	// TODO Check application integrity
+
 	/* Determine boot mode */
-	if (gpio_get_pin_level(BOOTMODE) == false)
+	if (
+		/* Bootmode set via pin or */
+		gpio_get_pin_level(BOOTMODE) == false ||
+		/* Application is invalid */
+		!(current_header->data.valid)
+	)
 	{
 		/* Continue with flasher */
 		run_flasher();
@@ -40,6 +88,7 @@ void run_flasher(void)
 	uint32_t crc_from_cmd; /** CRC read from serial */
 	uint32_t calculated_crc; /** CRC calculated from command */
 	bool flashing = false; /** Whether we are flashing right now */
+	union app_header header_to_write; /** Header prepared to write */
 
 	while (true)
 	{
@@ -60,6 +109,15 @@ void run_flasher(void)
 				/* Already started */
 				goto failure;
 			}
+
+			/* Intentionally invalidate application */
+			header_to_write.data.magic = HEADER_MAGIC;
+			header_to_write.data.valid = 0;
+			header_to_write.data.crc = 0; // TODO Fill app CRC
+			header_to_write.data.length = 0; // TODO Fill app length
+			header_to_write.data.version = 0; // TODO Fill app version
+			flash_write(&FLASH_0, HEADER_OFFSET,
+				header_to_write.bytes, PAGE_SIZE);
 
 			/* Can start flashing now */
 			flashing = true;
@@ -121,6 +179,15 @@ void run_flasher(void)
 				goto failure;
 			}
 
+			/* Mark application valid */
+			header_to_write.data.magic = HEADER_MAGIC;
+			header_to_write.data.valid = 1;
+			header_to_write.data.crc = 0; // TODO Fill app CRC
+			header_to_write.data.length = 0; // TODO Fill app length
+			header_to_write.data.version = 0; // TODO Fill app version
+			flash_write(&FLASH_0, HEADER_OFFSET,
+				header_to_write.bytes, PAGE_SIZE);
+
 			/* Dont allow flashing anymore */
 			flashing = false;
 
@@ -142,7 +209,7 @@ void run_flasher(void)
 			io_write(serial, (uint8_t[]) { 0x42 }, 1);
 
 			/* Bootmode is not actually used yet */
-			run_application();
+			try_booting();
 		}
 			break;
 
