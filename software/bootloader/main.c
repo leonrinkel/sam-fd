@@ -1,3 +1,6 @@
+#include <stdint.h>
+#include <stdbool.h>
+
 #include <atmel_start.h>
 
 #include "protocol.h"
@@ -36,6 +39,7 @@ void run_flasher(void)
 	struct flasher_cmd cmd; /** Command read from serial */
 	uint32_t crc_from_cmd; /** CRC read from serial */
 	uint32_t calculated_crc; /** CRC calculated from command */
+	bool flashing = false; /** Whether we are flashing right now */
 
 	while (true)
 	{
@@ -48,49 +52,98 @@ void run_flasher(void)
 
 		switch (cmd.type)
 		{
+		/* Handle start command */
+		case start_cmd_type:
+		{
+			if (flashing)
+			{
+				/* Already started */
+				goto failure;
+			}
+
+			/* Can start flashing now */
+			flashing = true;
+
+			/* Successful response */
+			io_write(serial, (uint8_t[]) { 0x42 }, 1);
+		}
+			break;
+
+		/* Handle write command */
 		case write_cmd_type:
 		{
-		/* Check page parameter */
-		if (
+			if (!flashing)
+			{
+				/* Not yet started */
+				goto failure;
+			}
+
+			/* Check page parameter */
+			if (
 				cmd.typed.write.page < START_PAGE ||
 				cmd.typed.write.page >= NUM_PAGES
-		)
-		{
-			goto failure;
-		}
+			)
+			{
+				goto failure;
+			}
 
-		/* Calculate CRC */
+			/* Calculate CRC */
 
 			crc_from_cmd = cmd.typed.write.crc;
 			cmd.typed.write.crc = 0;
 
-		calculated_crc = 0xFFFFFFFF;
-			crc_sync_crc32(&CRC_0, (uint32_t*) &cmd.typed.write,
-			sizeof(struct write_cmd) / sizeof(uint32_t), &calculated_crc);
-		calculated_crc ^= 0xFFFFFFFF;
+			calculated_crc = 0xFFFFFFFF;
+				crc_sync_crc32(&CRC_0, (uint32_t*) &cmd.typed.write,
+				sizeof(struct write_cmd) / sizeof(uint32_t), &calculated_crc);
+			calculated_crc ^= 0xFFFFFFFF;
 
-		if (calculated_crc != crc_from_cmd)
-		{
-			/* Incorrect CRC */
-			goto failure;
-		}
+			if (calculated_crc != crc_from_cmd)
+			{
+				/* Incorrect CRC */
+				goto failure;
+			}
 
-		/* Write flash */
+			/* Write flash */
 			flash_write(&FLASH_0, cmd.typed.write.page * PAGE_SIZE,
 				cmd.typed.write.data, PAGE_SIZE);
 
-		/* Successful response */
-		io_write(serial, (uint8_t[]) { 0x42 }, 1);
+			/* Successful response */
+			io_write(serial, (uint8_t[]) { 0x42 }, 1);
 		}
 			break;
 
+		/* Handle stop command */
+		case stop_cmd_type:
+		{
+			if (!flashing)
+			{
+				/* Not yet started */
+				goto failure;
+			}
+
+			/* Dont allow flashing anymore */
+			flashing = false;
+
+			/* Successful response */
+			io_write(serial, (uint8_t[]) { 0x42 }, 1);
+		}
+			break;
+
+		/* Handle boot command */
 		case boot_cmd_type:
+		{
+			if (flashing)
+			{
+				/* Can't boot while still flashing */
+				goto failure;
+			}
+
 			/* Successful response */
 			io_write(serial, (uint8_t[]) { 0x42 }, 1);
 
 			/* Bootmode is not actually used yet */
 			run_application();
-
+		}
 			break;
 
 		default:

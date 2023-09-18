@@ -108,6 +108,21 @@ int main(int argc, char* argv[])
 		goto cleanup;
 	}
 
+	/* Send start command */
+	cmd.type = start_cmd_type;
+	if (!serial_write((uint8_t*) &cmd, sizeof(struct flasher_cmd)))
+	{
+		ret = EXIT_FAILURE;
+		goto cleanup;
+	}
+
+	/* Check response to start command */
+	if (!serial_read((uint8_t*) &cmd_resp, sizeof(uint8_t)))
+	{
+		ret = EXIT_FAILURE;
+		goto cleanup;
+	}
+
 	printf("flashing...");
 	fflush(stdout);
 
@@ -160,6 +175,21 @@ int main(int argc, char* argv[])
 			/* End of file */
 			break;
 		}
+	}
+
+	/* Send stop command */
+	cmd.type = stop_cmd_type;
+	if (!serial_write((uint8_t*) &cmd, sizeof(struct flasher_cmd)))
+	{
+		ret = EXIT_FAILURE;
+		goto cleanup;
+	}
+
+	/* Check response to stop command */
+	if (!serial_read((uint8_t*) &cmd_resp, sizeof(uint8_t)))
+	{
+		ret = EXIT_FAILURE;
+		goto cleanup;
 	}
 
 	printf("done\nbooting...");

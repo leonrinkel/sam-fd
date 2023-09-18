@@ -8,12 +8,26 @@
 #define NUM_PAGES 256 /* There are 256 pages */
 #define START_PAGE (APP_OFFSET / PAGE_SIZE) /* Only allow writing from here */
 
+/** Structure of a start command */
+struct start_cmd
+{
+	uint8_t idk;
+	uint8_t whatever;
+};
+
 /** Structure of a write command */
 struct write_cmd
 {
 	uint32_t page; /** Page number to write */
 	uint8_t data[PAGE_SIZE]; /** Data to write */
 	uint32_t crc; /** CRC32 of command */
+};
+
+/** Structure of a stop command */
+struct stop_cmd
+{
+	uint8_t idk;
+	uint8_t whatever;
 };
 
 /** Structure of a boot command */
@@ -24,7 +38,9 @@ struct boot_cmd
 
 enum cmd_type
 {
+	start_cmd_type = 0x13,
 	write_cmd_type = 0x42,
+	stop_cmd_type = 0x37,
 	boot_cmd_type = 0x69,
 };
 
@@ -33,7 +49,9 @@ struct flasher_cmd
 	enum cmd_type type;
 	union
 	{
+		struct start_cmd start;
 		struct write_cmd write;
+		struct stop_cmd stop;
 		struct boot_cmd boot;
 	} typed;
 };
