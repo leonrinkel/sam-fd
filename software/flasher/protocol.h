@@ -11,8 +11,8 @@
 /** Structure of a start command */
 struct start_cmd
 {
-	uint8_t idk;
-	uint8_t whatever;
+	uint32_t length; /** Number of bytes to flash */
+	uint16_t version; /** Application version number */
 };
 
 /** Structure of a write command */

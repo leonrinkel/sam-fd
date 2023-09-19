@@ -72,18 +72,21 @@ int main(int argc, char* argv[])
 
 	char* arg_port; /** Serial port to open */
 	char* arg_file; /** Path to flash file */
+	char* arg_version; /** Verion number */
 
 	int portfd = 0; /** File descriptor of serial port */
 	FILE* file = NULL; /** File descriptor of bin file to flash */
 	struct flasher_cmd cmd; /** Command to transmit */
 	size_t file_nread; /** Number of bytes read from flash file */
 	uint8_t cmd_resp; /** Response read from serial port */
+	uint16_t version_no = 0; /** Version number */
+	long length_to_flash; /** Number of bytes to flash */
 
 	/* Parse CLI args */
-	if (argc != 3)
+	if (argc < 3 || argc > 4)
 	{
 		fprintf(stderr,
-			"usage: flasher <port> <file>\n"
+			"usage: flasher port file <version>\n"
 			"e.g.: ./flasher /dev/ttyUSB0 application.bin\n"
 			"or: flasher.exe COM1 application.bin\n"
 		);
@@ -92,6 +95,13 @@ int main(int argc, char* argv[])
 	}
 	arg_port = argv[1];
 	arg_file = argv[2];
+
+	/* Parse version number */
+	if (argc == 4)
+	{
+		arg_version = argv[3];
+		version_no = atoi(arg_version);
+	}
 
 	if (!serial_open(arg_port))
 	{
@@ -108,8 +118,21 @@ int main(int argc, char* argv[])
 		goto cleanup;
 	}
 
+	/* Determine file size */
+	fseek(file, 0, SEEK_END);
+	length_to_flash = ftell(file);
+	rewind(file);
+	/* Plus page padding */
+	if (length_to_flash % PAGE_SIZE > 0)
+	{
+		length_to_flash +=
+			PAGE_SIZE - (length_to_flash % PAGE_SIZE);
+	}
+
 	/* Send start command */
 	cmd.type = start_cmd_type;
+	cmd.typed.start.length = length_to_flash;
+	cmd.typed.start.version = version_no;
 	if (!serial_write((uint8_t*) &cmd, sizeof(struct flasher_cmd)))
 	{
 		ret = EXIT_FAILURE;

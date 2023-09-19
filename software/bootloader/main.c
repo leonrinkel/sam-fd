@@ -89,6 +89,10 @@ void run_flasher(void)
 	uint32_t calculated_crc; /** CRC calculated from command */
 	bool flashing = false; /** Whether we are flashing right now */
 	union app_header header_to_write; /** Header prepared to write */
+	uint32_t bytes_flashed; /** Number of bytes already flashed */
+	/** Pointer to actual current app header */
+	volatile union app_header* current_header =
+		(union app_header*) HEADER_OFFSET;
 
 	while (true)
 	{
@@ -113,13 +117,14 @@ void run_flasher(void)
 			/* Intentionally invalidate application */
 			header_to_write.data.magic = HEADER_MAGIC;
 			header_to_write.data.valid = 0;
-			header_to_write.data.crc = 0; // TODO Fill app CRC
-			header_to_write.data.length = 0; // TODO Fill app length
-			header_to_write.data.version = 0; // TODO Fill app version
+			header_to_write.data.crc = 0;
+			header_to_write.data.length = cmd.typed.start.length;
+			header_to_write.data.version = cmd.typed.start.version;
 			flash_write(&FLASH_0, HEADER_OFFSET,
 				header_to_write.bytes, PAGE_SIZE);
 
 			/* Can start flashing now */
+			bytes_flashed = 0;
 			flashing = true;
 
 			/* Successful response */
@@ -164,6 +169,7 @@ void run_flasher(void)
 			/* Write flash */
 			flash_write(&FLASH_0, cmd.typed.write.page * PAGE_SIZE,
 				cmd.typed.write.data, PAGE_SIZE);
+			bytes_flashed += PAGE_SIZE;
 
 			/* Successful response */
 			io_write(serial, (uint8_t[]) { 0x42 }, 1);
@@ -179,12 +185,18 @@ void run_flasher(void)
 				goto failure;
 			}
 
+			if (bytes_flashed != current_header->data.length)
+			{
+				/* Flashed less than expected */
+				goto failure;
+			}
+
 			/* Mark application valid */
 			header_to_write.data.magic = HEADER_MAGIC;
 			header_to_write.data.valid = 1;
 			header_to_write.data.crc = 0; // TODO Fill app CRC
-			header_to_write.data.length = 0; // TODO Fill app length
-			header_to_write.data.version = 0; // TODO Fill app version
+			header_to_write.data.length = current_header->data.length;
+			header_to_write.data.version = current_header->data.version;
 			flash_write(&FLASH_0, HEADER_OFFSET,
 				header_to_write.bytes, PAGE_SIZE);
 
