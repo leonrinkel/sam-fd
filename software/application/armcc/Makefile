@@ -43,6 +43,7 @@ hpl/gclk \
 hpl/oscctrl \
 stdio_redirect/keil \
 samc21/armcc/Device/SAMC21/Source \
+hpl/nvmctrl \
 hpl/core \
 hpl/divas
 
@@ -53,6 +54,7 @@ stdio_redirect/stdio_io.o \
 hpl/systick/hpl_systick.o \
 hal/src/hal_can_async.o \
 hpl/can/hpl_can.o \
+hpl/nvmctrl/hpl_nvmctrl.o \
 samc21/armcc/Device/SAMC21/Source/ARM/startup_SAMC21.o \
 hal/src/hal_delay.o \
 hpl/oscctrl/hpl_oscctrl.o \
@@ -67,6 +69,7 @@ hpl/mclk/hpl_mclk.o \
 stdio_redirect/keil/Retarget.o \
 hpl/gclk/hpl_gclk.o \
 stdio_start.o \
+hal/src/hal_flash.o \
 hal/src/hal_init.o \
 main.o \
 hpl/osc32kctrl/hpl_osc32kctrl.o \
@@ -87,6 +90,7 @@ OBJS_AS_ARGS +=  \
 "hpl/systick/hpl_systick.o" \
 "hal/src/hal_can_async.o" \
 "hpl/can/hpl_can.o" \
+"hpl/nvmctrl/hpl_nvmctrl.o" \
 "samc21/armcc/Device/SAMC21/Source/ARM/startup_SAMC21.o" \
 "hal/src/hal_delay.o" \
 "hpl/oscctrl/hpl_oscctrl.o" \
@@ -101,6 +105,7 @@ OBJS_AS_ARGS +=  \
 "stdio_redirect/keil/Retarget.o" \
 "hpl/gclk/hpl_gclk.o" \
 "stdio_start.o" \
+"hal/src/hal_flash.o" \
 "hal/src/hal_init.o" \
 "main.o" \
 "hpl/osc32kctrl/hpl_osc32kctrl.o" \
@@ -126,6 +131,7 @@ DEPS_AS_ARGS +=  \
 "hpl/systick/hpl_systick.d" \
 "hpl/can/hpl_can.d" \
 "samc21/armcc/Device/SAMC21/Source/ARM/startup_SAMC21.d" \
+"hpl/nvmctrl/hpl_nvmctrl.d" \
 "hpl/core/hpl_core_m0plus_base.d" \
 "hal/utils/src/utils_list.d" \
 "hpl/dmac/hpl_dmac.d" \
@@ -133,6 +139,7 @@ DEPS_AS_ARGS +=  \
 "hal/src/hal_delay.d" \
 "hpl/core/hpl_init.d" \
 "hpl/pm/hpl_pm.d" \
+"hal/src/hal_flash.d" \
 "stdio_start.d" \
 "hpl/gclk/hpl_gclk.d" \
 "hal/src/hal_init.d" \
@@ -186,7 +193,7 @@ $(OBJS_AS_ARGS)
 	@echo Building file: $<
 	@echo ARMCC Compiler
 	$(QUOTE)armcc$(QUOTE) --c99 -c -DDEBUG -O1 -g --apcs=interwork --split_sections --cpu Cortex-M0+ -D__SAMC21E16A__ \
--I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/can" -I"../hpl/core" -I"../hpl/divas" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/mclk" -I"../hpl/osc32kctrl" -I"../hpl/oscctrl" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/systick" -I"../hri" -I"../" -I"../config" -I"../stdio_redirect" -I"../" -I"../CMSIS/Core/Include" -I"../samc21/include"  \
+-I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/can" -I"../hpl/core" -I"../hpl/divas" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/mclk" -I"../hpl/nvmctrl" -I"../hpl/osc32kctrl" -I"../hpl/oscctrl" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/systick" -I"../hri" -I"../" -I"../config" -I"../stdio_redirect" -I"../" -I"../CMSIS/Core/Include" -I"../samc21/include"  \
 --depend "$@"  -o "$@" "$<"
 
 	@echo Finished building: $<
@@ -195,7 +202,7 @@ $(OBJS_AS_ARGS)
 	@echo Building file: $<
 	@echo ARMCC Assembler
 	$(QUOTE)armasm$(QUOTE) -g --apcs=interwork --cpu Cortex-M0+ --pd "D__SAMC21E16A__ SETA 1" \
--I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/can" -I"../hpl/core" -I"../hpl/divas" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/mclk" -I"../hpl/osc32kctrl" -I"../hpl/oscctrl" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/systick" -I"../hri" -I"../" -I"../config" -I"../stdio_redirect" -I"../" -I"../CMSIS/Core/Include" -I"../samc21/include"  \
+-I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/can" -I"../hpl/core" -I"../hpl/divas" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/mclk" -I"../hpl/nvmctrl" -I"../hpl/osc32kctrl" -I"../hpl/oscctrl" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/systick" -I"../hri" -I"../" -I"../config" -I"../stdio_redirect" -I"../" -I"../CMSIS/Core/Include" -I"../samc21/include"  \
 --depend "$(@:%.o=%.d)" -o "$@" "$<"
 
 	@echo Finished building: $<
@@ -204,7 +211,7 @@ $(OBJS_AS_ARGS)
 	@echo Building file: $<
 	@echo ARMCC Preprocessing Assembler
 	$(QUOTE)armcc$(QUOTE) --c99 -c -DDEBUG -O1 -g --apcs=interwork --split_sections --cpu Cortex-M0+ -D__SAMC21E16A__ \
--I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/can" -I"../hpl/core" -I"../hpl/divas" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/mclk" -I"../hpl/osc32kctrl" -I"../hpl/oscctrl" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/systick" -I"../hri" -I"../" -I"../config" -I"../stdio_redirect" -I"../" -I"../CMSIS/Core/Include" -I"../samc21/include"  \
+-I"../" -I"../config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/can" -I"../hpl/core" -I"../hpl/divas" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/mclk" -I"../hpl/nvmctrl" -I"../hpl/osc32kctrl" -I"../hpl/oscctrl" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/sercom" -I"../hpl/systick" -I"../hri" -I"../" -I"../config" -I"../stdio_redirect" -I"../" -I"../CMSIS/Core/Include" -I"../samc21/include"  \
 --depend "$@"  -o "$@" "$<"
 
 	@echo Finished building: $<

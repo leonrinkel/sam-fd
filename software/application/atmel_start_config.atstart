@@ -454,6 +454,19 @@ drivers:
           external: false
           external_frequency: 0
         configuration: {}
+  FLASH_0:
+    user_label: FLASH_0
+    definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::NVMCTRL::driver_config_definition::Flash::HAL:Driver:FLASH
+    functionality: Flash
+    api: HAL:Driver:FLASH
+    configuration:
+      nvm_arch_cache: false
+      nvm_arch_read_mode: No Miss Penalty
+      nvm_arch_sleepprm: Wake On Access
+    optional_signals: []
+    variant: null
+    clocks:
+      domain_group: null
   OSC32KCTRL:
     user_label: OSC32KCTRL
     definition: Atmel:SAMC21_Drivers:0.0.1::SAMC21E16A-AN::OSC32KCTRL::driver_config_definition::OSC32KCTRL::HAL:HPL:OSC32KCTRL
@@ -501,9 +514,9 @@ drivers:
     functionality: System
     api: HAL:HPL:OSCCTRL
     configuration:
-      $input: 12000000
+      $input: 32768
       $input_id: 32kHz External Crystal Oscillator (XOSC32K)
-      RESERVED_InputFreq: 12000000
+      RESERVED_InputFreq: 32768
       RESERVED_InputFreq_id: 32kHz External Crystal Oscillator (XOSC32K)
       _$freq_output_48MHz Internal Oscillator (OSC48M): 48000000
       _$freq_output_External Crystal Oscillator 0.4-32MHz (XOSC): '32000000'

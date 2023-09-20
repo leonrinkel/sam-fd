@@ -22,6 +22,7 @@ add_compile_options(
 	-Wall
 	-D__SAMC21E16A__
 	-DDEBUG
+	-Wno-array-bounds
 )
 
 add_link_options(
@@ -62,6 +63,8 @@ add_executable(application
 	hpl/sercom/hpl_sercom.c
 	hpl/divas/hpl_divas.c
 	samc21/gcc/system_samc21.c
+	hpl/nvmctrl/hpl_nvmctrl.c
+	hal/src/hal_flash.c
 	samc21/gcc/gcc/startup_samc21.c
 	stdio_start.c
 	stdio_redirect/stdio_io.c
@@ -91,6 +94,7 @@ target_include_directories(application PRIVATE
 	hpl/port
 	hpl/sercom
 	hpl/systick
+	hpl/nvmctrl
 	hri
 	samc21/include
 	stdio_redirect

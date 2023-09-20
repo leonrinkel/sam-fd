@@ -12,6 +12,9 @@
 extern "C" {
 #endif
 
+void FLASH_0_example(void);
+void RWW_FLASH_0_example(void);
+
 void TARGET_IO_example(void);
 
 void delay_example(void);

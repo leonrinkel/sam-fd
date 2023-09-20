@@ -13,7 +13,21 @@
 
 struct can_async_descriptor CAN_0;
 
+struct flash_descriptor FLASH_0;
+
 struct usart_sync_descriptor TARGET_IO;
+
+void FLASH_0_CLOCK_init(void)
+{
+
+	hri_mclk_set_AHBMASK_NVMCTRL_bit(MCLK);
+}
+
+void FLASH_0_init(void)
+{
+	FLASH_0_CLOCK_init();
+	flash_init(&FLASH_0, NVMCTRL);
+}
 
 void TARGET_IO_PORT_init(void)
 {
@@ -136,6 +150,8 @@ void system_init(void)
 	gpio_set_pin_direction(CAN_STB, GPIO_DIRECTION_OUT);
 
 	gpio_set_pin_function(CAN_STB, GPIO_PIN_FUNCTION_OFF);
+
+	FLASH_0_init();
 
 	TARGET_IO_init();
 
