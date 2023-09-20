@@ -44,9 +44,12 @@ int main(void)
 
 void try_booting(void)
 {
+	/** Pointer to actual current app header */
 	volatile union app_header* current_header =
 		(union app_header*) HEADER_OFFSET;
-	union app_header header_to_write;
+	union app_header header_to_write;  /** Header prepared to write */
+	uint32_t application_crc; /** Computed CRC of application */
+	uint8_t integrity_asserted;
 
 	/* Check if application header initialized */
 	if (current_header->data.magic != HEADER_MAGIC)
@@ -61,14 +64,34 @@ void try_booting(void)
 			header_to_write.bytes, PAGE_SIZE);
 	}
 
-	// TODO Check application integrity
+	/* Calculate application CRC */
+	application_crc = 0xFFFFFFFF;
+	for (
+		unsigned int page = 0;
+		page * PAGE_SIZE < current_header->data.length;
+		page++
+	)
+	{
+		/* Add flashed page to CRC computation */
+		crc_sync_crc32(&CRC_0, (uint32_t*) ((page + START_PAGE) * PAGE_SIZE),
+			PAGE_SIZE / sizeof(uint32_t), &application_crc);
+	}
+
+	/* Check application integrity */
+	integrity_asserted =
+	(
+		(application_crc ^ 0xFFFFFFFF) ==
+		current_header->data.crc
+	);
 
 	/* Determine boot mode */
 	if (
 		/* Bootmode set via pin or */
 		gpio_get_pin_level(BOOTMODE) == false ||
 		/* Application is invalid */
-		!(current_header->data.valid)
+		!(current_header->data.valid) ||
+		/* Application integrity check failed */
+		!integrity_asserted
 	)
 	{
 		/* Continue with flasher */
@@ -86,7 +109,8 @@ void run_flasher(void)
 	int32_t nread; /** Number of bytes read from serial */
 	struct flasher_cmd cmd; /** Command read from serial */
 	uint32_t crc_from_cmd; /** CRC read from serial */
-	uint32_t calculated_crc; /** CRC calculated from command */
+	uint32_t command_crc; /** CRC calculated from command */
+	uint32_t application_crc; /** Computed CRC of flashed application */
 	bool flashing = false; /** Whether we are flashing right now */
 	union app_header header_to_write; /** Header prepared to write */
 	uint32_t bytes_flashed; /** Number of bytes already flashed */
@@ -125,6 +149,7 @@ void run_flasher(void)
 
 			/* Can start flashing now */
 			bytes_flashed = 0;
+			application_crc = 0xFFFFFFFF;
 			flashing = true;
 
 			/* Successful response */
@@ -150,17 +175,16 @@ void run_flasher(void)
 				goto failure;
 			}
 
-			/* Calculate CRC */
-
+			/* Calculate CRC of write command */
 			crc_from_cmd = cmd.typed.write.crc;
 			cmd.typed.write.crc = 0;
-
-			calculated_crc = 0xFFFFFFFF;
+			command_crc = 0xFFFFFFFF;
 				crc_sync_crc32(&CRC_0, (uint32_t*) &cmd.typed.write,
-				sizeof(struct write_cmd) / sizeof(uint32_t), &calculated_crc);
-			calculated_crc ^= 0xFFFFFFFF;
+				sizeof(struct write_cmd) / sizeof(uint32_t), &command_crc);
+			command_crc ^= 0xFFFFFFFF;
 
-			if (calculated_crc != crc_from_cmd)
+			/* Check CRC of write command */
+			if (command_crc != crc_from_cmd)
 			{
 				/* Incorrect CRC */
 				goto failure;
@@ -170,6 +194,10 @@ void run_flasher(void)
 			flash_write(&FLASH_0, cmd.typed.write.page * PAGE_SIZE,
 				cmd.typed.write.data, PAGE_SIZE);
 			bytes_flashed += PAGE_SIZE;
+
+			/* Add flashed page to CRC computation for total application */
+			crc_sync_crc32(&CRC_0, (uint32_t*) cmd.typed.write.data,
+				PAGE_SIZE / sizeof(uint32_t), &application_crc);
 
 			/* Successful response */
 			io_write(serial, (uint8_t[]) { 0x42 }, 1);
@@ -194,7 +222,7 @@ void run_flasher(void)
 			/* Mark application valid */
 			header_to_write.data.magic = HEADER_MAGIC;
 			header_to_write.data.valid = 1;
-			header_to_write.data.crc = 0; // TODO Fill app CRC
+			header_to_write.data.crc = application_crc ^ 0xFFFFFFFF;
 			header_to_write.data.length = current_header->data.length;
 			header_to_write.data.version = current_header->data.version;
 			flash_write(&FLASH_0, HEADER_OFFSET,
