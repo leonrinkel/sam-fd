@@ -7,6 +7,7 @@ project(flasher
 
 add_executable(
 	${PROJECT_NAME}
+	crc.c
 	flasher.c
 	serial_unix.c
 	serial_windows.c
