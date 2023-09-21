@@ -1,30 +1,39 @@
 /**
- * \file src/system.cpp
+ * \file   src/system.c
  * \author Rinkel, Leon <leon@rinkel.me>
  *
  * Implementation of low-level processor stuff such as the vector table.
  */
 
-#include "system.hpp"
+#include <stdint.h>
+#include <stdbool.h>
 
-#include "samfd.hpp"
-#include "types.hpp"
-#include "linked.hpp"
+#include "linked.h"
+#include "port.h"
+#include "system.h"
 
-/**
- * Main function.
- *
- * We could just call our wrapper class in the reset handler but some debuggers
- * seem to require a main function to work properly.
- */
+/** \brief Main function */
 int main(void)
 {
-	samfd().run();
+	PORT_DIR.U |=
+		PORT_DIR_DIR9_MSK |
+		PORT_DIR_DIR10_MSK;
+
+	PORT_OUT.B.OUT9 = 0;
+	PORT_OUT.B.OUT10 = 1;
+
+	for (;;)
+	{
+		PORT_OUT.U ^= PORT_DIR_DIR9_MSK;
+		PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
+		for (uint32_t i = 0x000FFFFFu; i > 0; i--);
+	}
+
 	return 0;
 }
 
 /**
- * Handles the reset exception.
+ * \brief Handles the reset exception.
  *
  * Reset is invoked on power up or a warm reset. The exception model treats
  * reset as a special form of exception. When reset is asserted, the
@@ -40,7 +49,7 @@ void reset_handler(void)
 	uint32_t  cnt;
 	uint32_t  idx;
 
-	/* Relocate data section. */
+	/* Relocate data section */
 	src = &_sdata;
 	dst = &_sdata_reloc;
 	while (dst < &_edata_reloc)
@@ -48,38 +57,39 @@ void reset_handler(void)
 		*dst++ = *src++;
 	}
 
-	/* Clear bss section. */
+	/* Clear bss section */
 	dst = &_sbss;
 	while (dst < &_ebss)
 	{
 		*dst++ = 0;
 	}
 
-	/* Call constructors. */
+	/* Call constructors */
 	cnt = _einit_array - _sinit_array;
 	for (idx = 0; idx < cnt; idx++)
 	{
 		((void(*)(void)) _sinit_array[idx])();
 	}
 
-	/* Call main entry point. */
+	/* Call main entry point */
 	main();
 
-	/* Call destructors. */
+	/* Call destructors */
 	cnt = _efini_array - _sfini_array;
 	for (idx = 0; idx < cnt; idx++)
 	{
 		((void(*)(void)) _sfini_array[idx])();
 	}
 
-	/* Infinite loop. */
+	/* Infinite loop */
 	while (true)
 	{
 		__asm__("nop");
 	}
 }
 
-/** NMI handler.
+/**
+ * \brief NMI handler
  *
  * A Non-Maskable Interrupt (NMI) can be signalled by a peripheral or
  * triggered by software. This is the highest priority exception other than
@@ -91,7 +101,7 @@ void reset_handler(void)
 void __attribute__((interrupt)) nmi_handler(void) {}
 
 /**
- * HardFault handler.
+ * \brief HardFault handler
  *
  * A HardFault is an exception that occurs because of an error. HardFaults
  * have a fixed priority of –1, meaning they have higher priority than any
@@ -99,7 +109,7 @@ void __attribute__((interrupt)) nmi_handler(void) {}
  */
 void __attribute__((interrupt)) hard_fault_handler(void)
 {
-	/* Infinite loop so that we can see we hard faulted. */
+	/* Infinite loop so that we can see we hard faulted */
 	while (true)
 	{
 		__asm__("nop");
@@ -107,7 +117,7 @@ void __attribute__((interrupt)) hard_fault_handler(void)
 }
 
 /**
- * SV call handler.
+ * \brief SV call handler
  *
  * A Supervisor Call (SVC) is an exception that is triggered by the SVC
  * instruction. In an OS environment, applications can use SVC instructions
@@ -116,7 +126,7 @@ void __attribute__((interrupt)) hard_fault_handler(void)
 void __attribute__((interrupt)) sv_call_handler(void) {}
 
 /**
- * PendSV handler.
+ * \brief PendSV handler
  *
  * PendSV is an interrupt-driven request for system-level service. In an OS
  * environment, use PendSV for context switching when no other exception is
@@ -125,7 +135,7 @@ void __attribute__((interrupt)) sv_call_handler(void) {}
 void __attribute__((interrupt)) pend_sv_handler(void) {}
 
 /**
- * SysTick handler.
+ * \brief SysTick handler
  *
  * If the device implements the SysTick timer, a SysTick exception is
  * generated when the SysTick timer reaches zero. Software can also
@@ -134,91 +144,91 @@ void __attribute__((interrupt)) pend_sv_handler(void) {}
  */
 void __attribute__((interrupt)) sys_tick_handler(void) {}
 
-/** System IRQ handler */
+/** \brief System IRQ handler */
 void __attribute__((interrupt)) system_handler(void) {}
 
-/** WDT IRQ handler */
+/** \brief WDT IRQ handler */
 void __attribute__((interrupt)) wdt_handler(void) {}
 
-/** RTC IRQ handler */
+/** \brief RTC IRQ handler */
 void __attribute__((interrupt)) rtc_handler(void) {}
 
-/** EIC IRQ handler */
+/** \brief EIC IRQ handler */
 void __attribute__((interrupt)) eic_handler(void) {}
 
-/** FREQM IRQ handler */
+/** \brief FREQM IRQ handler */
 void __attribute__((interrupt)) freqm_handler(void) {}
 
-/** TSENS IRQ handler */
+/** \brief TSENS IRQ handler */
 void __attribute__((interrupt)) tsens_handler(void) {}
 
-/** NVMCTRL IRQ handler */
+/** \brief NVMCTRL IRQ handler */
 void __attribute__((interrupt)) nvmctrl_handler(void) {}
 
-/** DMAC IRQ handler */
+/** \brief DMAC IRQ handler */
 void __attribute__((interrupt)) dmac_handler(void) {}
 
-/** EVSYS IRQ handler */
+/** \brief EVSYS IRQ handler */
 void __attribute__((interrupt)) evsys_handler(void) {}
 
-/** SERCOM0 IRQ handler */
+/** \brief SERCOM0 IRQ handler */
 void __attribute__((interrupt)) sercom0_handler(void) {}
 
-/** SERCOM1 IRQ handler */
+/** \brief SERCOM1 IRQ handler */
 void __attribute__((interrupt)) sercom1_handler(void) {}
 
-/** SERCOM2 IRQ handler */
+/** \brief SERCOM2 IRQ handler */
 void __attribute__((interrupt)) sercom2_handler(void) {}
 
-/** SERCOM3 IRQ handler */
+/** \brief SERCOM3 IRQ handler */
 void __attribute__((interrupt)) sercom3_handler(void) {}
 
-/** CAN0 IRQ handler */
+/** \brief CAN0 IRQ handler */
 void __attribute__((interrupt)) can0_handler(void) {}
 
-/** TCC0 IRQ handler */
+/** \brief TCC0 IRQ handler */
 void __attribute__((interrupt)) tcc0_handler(void) {}
 
-/** TCC1 IRQ handler */
+/** \brief TCC1 IRQ handler */
 void __attribute__((interrupt)) tcc1_handler(void) {}
 
-/** TCC2 IRQ handler */
+/** \brief TCC2 IRQ handler */
 void __attribute__((interrupt)) tcc2_handler(void) {}
 
-/** TC0 IRQ handler */
+/** \brief TC0 IRQ handler */
 void __attribute__((interrupt)) tc0_handler(void) {}
 
-/** TC1 IRQ handler */
+/** \brief TC1 IRQ handler */
 void __attribute__((interrupt)) tc1_handler(void) {}
 
-/** TC2 IRQ handler */
+/** \brief TC2 IRQ handler */
 void __attribute__((interrupt)) tc2_handler(void) {}
 
-/** TC3 IRQ handler */
+/** \brief TC3 IRQ handler */
 void __attribute__((interrupt)) tc3_handler(void) {}
 
-/** TC4 IRQ handler */
+/** \brief TC4 IRQ handler */
 void __attribute__((interrupt)) tc4_handler(void) {}
 
-/** ADC0 IRQ handler */
+/** \brief ADC0 IRQ handler */
 void __attribute__((interrupt)) adc0_handler(void) {}
 
-/** ADC1 IRQ handler */
+/** \brief ADC1 IRQ handler */
 void __attribute__((interrupt)) adc1_handler(void) {}
 
-/** AC IRQ handler */
+/** \brief AC IRQ handler */
 void __attribute__((interrupt)) ac_handler(void) {}
 
-/** DAC IRQ handler */
+/** \brief DAC IRQ handler */
 void __attribute__((interrupt)) dac_handler(void) {}
 
-/** SDADC IRQ handler */
+/** \brief SDADC IRQ handler */
 void __attribute__((interrupt)) sdadc_handler(void) {}
 
-/** PTC IRQ handler */
+/** \brief PTC IRQ handler */
 void __attribute__((interrupt)) ptc_handler(void) {}
 
-/** Processor interrupt vector table. */
+/** \brief Processor interrupt vector table */
 __attribute__((section(".vectors")))
 const struct vector_table vectors =
 {
@@ -264,33 +274,3 @@ const struct vector_table vectors =
 		/* IRQ 30 */ ptc_handler,
 	},
 };
-
-const volatile struct cpuid::_cpuid* cpuid::cpuid_ro(void)
-{
-	return ((const volatile struct cpuid::_cpuid*) _cpuid_register_address);
-}
-
-uint8_t cpuid::get_revision(void)
-{
-	return cpuid_ro()->revision;
-}
-
-enum cpuid::partno cpuid::get_partno(void)
-{
-	return static_cast<enum cpuid::partno>(cpuid_ro()->partno);
-}
-
-enum cpuid::architecture cpuid::get_architecture(void)
-{
-	return static_cast<enum cpuid::architecture>(cpuid_ro()->architecture);
-}
-
-uint8_t cpuid::get_variant(void)
-{
-	return cpuid_ro()->variant;
-}
-
-enum cpuid::implementer cpuid::get_implementer(void)
-{
-	return static_cast<enum cpuid::implementer>(cpuid_ro()->implementer);
-}

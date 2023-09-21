@@ -1,15 +1,20 @@
 cmake_minimum_required(VERSION 3.25.2)
 
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/toolchain.cmake)
-set(CMAKE_C_COMPILER_WORKS 1)
-set(CMAKE_CXX_COMPILER_WORKS 1)
 
 project(baremetal
-	LANGUAGES CXX
+	LANGUAGES C CXX
 	VERSION 0.1
 )
 
-option(BUILD_DOC "Build documentation" ON)
+option(BUILD_DOC "Build documentation" OFF)
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_FLAGS "-fno-exceptions -ffreestanding -fno-jump-tables")
+
+set(CMAKE_C_FLAGS_DEBUG "-O0 -g3")
+set(CMAKE_C_FLAGS_RELEASE "-Os -g0")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,8 +28,6 @@ add_compile_options(
 	-mthumb
 	-Wall
 	-Wextra
-	-Wno-packed-bitfield-compat
-	-Wno-missing-field-initializers
 )
 
 add_link_options(
@@ -35,33 +38,32 @@ add_link_options(
 	-T${CMAKE_SOURCE_DIR}/link.ld
 )
 
-add_executable(baremetal
-	src/gclk.cpp
-	src/mclk.cpp
-	src/optional.cpp
-	src/port.cpp
-	src/samfd.cpp
-	src/system.cpp
+add_executable(
+	${PROJECT_NAME}
+	src/system.c
 )
 
-target_include_directories(baremetal PRIVATE inc)
+target_include_directories(
+	${PROJECT_NAME}
+	PRIVATE inc
+)
 
-set_target_properties(baremetal PROPERTIES SUFFIX .elf)
+set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX .elf)
 
-set(BIN_FILE ${CMAKE_CURRENT_BINARY_DIR}/baremetal.bin)
+set(BIN_FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.bin)
 add_custom_command(
-	TARGET baremetal POST_BUILD
+	TARGET ${PROJECT_NAME} POST_BUILD
 	COMMAND
-		arm-none-eabi-objcopy -O binary $<TARGET_FILE:baremetal> ${BIN_FILE}
+		arm-none-eabi-objcopy -O binary $<TARGET_FILE:${PROJECT_NAME}> ${BIN_FILE}
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	COMMENT "Objcopying elf to bin ${BIN_FILE}"
 )
 
-set(HEX_FILE ${CMAKE_CURRENT_BINARY_DIR}/baremetal.hex)
+set(HEX_FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.hex)
 add_custom_command(
-	TARGET baremetal POST_BUILD
+	TARGET ${PROJECT_NAME} POST_BUILD
 	COMMAND
-		arm-none-eabi-objcopy -O ihex $<TARGET_FILE:baremetal> ${HEX_FILE}
+		arm-none-eabi-objcopy -O ihex $<TARGET_FILE:${PROJECT_NAME}> ${HEX_FILE}
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	COMMENT "Objcopying elf to hex ${HEX_FILE}"
 )
