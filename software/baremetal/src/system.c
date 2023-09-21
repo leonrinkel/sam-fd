@@ -8,25 +8,112 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "gclk.h"
 #include "linked.h"
+#include "mclk.h"
 #include "port.h"
+#include "sercom.h"
 #include "system.h"
 
 /** \brief Main function */
 int main(void)
 {
+	/* Enable PORT peripheral */
+	MCLK_APBBMASK.U |= MCLK_APBBMASK_PORT_MSK;
+	/* Enable SERCOM0 peripheral */
+	MCLK_APBCMASK.U |= MCLK_APBCMASK_SERCOM0_MSK;
+
+	/* Clock SERCOM01234_SLOW using OSC48M */
+	GCLK_PCHCTRL18.U =
+		(0x0u << GCLK_PCHCTRL_GEN_OFF    ) |
+		(0x1u << GCLK_PCHCTRL_CHEN_OFF   ) |
+		(0x0u << GCLK_PCHCTRL_WRTLOCK_OFF);
+	/* Clock SERCOM0_CORE using OSC48M */
+	GCLK_PCHCTRL19.U =
+		(0x0u << GCLK_PCHCTRL_GEN_OFF    ) |
+		(0x1u << GCLK_PCHCTRL_CHEN_OFF   ) |
+		(0x0u << GCLK_PCHCTRL_WRTLOCK_OFF);
+
+	/* Make UART RX/TX pins use port multiplexer */
+	PORT_PINCFG5.U |= PORT_PINCFG_PMUXEN_MSK;
+	PORT_PINCFG6.U |= PORT_PINCFG_PMUXEN_MSK;
+
+	/* SERCOM0/PAD[1] (UART RX) using peripheral function D */
+	PORT_PMUX2.B.PMUXO = 0x3u;
+	/* SERCOM0/PAD[2] (UART TX) using peripheral function D */
+	PORT_PMUX3.B.PMUXE = 0x3u;
+
+	/* Disable SERCOM0 */
+	SERCOM0_CTRLA.B.ENABLE = 0x0u;
+	while (SERCOM0_SYNCBUSY.U & SERCOM_SYNCBUSY_ENABLE_MSK);
+
+	/* Configure SERCOM0 for simple 8N1 UART */
+	SERCOM0_CTRLA.U =
+		(0x0u << SERCOM_CTRLA_SWRST_OFF   ) |
+		(0x0u << SERCOM_CTRLA_ENABLE_OFF  ) |
+		(0x1u << SERCOM_CTRLA_MODE_OFF    ) |
+		(0x0u << SERCOM_CTRLA_RUNSTDBY_OFF) |
+		(0x0u << SERCOM_CTRLA_IBON_OFF    ) |
+		(0x0u << SERCOM_CTRLA_SAMPR_OFF   ) |
+		(0x1u << SERCOM_CTRLA_TXPO_OFF    ) |
+		(0x1u << SERCOM_CTRLA_RXPO_OFF    ) |
+		(0x0u << SERCOM_CTRLA_SAMPA_OFF   ) |
+		(0x0u << SERCOM_CTRLA_FORM_OFF    ) |
+		(0x0u << SERCOM_CTRLA_CMODE_OFF   ) |
+		(0x0u << SERCOM_CTRLA_CPOL_OFF    ) |
+		(0x1u << SERCOM_CTRLA_DORD_OFF    );
+	SERCOM0_CTRLB.U =
+		(0x0u << SERCOM_CTRLB_CHSIZE_OFF) |
+		(0x0u << SERCOM_CTRLB_SBMODE_OFF) |
+		(0x0u << SERCOM_CTRLB_COLDEN_OFF) |
+		(0x0u << SERCOM_CTRLB_SFDE_OFF  ) |
+		(0x0u << SERCOM_CTRLB_ENC_OFF   ) |
+		(0x0u << SERCOM_CTRLB_PMODE_OFF ) |
+		(0x1u << SERCOM_CTRLB_TXEN_OFF  ) |
+		(0x1u << SERCOM_CTRLB_RXEN_OFF  ) |
+		(0x0u << SERCOM_CTRLB_LINCMD_OFF);
+
+	/* Baudrate 115200 @ 4MHz core clock */
+	SERCOM0_BAUD = 35337;
+
+	/* Enable SERCOM0 */
+	SERCOM0_CTRLA.B.ENABLE = 0x1u;
+	while (SERCOM0_SYNCBUSY.U & SERCOM_SYNCBUSY_ENABLE_MSK);
+
+	/* Configure TX_ACT/RX_ACT pins as output */
 	PORT_DIR.U |=
 		PORT_DIR_DIR9_MSK |
 		PORT_DIR_DIR10_MSK;
 
+	/* Turn TX_ACT LED on (active-low) */
 	PORT_OUT.B.OUT9 = 0;
+	/* Turn RX_ACT LED off (active-low) */
 	PORT_OUT.B.OUT10 = 1;
 
 	for (;;)
 	{
+		/* Toggle TX_ACT/RX_ACT LEDs */
 		PORT_OUT.U ^= PORT_DIR_DIR9_MSK;
 		PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
-		for (uint32_t i = 0x000FFFFFu; i > 0; i--);
+
+		/* Delay */
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+
+		/* UART transmit */
+		*((uint32_t*) 0x42000428) = 'h';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = 'e';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = 'l';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = 'l';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = 'o';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = '\r';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = '\n';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
 	}
 
 	return 0;

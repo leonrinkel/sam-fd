@@ -504,4 +504,376 @@ typedef union
 
 /**@}*/
 
+/** \name PORT PINCFG register */
+/**@{*/
+
+/** \brief PORT PINCFG register structure */
+typedef union
+{
+	/** \brief Unsigned access */
+	uint8_t U;
+	/** \brief Bitfield access */
+	struct
+	{
+		/** \brief Peripheral multiplexer enable */
+		uint8_t PMUXEN:1;
+		/** \brief Input buffer enable */
+		uint8_t INEN:1;
+		/** \brief Pull enable */
+		uint8_t PULLEN:1;
+		/** \brief Reserved */
+		uint8_t :3;
+		/** \brief Output driver strength selection */
+		uint8_t DRVSTR:1;
+		/** \brief Reserved */
+		uint8_t :1;
+	} B;
+} port_pincfg_t;
+
+/** \brief PORT PINCFG0 register address offset */
+#define PORT_PINCFG0_OFF 0x40u
+/** \brief PORT PINCFG1 register address offset */
+#define PORT_PINCFG1_OFF 0x41u
+/** \brief PORT PINCFG2 register address offset */
+#define PORT_PINCFG2_OFF 0x42u
+/** \brief PORT PINCFG3 register address offset */
+#define PORT_PINCFG3_OFF 0x43u
+/** \brief PORT PINCFG4 register address offset */
+#define PORT_PINCFG4_OFF 0x44u
+/** \brief PORT PINCFG5 register address offset */
+#define PORT_PINCFG5_OFF 0x45u
+/** \brief PORT PINCFG6 register address offset */
+#define PORT_PINCFG6_OFF 0x46u
+/** \brief PORT PINCFG7 register address offset */
+#define PORT_PINCFG7_OFF 0x47u
+/** \brief PORT PINCFG8 register address offset */
+#define PORT_PINCFG8_OFF 0x48u
+/** \brief PORT PINCFG9 register address offset */
+#define PORT_PINCFG9_OFF 0x49u
+/** \brief PORT PINCFG10 register address offset */
+#define PORT_PINCFG10_OFF 0x4Au
+/** \brief PORT PINCFG11 register address offset */
+#define PORT_PINCFG11_OFF 0x4Bu
+/** \brief PORT PINCFG12 register address offset */
+#define PORT_PINCFG12_OFF 0x4Cu
+/** \brief PORT PINCFG13 register address offset */
+#define PORT_PINCFG13_OFF 0x4Du
+/** \brief PORT PINCFG14 register address offset */
+#define PORT_PINCFG14_OFF 0x4Eu
+/** \brief PORT PINCFG15 register address offset */
+#define PORT_PINCFG15_OFF 0x4Fu
+/** \brief PORT PINCFG16 register address offset */
+#define PORT_PINCFG16_OFF 0x50u
+/** \brief PORT PINCFG17 register address offset */
+#define PORT_PINCFG17_OFF 0x51u
+/** \brief PORT PINCFG18 register address offset */
+#define PORT_PINCFG18_OFF 0x52u
+/** \brief PORT PINCFG19 register address offset */
+#define PORT_PINCFG19_OFF 0x53u
+/** \brief PORT PINCFG20 register address offset */
+#define PORT_PINCFG20_OFF 0x54u
+/** \brief PORT PINCFG21 register address offset */
+#define PORT_PINCFG21_OFF 0x55u
+/** \brief PORT PINCFG22 register address offset */
+#define PORT_PINCFG22_OFF 0x56u
+/** \brief PORT PINCFG23 register address offset */
+#define PORT_PINCFG23_OFF 0x57u
+/** \brief PORT PINCFG24 register address offset */
+#define PORT_PINCFG24_OFF 0x58u
+/** \brief PORT PINCFG25 register address offset */
+#define PORT_PINCFG25_OFF 0x59u
+/** \brief PORT PINCFG26 register address offset */
+#define PORT_PINCFG26_OFF 0x5Au
+/** \brief PORT PINCFG27 register address offset */
+#define PORT_PINCFG27_OFF 0x5Bu
+/** \brief PORT PINCFG28 register address offset */
+#define PORT_PINCFG28_OFF 0x5Cu
+/** \brief PORT PINCFG29 register address offset */
+#define PORT_PINCFG29_OFF 0x5Du
+/** \brief PORT PINCFG30 register address offset */
+#define PORT_PINCFG30_OFF 0x5Eu
+/** \brief PORT PINCFG31 register address offset */
+#define PORT_PINCFG31_OFF 0x5Fu
+
+/** \brief PORT PINCFG0 register address */
+#define PORT_PINCFG0_ADDR (PORT_ADDR + PORT_PINCFG0_OFF)
+/** \brief PORT PINCFG1 register address */
+#define PORT_PINCFG1_ADDR (PORT_ADDR + PORT_PINCFG1_OFF)
+/** \brief PORT PINCFG2 register address */
+#define PORT_PINCFG2_ADDR (PORT_ADDR + PORT_PINCFG2_OFF)
+/** \brief PORT PINCFG3 register address */
+#define PORT_PINCFG3_ADDR (PORT_ADDR + PORT_PINCFG3_OFF)
+/** \brief PORT PINCFG4 register address */
+#define PORT_PINCFG4_ADDR (PORT_ADDR + PORT_PINCFG4_OFF)
+/** \brief PORT PINCFG5 register address */
+#define PORT_PINCFG5_ADDR (PORT_ADDR + PORT_PINCFG5_OFF)
+/** \brief PORT PINCFG6 register address */
+#define PORT_PINCFG6_ADDR (PORT_ADDR + PORT_PINCFG6_OFF)
+/** \brief PORT PINCFG7 register address */
+#define PORT_PINCFG7_ADDR (PORT_ADDR + PORT_PINCFG7_OFF)
+/** \brief PORT PINCFG8 register address */
+#define PORT_PINCFG8_ADDR (PORT_ADDR + PORT_PINCFG8_OFF)
+/** \brief PORT PINCFG9 register address */
+#define PORT_PINCFG9_ADDR (PORT_ADDR + PORT_PINCFG9_OFF)
+/** \brief PORT PINCFG10 register address */
+#define PORT_PINCFG10_ADDR (PORT_ADDR + PORT_PINCFG10_OFF)
+/** \brief PORT PINCFG11 register address */
+#define PORT_PINCFG11_ADDR (PORT_ADDR + PORT_PINCFG11_OFF)
+/** \brief PORT PINCFG12 register address */
+#define PORT_PINCFG12_ADDR (PORT_ADDR + PORT_PINCFG12_OFF)
+/** \brief PORT PINCFG13 register address */
+#define PORT_PINCFG13_ADDR (PORT_ADDR + PORT_PINCFG13_OFF)
+/** \brief PORT PINCFG14 register address */
+#define PORT_PINCFG14_ADDR (PORT_ADDR + PORT_PINCFG14_OFF)
+/** \brief PORT PINCFG15 register address */
+#define PORT_PINCFG15_ADDR (PORT_ADDR + PORT_PINCFG15_OFF)
+/** \brief PORT PINCFG16 register address */
+#define PORT_PINCFG16_ADDR (PORT_ADDR + PORT_PINCFG16_OFF)
+/** \brief PORT PINCFG17 register address */
+#define PORT_PINCFG17_ADDR (PORT_ADDR + PORT_PINCFG17_OFF)
+/** \brief PORT PINCFG18 register address */
+#define PORT_PINCFG18_ADDR (PORT_ADDR + PORT_PINCFG18_OFF)
+/** \brief PORT PINCFG19 register address */
+#define PORT_PINCFG19_ADDR (PORT_ADDR + PORT_PINCFG19_OFF)
+/** \brief PORT PINCFG20 register address */
+#define PORT_PINCFG20_ADDR (PORT_ADDR + PORT_PINCFG20_OFF)
+/** \brief PORT PINCFG21 register address */
+#define PORT_PINCFG21_ADDR (PORT_ADDR + PORT_PINCFG21_OFF)
+/** \brief PORT PINCFG22 register address */
+#define PORT_PINCFG22_ADDR (PORT_ADDR + PORT_PINCFG22_OFF)
+/** \brief PORT PINCFG23 register address */
+#define PORT_PINCFG23_ADDR (PORT_ADDR + PORT_PINCFG23_OFF)
+/** \brief PORT PINCFG24 register address */
+#define PORT_PINCFG24_ADDR (PORT_ADDR + PORT_PINCFG24_OFF)
+/** \brief PORT PINCFG25 register address */
+#define PORT_PINCFG25_ADDR (PORT_ADDR + PORT_PINCFG25_OFF)
+/** \brief PORT PINCFG26 register address */
+#define PORT_PINCFG26_ADDR (PORT_ADDR + PORT_PINCFG26_OFF)
+/** \brief PORT PINCFG27 register address */
+#define PORT_PINCFG27_ADDR (PORT_ADDR + PORT_PINCFG27_OFF)
+/** \brief PORT PINCFG28 register address */
+#define PORT_PINCFG28_ADDR (PORT_ADDR + PORT_PINCFG28_OFF)
+/** \brief PORT PINCFG29 register address */
+#define PORT_PINCFG29_ADDR (PORT_ADDR + PORT_PINCFG29_OFF)
+/** \brief PORT PINCFG30 register address */
+#define PORT_PINCFG30_ADDR (PORT_ADDR + PORT_PINCFG30_OFF)
+/** \brief PORT PINCFG31 register address */
+#define PORT_PINCFG31_ADDR (PORT_ADDR + PORT_PINCFG31_OFF)
+
+/** \brief PORT PINCFG0 register */
+#define PORT_PINCFG0 (*((volatile port_pincfg_t*) PORT_PINCFG0_ADDR))
+/** \brief PORT PINCFG1 register */
+#define PORT_PINCFG1 (*((volatile port_pincfg_t*) PORT_PINCFG1_ADDR))
+/** \brief PORT PINCFG2 register */
+#define PORT_PINCFG2 (*((volatile port_pincfg_t*) PORT_PINCFG2_ADDR))
+/** \brief PORT PINCFG3 register */
+#define PORT_PINCFG3 (*((volatile port_pincfg_t*) PORT_PINCFG3_ADDR))
+/** \brief PORT PINCFG4 register */
+#define PORT_PINCFG4 (*((volatile port_pincfg_t*) PORT_PINCFG4_ADDR))
+/** \brief PORT PINCFG5 register */
+#define PORT_PINCFG5 (*((volatile port_pincfg_t*) PORT_PINCFG5_ADDR))
+/** \brief PORT PINCFG6 register */
+#define PORT_PINCFG6 (*((volatile port_pincfg_t*) PORT_PINCFG6_ADDR))
+/** \brief PORT PINCFG7 register */
+#define PORT_PINCFG7 (*((volatile port_pincfg_t*) PORT_PINCFG7_ADDR))
+/** \brief PORT PINCFG8 register */
+#define PORT_PINCFG8 (*((volatile port_pincfg_t*) PORT_PINCFG8_ADDR))
+/** \brief PORT PINCFG9 register */
+#define PORT_PINCFG9 (*((volatile port_pincfg_t*) PORT_PINCFG9_ADDR))
+/** \brief PORT PINCFG10 register */
+#define PORT_PINCFG10 (*((volatile port_pincfg_t*) PORT_PINCFG10_ADDR))
+/** \brief PORT PINCFG11 register */
+#define PORT_PINCFG11 (*((volatile port_pincfg_t*) PORT_PINCFG11_ADDR))
+/** \brief PORT PINCFG12 register */
+#define PORT_PINCFG12 (*((volatile port_pincfg_t*) PORT_PINCFG12_ADDR))
+/** \brief PORT PINCFG13 register */
+#define PORT_PINCFG13 (*((volatile port_pincfg_t*) PORT_PINCFG13_ADDR))
+/** \brief PORT PINCFG14 register */
+#define PORT_PINCFG14 (*((volatile port_pincfg_t*) PORT_PINCFG14_ADDR))
+/** \brief PORT PINCFG15 register */
+#define PORT_PINCFG15 (*((volatile port_pincfg_t*) PORT_PINCFG15_ADDR))
+/** \brief PORT PINCFG16 register */
+#define PORT_PINCFG16 (*((volatile port_pincfg_t*) PORT_PINCFG16_ADDR))
+/** \brief PORT PINCFG17 register */
+#define PORT_PINCFG17 (*((volatile port_pincfg_t*) PORT_PINCFG17_ADDR))
+/** \brief PORT PINCFG18 register */
+#define PORT_PINCFG18 (*((volatile port_pincfg_t*) PORT_PINCFG18_ADDR))
+/** \brief PORT PINCFG19 register */
+#define PORT_PINCFG19 (*((volatile port_pincfg_t*) PORT_PINCFG19_ADDR))
+/** \brief PORT PINCFG20 register */
+#define PORT_PINCFG20 (*((volatile port_pincfg_t*) PORT_PINCFG20_ADDR))
+/** \brief PORT PINCFG21 register */
+#define PORT_PINCFG21 (*((volatile port_pincfg_t*) PORT_PINCFG21_ADDR))
+/** \brief PORT PINCFG22 register */
+#define PORT_PINCFG22 (*((volatile port_pincfg_t*) PORT_PINCFG22_ADDR))
+/** \brief PORT PINCFG23 register */
+#define PORT_PINCFG23 (*((volatile port_pincfg_t*) PORT_PINCFG23_ADDR))
+/** \brief PORT PINCFG24 register */
+#define PORT_PINCFG24 (*((volatile port_pincfg_t*) PORT_PINCFG24_ADDR))
+/** \brief PORT PINCFG25 register */
+#define PORT_PINCFG25 (*((volatile port_pincfg_t*) PORT_PINCFG25_ADDR))
+/** \brief PORT PINCFG26 register */
+#define PORT_PINCFG26 (*((volatile port_pincfg_t*) PORT_PINCFG26_ADDR))
+/** \brief PORT PINCFG27 register */
+#define PORT_PINCFG27 (*((volatile port_pincfg_t*) PORT_PINCFG27_ADDR))
+/** \brief PORT PINCFG28 register */
+#define PORT_PINCFG28 (*((volatile port_pincfg_t*) PORT_PINCFG28_ADDR))
+/** \brief PORT PINCFG29 register */
+#define PORT_PINCFG29 (*((volatile port_pincfg_t*) PORT_PINCFG29_ADDR))
+/** \brief PORT PINCFG30 register */
+#define PORT_PINCFG30 (*((volatile port_pincfg_t*) PORT_PINCFG30_ADDR))
+/** \brief PORT PINCFG31 register */
+#define PORT_PINCFG31 (*((volatile port_pincfg_t*) PORT_PINCFG31_ADDR))
+
+/** \brief PORT PINCFG.PMUXEN bit offset */
+#define PORT_PINCFG_PMUXEN_OFF 0u
+/** \brief PORT PINCFG.PMUXEN bit mask */
+#define PORT_PINCFG_PMUXEN_MSK (0x1u << PORT_PINCFG_PMUXEN_OFF)
+
+/** \brief PORT PINCFG.INEN bit offset */
+#define PORT_PINCFG_INEN_OFF 1u
+/** \brief PORT PINCFG.INEN bit mask */
+#define PORT_PINCFG_INEN_MSK (0x1u << PORT_PINCFG_INEN_OFF)
+
+/** \brief PORT PINCFG.PULLEN bit offset */
+#define PORT_PINCFG_PULLEN_OFF 2u
+/** \brief PORT PINCFG.PULLEN bit mask */
+#define PORT_PINCFG_PULLEN_MSK (0x1u << PORT_PINCFG_PULLEN_OFF)
+
+/** \brief PORT PINCFG.DRVSTR bit offset */
+#define PORT_PINCFG_DRVSTR_OFF 6u
+/** \brief PORT PINCFG.DRVSTR bit mask */
+#define PORT_PINCFG_DRVSTR_MSK (0x1u << PORT_PINCFG_DRVSTR_OFF)
+
+/**@}*/
+
+/** \name PORT PMUX register */
+/**@{*/
+
+/** \brief PORT PMUX register structure */
+typedef union
+{
+	/** \brief Unsigned access */
+	uint8_t U;
+	/** \brief Bitfield access */
+	struct
+	{
+		/** \brief Peripheral multiplexing for even-numbered pin */
+		uint8_t PMUXE:4;
+		/** \brief Peripheral multiplexing for odd-numbered pin */
+		uint8_t PMUXO:4;
+	} B;
+} port_pmux_t;
+
+/** \brief PORT PMUX0 register address offset */
+#define PORT_PMUX0_OFF 0x30u
+/** \brief PORT PMUX1 register address offset */
+#define PORT_PMUX1_OFF 0x31u
+/** \brief PORT PMUX2 register address offset */
+#define PORT_PMUX2_OFF 0x32u
+/** \brief PORT PMUX3 register address offset */
+#define PORT_PMUX3_OFF 0x33u
+/** \brief PORT PMUX4 register address offset */
+#define PORT_PMUX4_OFF 0x34u
+/** \brief PORT PMUX5 register address offset */
+#define PORT_PMUX5_OFF 0x35u
+/** \brief PORT PMUX6 register address offset */
+#define PORT_PMUX6_OFF 0x36u
+/** \brief PORT PMUX7 register address offset */
+#define PORT_PMUX7_OFF 0x37u
+/** \brief PORT PMUX8 register address offset */
+#define PORT_PMUX8_OFF 0x38u
+/** \brief PORT PMUX9 register address offset */
+#define PORT_PMUX9_OFF 0x39u
+/** \brief PORT PMUX10 register address offset */
+#define PORT_PMUX10_OFF 0x3Au
+/** \brief PORT PMUX11 register address offset */
+#define PORT_PMUX11_OFF 0x3Bu
+/** \brief PORT PMUX12 register address offset */
+#define PORT_PMUX12_OFF 0x3Cu
+/** \brief PORT PMUX13 register address offset */
+#define PORT_PMUX13_OFF 0x3Du
+/** \brief PORT PMUX14 register address offset */
+#define PORT_PMUX14_OFF 0x3Eu
+/** \brief PORT PMUX15 register address offset */
+#define PORT_PMUX15_OFF 0x3Fu
+
+/** \brief PORT PMUX0 register address */
+#define PORT_PMUX0_ADDR (PORT_ADDR + PORT_PMUX0_OFF)
+/** \brief PORT PMUX1 register address */
+#define PORT_PMUX1_ADDR (PORT_ADDR + PORT_PMUX1_OFF)
+/** \brief PORT PMUX2 register address */
+#define PORT_PMUX2_ADDR (PORT_ADDR + PORT_PMUX2_OFF)
+/** \brief PORT PMUX3 register address */
+#define PORT_PMUX3_ADDR (PORT_ADDR + PORT_PMUX3_OFF)
+/** \brief PORT PMUX4 register address */
+#define PORT_PMUX4_ADDR (PORT_ADDR + PORT_PMUX4_OFF)
+/** \brief PORT PMUX5 register address */
+#define PORT_PMUX5_ADDR (PORT_ADDR + PORT_PMUX5_OFF)
+/** \brief PORT PMUX6 register address */
+#define PORT_PMUX6_ADDR (PORT_ADDR + PORT_PMUX6_OFF)
+/** \brief PORT PMUX7 register address */
+#define PORT_PMUX7_ADDR (PORT_ADDR + PORT_PMUX7_OFF)
+/** \brief PORT PMUX8 register address */
+#define PORT_PMUX8_ADDR (PORT_ADDR + PORT_PMUX8_OFF)
+/** \brief PORT PMUX9 register address */
+#define PORT_PMUX9_ADDR (PORT_ADDR + PORT_PMUX9_OFF)
+/** \brief PORT PMUX10 register address */
+#define PORT_PMUX10_ADDR (PORT_ADDR + PORT_PMUX10_OFF)
+/** \brief PORT PMUX11 register address */
+#define PORT_PMUX11_ADDR (PORT_ADDR + PORT_PMUX11_OFF)
+/** \brief PORT PMUX12 register address */
+#define PORT_PMUX12_ADDR (PORT_ADDR + PORT_PMUX12_OFF)
+/** \brief PORT PMUX13 register address */
+#define PORT_PMUX13_ADDR (PORT_ADDR + PORT_PMUX13_OFF)
+/** \brief PORT PMUX14 register address */
+#define PORT_PMUX14_ADDR (PORT_ADDR + PORT_PMUX14_OFF)
+/** \brief PORT PMUX15 register address */
+#define PORT_PMUX15_ADDR (PORT_ADDR + PORT_PMUX15_OFF)
+
+/** \brief PORT PMUX0 register */
+#define PORT_PMUX0 (*((volatile port_pmux_t*) PORT_PMUX0_ADDR))
+/** \brief PORT PMUX1 register */
+#define PORT_PMUX1 (*((volatile port_pmux_t*) PORT_PMUX1_ADDR))
+/** \brief PORT PMUX2 register */
+#define PORT_PMUX2 (*((volatile port_pmux_t*) PORT_PMUX2_ADDR))
+/** \brief PORT PMUX3 register */
+#define PORT_PMUX3 (*((volatile port_pmux_t*) PORT_PMUX3_ADDR))
+/** \brief PORT PMUX4 register */
+#define PORT_PMUX4 (*((volatile port_pmux_t*) PORT_PMUX4_ADDR))
+/** \brief PORT PMUX5 register */
+#define PORT_PMUX5 (*((volatile port_pmux_t*) PORT_PMUX5_ADDR))
+/** \brief PORT PMUX6 register */
+#define PORT_PMUX6 (*((volatile port_pmux_t*) PORT_PMUX6_ADDR))
+/** \brief PORT PMUX7 register */
+#define PORT_PMUX7 (*((volatile port_pmux_t*) PORT_PMUX7_ADDR))
+/** \brief PORT PMUX8 register */
+#define PORT_PMUX8 (*((volatile port_pmux_t*) PORT_PMUX8_ADDR))
+/** \brief PORT PMUX9 register */
+#define PORT_PMUX9 (*((volatile port_pmux_t*) PORT_PMUX9_ADDR))
+/** \brief PORT PMUX10 register */
+#define PORT_PMUX10 (*((volatile port_pmux_t*) PORT_PMUX10_ADDR))
+/** \brief PORT PMUX11 register */
+#define PORT_PMUX11 (*((volatile port_pmux_t*) PORT_PMUX11_ADDR))
+/** \brief PORT PMUX12 register */
+#define PORT_PMUX12 (*((volatile port_pmux_t*) PORT_PMUX12_ADDR))
+/** \brief PORT PMUX13 register */
+#define PORT_PMUX13 (*((volatile port_pmux_t*) PORT_PMUX13_ADDR))
+/** \brief PORT PMUX14 register */
+#define PORT_PMUX14 (*((volatile port_pmux_t*) PORT_PMUX14_ADDR))
+/** \brief PORT PMUX15 register */
+#define PORT_PMUX15 (*((volatile port_pmux_t*) PORT_PMUX15_ADDR))
+
+/** \brief PORT PMUX.PMUXE bit offset */
+#define PORT_PMUX_PMUXE_OFF 0u
+/** \brief PORT PMUX.PMUXE bit mask */
+#define PORT_PMUX_PMUXE_MSK (0xFu << PORT_PMUX_PMUXE)
+
+/** \brief PORT PMUX.PMUXO bit offset */
+#define PORT_PMUX_PMUXO_OFF 4u
+/** \brief PORT PMUX.PMUXO bit mask */
+#define PORT_PMUX_PMUXO_MSK (0xFu << PORT_PMUX_PMUXO)
+
+/**@}*/
+
 #endif /* SAMFD_PORT_H */
