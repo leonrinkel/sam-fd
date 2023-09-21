@@ -3,8 +3,8 @@ name: Build flasher
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    paths:
+      - software/flasher/**
 
 jobs:
   build:
