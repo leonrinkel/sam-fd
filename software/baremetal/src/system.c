@@ -11,6 +11,7 @@
 #include "gclk.h"
 #include "linked.h"
 #include "mclk.h"
+#include "nvic.h"
 #include "nvmctrl.h"
 #include "oscctrl.h"
 #include "port.h"
@@ -20,6 +21,19 @@
 /** \brief Main function */
 int main(void)
 {
+	/* Enable MCLK, OSCCTRL and GCLK APB clocks */
+	MCLK_APBAMASK.U |=
+		MCLK_APBAMASK_MCLK_MSK |
+		MCLK_APBAMASK_OSCCTRL_MSK |
+		MCLK_APBAMASK_GCLK_MSK;
+	/* Enable PORT and NVMCTRL APB clocks */
+	MCLK_APBBMASK.U |=
+		MCLK_APBBMASK_PORT_MSK |
+		MCLK_APBBMASK_NVMCTRL_MSK;
+	/* Enable SERCOM0 APB clocks */
+	MCLK_APBCMASK.U |=
+		MCLK_APBCMASK_SERCOM0_MSK;
+
 	/* Configure NVM wait states */
 	NVMCTRL_CTRLB.U = (0x2u << NVMCTRL_CTRLB_RWS_OFF);
 
@@ -38,10 +52,7 @@ int main(void)
 	/* Wait till external oscillator ready */
 	while (!OSCCTRL_STATUS.B.XOSCRDY);
 
-	/* Enable clock failure event */
-	OSCCTRL_EVCTRL.U = (0x1u << OSCCTRL_EVCTRL_CFDEO_OFF);
-
-	/* Clock CPU at 32MHz using external oscillator */
+	/* Clock generator 0 at 32MHz using external oscillator */
 	GCLK_GENCTRL0.U =
 		(0x0u << GCLK_GENCTRL_SRC_OFF     ) |
 		(0x1u << GCLK_GENCTRL_GENEN_OFF   ) |
@@ -52,17 +63,12 @@ int main(void)
 		(0x0u << GCLK_GENCTRL_RUNSTDBY_OFF) |
 		(0x0u << GCLK_GENCTRL_DIV_OFF     );
 
-	/* Enable PORT peripheral */
-	MCLK_APBBMASK.U |= MCLK_APBBMASK_PORT_MSK;
-	/* Enable SERCOM0 peripheral */
-	MCLK_APBCMASK.U |= MCLK_APBCMASK_SERCOM0_MSK;
-
-	/* Clock SERCOM01234_SLOW using OSC48M */
+	/* Clock SERCOM01234_SLOW using generator 0 (32MHz XOSC) */
 	GCLK_PCHCTRL18.U =
 		(0x0u << GCLK_PCHCTRL_GEN_OFF    ) |
 		(0x1u << GCLK_PCHCTRL_CHEN_OFF   ) |
 		(0x0u << GCLK_PCHCTRL_WRTLOCK_OFF);
-	/* Clock SERCOM0_CORE using OSC48M */
+	/* Clock SERCOM0_CORE using generator 0 (32MHz XOSC) */
 	GCLK_PCHCTRL19.U =
 		(0x0u << GCLK_PCHCTRL_GEN_OFF    ) |
 		(0x1u << GCLK_PCHCTRL_CHEN_OFF   ) |
@@ -110,6 +116,12 @@ int main(void)
 	/* Baudrate 115200 @ 32MHz core clock */
 	SERCOM0_BAUD = 61761;
 
+	/* Enable SERCOM0 receive complete interrupt */
+	SERCOM0_INTENSET.U = SERCOM_INTENSET_RXC_MSK;
+
+	/* Enable SERCOM0 interrupts */
+	NVIC_ISER = 0x1u << 9;
+
 	/* Enable SERCOM0 */
 	SERCOM0_CTRLA.B.ENABLE = 0x1u;
 	while (SERCOM0_SYNCBUSY.U & SERCOM_SYNCBUSY_ENABLE_MSK);
@@ -131,7 +143,7 @@ int main(void)
 		PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
 
 		/* Delay */
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		for (uint32_t i = 0x000FFFFFu; i > 0; i--);
 
 		/* UART transmit */
 		*((uint32_t*) 0x42000428) = 'h';
@@ -293,7 +305,11 @@ void __attribute__((interrupt)) dmac_handler(void) {}
 void __attribute__((interrupt)) evsys_handler(void) {}
 
 /** \brief SERCOM0 IRQ handler */
-void __attribute__((interrupt)) sercom0_handler(void) {}
+void __attribute__((interrupt)) sercom0_handler(void)
+{
+	/* Transmit back the received character */
+	*((uint32_t*) 0x42000428) = *((uint32_t*) 0x42000428);
+}
 
 /** \brief SERCOM1 IRQ handler */
 void __attribute__((interrupt)) sercom1_handler(void) {}

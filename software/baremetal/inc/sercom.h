@@ -315,6 +315,102 @@ typedef union
 
 /**@}*/
 
+/** \name SERCOM INTENSET register */
+/**@{*/
+
+/** \brief SERCOM INTENSET register structure */
+typedef union
+{
+	/** \brief Unsigned access */
+	uint8_t U;
+	/** \brief Bitfield access */
+	struct
+	{
+		/** \brief Data register empty interrupt enable */
+		uint8_t DRE:1;
+		/** \brief Transmit complete interrupt enable */
+		uint8_t TXC:1;
+		/** \brief Receive complete interrupt enable */
+		uint8_t RXC:1;
+		/** \brief Receive start interrupt enable */
+		uint8_t RXS:1;
+		/** \brief Clear to send input change interrupt enable */
+		uint8_t CTSIC:1;
+		/** \brief Receive break interrupt enable */
+		uint8_t RXBRK:1;
+		/** \brief Reserved */
+		uint8_t :1;
+		/** \brief Error interrupt enable */
+		uint8_t ERROR:1;
+	} B;
+} sercom_intenset_t;
+
+/** \brief SERCOM INTENSET register address offset */
+#define SERCOM_INTENSET_OFF 0x16u
+
+/** \brief SERCOM0 INTENSET register address */
+#define SERCOM0_INTENSET_ADDR (SERCOM0_ADDR + SERCOM_INTENSET_OFF)
+/** \brief SERCOM1 INTENSET register address */
+#define SERCOM1_INTENSET_ADDR (SERCOM1_ADDR + SERCOM_INTENSET_OFF)
+/** \brief SERCOM2 INTENSET register address */
+#define SERCOM2_INTENSET_ADDR (SERCOM2_ADDR + SERCOM_INTENSET_OFF)
+/** \brief SERCOM3 INTENSET register address */
+#define SERCOM3_INTENSET_ADDR (SERCOM3_ADDR + SERCOM_INTENSET_OFF)
+/** \brief SERCOM4 INTENSET register address */
+#define SERCOM4_INTENSET_ADDR (SERCOM4_ADDR + SERCOM_INTENSET_OFF)
+/** \brief SERCOM5 INTENSET register address */
+#define SERCOM5_INTENSET_ADDR (SERCOM5_ADDR + SERCOM_INTENSET_OFF)
+
+/** \brief SERCOM0 INTENSET register */
+#define SERCOM0_INTENSET (*((volatile sercom_intenset_t*) SERCOM0_INTENSET_ADDR))
+/** \brief SERCOM1 INTENSET register */
+#define SERCOM1_INTENSET (*((volatile sercom_intenset_t*) SERCOM1_INTENSET_ADDR))
+/** \brief SERCOM2 INTENSET register */
+#define SERCOM2_INTENSET (*((volatile sercom_intenset_t*) SERCOM2_INTENSET_ADDR))
+/** \brief SERCOM3 INTENSET register */
+#define SERCOM3_INTENSET (*((volatile sercom_intenset_t*) SERCOM3_INTENSET_ADDR))
+/** \brief SERCOM4 INTENSET register */
+#define SERCOM4_INTENSET (*((volatile sercom_intenset_t*) SERCOM4_INTENSET_ADDR))
+/** \brief SERCOM5 INTENSET register */
+#define SERCOM5_INTENSET (*((volatile sercom_intenset_t*) SERCOM5_INTENSET_ADDR))
+
+/** \brief SERCOM INTENSET.DRE bit offset */
+#define SERCOM_INTENSET_DRE_OFF 0u
+/** \brief SERCOM INTENSET.DRE bit mask */
+#define SERCOM_INTENSET_DRE_MSK (0x1u << SERCOM_INTENSET_DRE_OFF)
+
+/** \brief SERCOM INTENSET.TXC bit offset */
+#define SERCOM_INTENSET_TXC_OFF 1u
+/** \brief SERCOM INTENSET.TXC bit mask */
+#define SERCOM_INTENSET_TXC_MSK (0x1u << SERCOM_INTENSET_TXC_OFF)
+
+/** \brief SERCOM INTENSET.RXC bit offset */
+#define SERCOM_INTENSET_RXC_OFF 2u
+/** \brief SERCOM INTENSET.RXC bit mask */
+#define SERCOM_INTENSET_RXC_MSK (0x1u << SERCOM_INTENSET_RXC_OFF)
+
+/** \brief SERCOM INTENSET.RXS bit offset */
+#define SERCOM_INTENSET_RXS_OFF 3u
+/** \brief SERCOM INTENSET.RXS bit mask */
+#define SERCOM_INTENSET_RXS_MSK (0x1u << SERCOM_INTENSET_RXS_OFF)
+
+/** \brief SERCOM INTENSET.CTSIC bit offset */
+#define SERCOM_INTENSET_CTSIC_OFF 4u
+/** \brief SERCOM INTENSET.CTSIC bit mask */
+#define SERCOM_INTENSET_CTSIC_MSK (0x1u << SERCOM_INTENSET_CTSIC_OFF)
+
+/** \brief SERCOM INTENSET.RXBRK bit offset */
+#define SERCOM_INTENSET_RXBRK_OFF 5u
+/** \brief SERCOM INTENSET.RXBRK bit mask */
+#define SERCOM_INTENSET_RXBRK_MSK (0x1u << SERCOM_INTENSET_RXBRK_OFF)
+
+/** \brief SERCOM INTENSET.ERROR bit offset */
+#define SERCOM_INTENSET_ERROR_OFF 7u
+/** \brief SERCOM INTENSET.ERROR bit mask */
+#define SERCOM_INTENSET_ERROR_MSK (0x1u << SERCOM_INTENSET_ERROR_OFF)
+
+/**@}*/
+
 /** \name SERCOM SYNCBUSY register */
 /**@{*/
 
