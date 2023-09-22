@@ -11,6 +11,8 @@
 #include "gclk.h"
 #include "linked.h"
 #include "mclk.h"
+#include "nvmctrl.h"
+#include "oscctrl.h"
 #include "port.h"
 #include "sercom.h"
 #include "system.h"
@@ -18,6 +20,38 @@
 /** \brief Main function */
 int main(void)
 {
+	/* Configure NVM wait states */
+	NVMCTRL_CTRLB.U = (0x2u << NVMCTRL_CTRLB_RWS_OFF);
+
+	/* Configure and enable external 32MHz oscillator */
+	OSCCTRL_XOSCCTRL.U =
+		(0x1u << OSCCTRL_XOSCCTRL_ENABLE_OFF  ) |
+		(0x1u << OSCCTRL_XOSCCTRL_XTALEN_OFF  ) |
+		(0x1u << OSCCTRL_XOSCCTRL_CFDEN_OFF   ) |
+		(0x0u << OSCCTRL_XOSCCTRL_SWBEN_OFF   ) |
+		(0x0u << OSCCTRL_XOSCCTRL_RUNSTDBY_OFF) |
+		(0x0u << OSCCTRL_XOSCCTRL_ONDEMAND_OFF) |
+		(0x2u << OSCCTRL_XOSCCTRL_GAIN_OFF    ) |
+		(0x1u << OSCCTRL_XOSCCTRL_AMPGC_OFF   ) |
+		(0x6u << OSCCTRL_XOSCCTRL_STARTUP_OFF );
+
+	/* Wait till external oscillator ready */
+	while (!OSCCTRL_STATUS.B.XOSCRDY);
+
+	/* Enable clock failure event */
+	OSCCTRL_EVCTRL.U = (0x1u << OSCCTRL_EVCTRL_CFDEO_OFF);
+
+	/* Clock CPU at 32MHz using external oscillator */
+	GCLK_GENCTRL0.U =
+		(0x0u << GCLK_GENCTRL_SRC_OFF     ) |
+		(0x1u << GCLK_GENCTRL_GENEN_OFF   ) |
+		(0x0u << GCLK_GENCTRL_IDC_OFF     ) |
+		(0x0u << GCLK_GENCTRL_OOV_OFF     ) |
+		(0x0u << GCLK_GENCTRL_OE_OFF      ) |
+		(0x0u << GCLK_GENCTRL_DIVSEL_OFF  ) |
+		(0x0u << GCLK_GENCTRL_RUNSTDBY_OFF) |
+		(0x0u << GCLK_GENCTRL_DIV_OFF     );
+
 	/* Enable PORT peripheral */
 	MCLK_APBBMASK.U |= MCLK_APBBMASK_PORT_MSK;
 	/* Enable SERCOM0 peripheral */
@@ -73,8 +107,8 @@ int main(void)
 		(0x1u << SERCOM_CTRLB_RXEN_OFF  ) |
 		(0x0u << SERCOM_CTRLB_LINCMD_OFF);
 
-	/* Baudrate 115200 @ 4MHz core clock */
-	SERCOM0_BAUD = 35337;
+	/* Baudrate 115200 @ 32MHz core clock */
+	SERCOM0_BAUD = 61761;
 
 	/* Enable SERCOM0 */
 	SERCOM0_CTRLA.B.ENABLE = 0x1u;
