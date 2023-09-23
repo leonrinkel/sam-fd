@@ -24,6 +24,11 @@ void setup_systick(void);
 void setup_uart(void);
 void setup_leds(void);
 
+void task_1ms(void);
+void task_10ms(void);
+void task_100ms(void);
+void task_1000ms(void);
+
 /** \brief Main function */
 int main(void)
 {
@@ -32,30 +37,9 @@ int main(void)
 	setup_uart();
 	setup_leds();
 
-	for (;;)
+	while (true)
 	{
-		/* Toggle TX_ACT/RX_ACT LEDs */
-		PORT_OUT.U ^= PORT_DIR_DIR9_MSK;
-		PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
-
-		/* Delay */
-		for (uint32_t i = 0x000FFFFFu; i > 0; i--);
-
-		/* UART transmit */
-		*((uint32_t*) 0x42000428) = 'h';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = 'e';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = 'l';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = 'l';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = 'o';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = '\r';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = '\n';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		__asm__("nop");
 	}
 
 	return 0;
@@ -202,6 +186,42 @@ void setup_leds(void)
 	PORT_OUT.B.OUT10 = 1;
 }
 
+void task_1ms(void)
+{
+
+}
+
+void task_10ms(void)
+{
+
+}
+
+void task_100ms(void)
+{
+	/* Toggle TX_ACT/RX_ACT LEDs */
+	PORT_OUT.U ^= PORT_DIR_DIR9_MSK;
+	PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
+}
+
+void task_1000ms(void)
+{
+	/* UART transmit */
+	*((uint32_t*) 0x42000428) = 'h';
+	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	*((uint32_t*) 0x42000428) = 'e';
+	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	*((uint32_t*) 0x42000428) = 'l';
+	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	*((uint32_t*) 0x42000428) = 'l';
+	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	*((uint32_t*) 0x42000428) = 'o';
+	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	*((uint32_t*) 0x42000428) = '\r';
+	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	*((uint32_t*) 0x42000428) = '\n';
+	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+}
+
 /**
  * \brief Handles the reset exception.
  *
@@ -312,7 +332,37 @@ void __attribute__((interrupt)) pend_sv_handler(void) {}
  * generate a SysTick exception. In an OS environment, the processor can
  * use this exception as system tick.
  */
-void __attribute__((interrupt)) sys_tick_handler(void) {}
+void __attribute__((interrupt)) sys_tick_handler(void)
+{
+	static uint32_t cycle_1ms = 0;
+	static uint32_t cycle_10ms = 1;
+	static uint32_t cycle_100ms = 2;
+	static uint32_t cycle_1000ms = 3;
+
+	if (++cycle_1ms == 1)
+	{
+		task_1ms();
+		cycle_1ms = 0;
+	}
+
+	if (++cycle_10ms == 10)
+	{
+		task_10ms();
+		cycle_10ms = 0;
+	}
+
+	if (++cycle_100ms == 100)
+	{
+		task_100ms();
+		cycle_100ms = 0;
+	}
+
+	if (++cycle_1000ms == 1000)
+	{
+		task_1000ms();
+		cycle_1000ms = 0;
+	}
+}
 
 /** \brief System IRQ handler */
 void __attribute__((interrupt)) system_handler(void)
