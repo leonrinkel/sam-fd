@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: MIT */
+/**
+ * \file      inc/uart.h
+ * \brief     Declaration related to the UART driver
+ * \copyright Copyright (c) 2023 Leon Rinkel
+ */
+
 #ifndef SAMFD_UART_H
 #define SAMFD_UART_H
 

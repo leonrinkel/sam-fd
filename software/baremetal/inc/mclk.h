@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: MIT */
+/**
+ * \file      inc/mclk.h
+ * \brief     Definitions regarding MCLK registers structure
+ * \copyright Copyright (c) 2023 Leon Rinkel
+ */
+
 #ifndef SAMFD_MCLK_H
 #define SAMFD_MCLK_H
 

@@ -1,8 +1,8 @@
+/* SPDX-License-Identifier: MIT */
 /**
- * \file   inc/linked.h
- * \author Rinkel, Leon <leon@rinkel.me>
- *
- * Declaration of addresses provided by the linker.
+ * \file      inc/linked.h
+ * \brief     Declaration of addresses provided by the linker
+ * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
 #ifndef SAMFD_LINKED_H

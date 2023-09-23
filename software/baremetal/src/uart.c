@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: MIT */
+/**
+ * \file      src/uart.c
+ * \brief     Implementation of the UART driver
+ * \copyright Copyright (c) 2023 Leon Rinkel
+ */
+
 #include <stdint.h>
 
 #include <nvic.h>

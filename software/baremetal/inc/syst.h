@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: MIT */
+/**
+ * \file      inc/syst.h
+ * \brief     Definitions regarding SYST registers structure
+ * \copyright Copyright (c) 2023 Leon Rinkel
+ */
+
 #ifndef SAMFD_SYST_H
 #define SAMFD_SYST_H
 

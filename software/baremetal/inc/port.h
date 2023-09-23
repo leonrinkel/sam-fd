@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: MIT */
+/**
+ * \file      inc/port.h
+ * \brief     Definitions regarding PORT registers structure
+ * \copyright Copyright (c) 2023 Leon Rinkel
+ */
+
 #ifndef SAMFD_PORT_H
 #define SAMFD_PORT_H
 

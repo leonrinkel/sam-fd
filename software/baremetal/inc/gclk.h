@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: MIT */
+/**
+ * \file      inc/gclk.h
+ * \brief     Definitions regarding GCLK registers structure
+ * \copyright Copyright (c) 2023 Leon Rinkel
+ */
+
 #ifndef SAMFD_GCLK_H
 #define SAMFD_GCLK_H
 

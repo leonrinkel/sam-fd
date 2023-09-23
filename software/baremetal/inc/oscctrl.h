@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: MIT */
+/**
+ * \file      inc/oscctrl.h
+ * \brief     Definitions regarding OSCCTRL registers structure
+ * \copyright Copyright (c) 2023 Leon Rinkel
+ */
+
 #ifndef SAMFD_OSCCTRL_H
 #define SAMFD_OSCCTRL_H
 

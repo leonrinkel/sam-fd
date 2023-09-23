@@ -1,3 +1,10 @@
+/* SPDX-License-Identifier: MIT */
+/**
+ * \file      inc/sercom.h
+ * \brief     Definitions regarding SERCOM registers structure
+ * \copyright Copyright (c) 2023 Leon Rinkel
+ */
+
 #ifndef SAMFD_SERCOM_H
 #define SAMFD_SERCOM_H
 

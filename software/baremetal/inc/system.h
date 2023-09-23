@@ -1,8 +1,8 @@
+/* SPDX-License-Identifier: MIT */
 /**
- * \file   inc/system.h
- * \author Rinkel, Leon <leon@rinkel.me>
- *
- * Declaration of low-level processor stuff such as the vector table.
+ * \file      inc/system.h
+ * \brief     Declaration of low-level processor stuff such as the vector table
+ * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
 #ifndef SAMFD_SYSTEM_H

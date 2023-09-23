@@ -1,8 +1,8 @@
+/* SPDX-License-Identifier: MIT */
 /**
- * \file   src/system.c
- * \author Rinkel, Leon <leon@rinkel.me>
- *
- * Implementation of low-level processor stuff such as the vector table.
+ * \file      src/system.c
+ * \brief     Implementation of low-level processor stuff such as the vector table
+ * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
 #include <stdint.h>
