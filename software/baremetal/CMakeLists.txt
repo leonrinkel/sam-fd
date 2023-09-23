@@ -41,6 +41,7 @@ add_link_options(
 add_executable(
 	${PROJECT_NAME}
 	src/system.c
+	src/uart.c
 )
 
 target_include_directories(

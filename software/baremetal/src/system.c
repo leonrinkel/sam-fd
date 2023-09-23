@@ -8,20 +8,20 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "gclk.h"
-#include "linked.h"
-#include "mclk.h"
-#include "nvic.h"
-#include "nvmctrl.h"
-#include "oscctrl.h"
-#include "port.h"
-#include "sercom.h"
-#include "syst.h"
-#include "system.h"
+#include <gclk.h>
+#include <linked.h>
+#include <mclk.h>
+#include <nvic.h>
+#include <nvmctrl.h>
+#include <oscctrl.h>
+#include <port.h>
+#include <sercom.h>
+#include <syst.h>
+#include <system.h>
+#include <uart.h>
 
 void setup_clocks(void);
 void setup_systick(void);
-void setup_uart(void);
 void setup_leds(void);
 
 void task_1ms(void);
@@ -119,60 +119,6 @@ void setup_systick(void)
 	SYST_RVR.U = (0x7A12u << SYST_RVR_RELOAD_OFF);
 }
 
-void setup_uart(void)
-{
-	/* Make UART RX/TX pins use port multiplexer */
-	PORT_PINCFG5.U |= PORT_PINCFG_PMUXEN_MSK;
-	PORT_PINCFG6.U |= PORT_PINCFG_PMUXEN_MSK;
-
-	/* SERCOM0/PAD[1] (UART RX) using peripheral function D */
-	PORT_PMUX2.B.PMUXO = 0x3u;
-	/* SERCOM0/PAD[2] (UART TX) using peripheral function D */
-	PORT_PMUX3.B.PMUXE = 0x3u;
-
-	/* Disable SERCOM0 */
-	SERCOM0_CTRLA.B.ENABLE = 0x0u;
-	while (SERCOM0_SYNCBUSY.U & SERCOM_SYNCBUSY_ENABLE_MSK);
-
-	/* Configure SERCOM0 for simple 8N1 UART */
-	SERCOM0_CTRLA.U =
-		(0x0u << SERCOM_CTRLA_SWRST_OFF   ) |
-		(0x0u << SERCOM_CTRLA_ENABLE_OFF  ) |
-		(0x1u << SERCOM_CTRLA_MODE_OFF    ) |
-		(0x0u << SERCOM_CTRLA_RUNSTDBY_OFF) |
-		(0x0u << SERCOM_CTRLA_IBON_OFF    ) |
-		(0x0u << SERCOM_CTRLA_SAMPR_OFF   ) |
-		(0x1u << SERCOM_CTRLA_TXPO_OFF    ) |
-		(0x1u << SERCOM_CTRLA_RXPO_OFF    ) |
-		(0x0u << SERCOM_CTRLA_SAMPA_OFF   ) |
-		(0x0u << SERCOM_CTRLA_FORM_OFF    ) |
-		(0x0u << SERCOM_CTRLA_CMODE_OFF   ) |
-		(0x0u << SERCOM_CTRLA_CPOL_OFF    ) |
-		(0x1u << SERCOM_CTRLA_DORD_OFF    );
-	SERCOM0_CTRLB.U =
-		(0x0u << SERCOM_CTRLB_CHSIZE_OFF) |
-		(0x0u << SERCOM_CTRLB_SBMODE_OFF) |
-		(0x0u << SERCOM_CTRLB_COLDEN_OFF) |
-		(0x0u << SERCOM_CTRLB_SFDE_OFF  ) |
-		(0x0u << SERCOM_CTRLB_ENC_OFF   ) |
-		(0x0u << SERCOM_CTRLB_PMODE_OFF ) |
-		(0x1u << SERCOM_CTRLB_TXEN_OFF  ) |
-		(0x1u << SERCOM_CTRLB_RXEN_OFF  ) |
-		(0x0u << SERCOM_CTRLB_LINCMD_OFF);
-
-	/* Baudrate 115200 @ 32MHz core clock */
-	SERCOM0_BAUD = 61761;
-
-	/* Enable SERCOM0 receive complete interrupt */
-	SERCOM0_INTENSET.U = SERCOM_INTENSET_RXC_MSK;
-	/* Enable SERCOM0 interrupts */
-	NVIC_ISER = 0x1u << 9;
-
-	/* Enable SERCOM0 */
-	SERCOM0_CTRLA.B.ENABLE = 0x1u;
-	while (SERCOM0_SYNCBUSY.U & SERCOM_SYNCBUSY_ENABLE_MSK);
-}
-
 void setup_leds(void)
 {
 	/* Configure TX_ACT/RX_ACT pins as output */
@@ -193,7 +139,9 @@ void task_1ms(void)
 
 void task_10ms(void)
 {
-
+	/* UART transmit */
+	uart_write_char('y');
+	uart_write_char('o');
 }
 
 void task_100ms(void)
@@ -206,20 +154,13 @@ void task_100ms(void)
 void task_1000ms(void)
 {
 	/* UART transmit */
-	*((uint32_t*) 0x42000428) = 'h';
-	while (!SERCOM0_INTFLAG.B.TXC);
-	*((uint32_t*) 0x42000428) = 'e';
-	while (!SERCOM0_INTFLAG.B.TXC);
-	*((uint32_t*) 0x42000428) = 'l';
-	while (!SERCOM0_INTFLAG.B.TXC);
-	*((uint32_t*) 0x42000428) = 'l';
-	while (!SERCOM0_INTFLAG.B.TXC);
-	*((uint32_t*) 0x42000428) = 'o';
-	while (!SERCOM0_INTFLAG.B.TXC);
-	*((uint32_t*) 0x42000428) = '\r';
-	while (!SERCOM0_INTFLAG.B.TXC);
-	*((uint32_t*) 0x42000428) = '\n';
-	while (!SERCOM0_INTFLAG.B.TXC);
+	uart_write_char(' ');
+	uart_write_char('h');
+	uart_write_char('e');
+	uart_write_char('l');
+	uart_write_char('l');
+	uart_write_char('o');
+	uart_write_char(' ');
 }
 
 /**
@@ -412,16 +353,6 @@ void __attribute__((interrupt)) dmac_handler(void) {}
 
 /** \brief EVSYS IRQ handler */
 void __attribute__((interrupt)) evsys_handler(void) {}
-
-/** \brief SERCOM0 IRQ handler */
-void __attribute__((interrupt)) sercom0_handler(void)
-{
-	if (SERCOM0_INTFLAG.B.RXC)
-	{
-		/* Transmit back the received character */
-		*((uint32_t*) 0x42000428) = *((uint32_t*) 0x42000428);
-	}
-}
 
 /** \brief SERCOM1 IRQ handler */
 void __attribute__((interrupt)) sercom1_handler(void) {}

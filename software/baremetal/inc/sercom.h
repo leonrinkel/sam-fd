@@ -671,4 +671,58 @@ typedef union
 
 /**@}*/
 
+/** \name SERCOM DATA register */
+/**@{*/
+
+/** \brief SERCOM DATA register structure */
+typedef union
+{
+	/** \brief Unsigned access */
+	uint16_t U;
+	/** \brief Bitfield access */
+	struct
+	{
+		/** \brief Data */
+		uint16_t DATA:9;
+		/** \brief Reserved */
+		uint16_t :7;
+	} B;
+} sercom_data_t;
+
+/** \brief SERCOM DATA register address offset */
+#define SERCOM_DATA_OFF 0x28u
+
+/** \brief SERCOM0 DATA register address */
+#define SERCOM0_DATA_ADDR (SERCOM0_ADDR + SERCOM_DATA_OFF)
+/** \brief SERCOM1 DATA register address */
+#define SERCOM1_DATA_ADDR (SERCOM1_ADDR + SERCOM_DATA_OFF)
+/** \brief SERCOM2 DATA register address */
+#define SERCOM2_DATA_ADDR (SERCOM2_ADDR + SERCOM_DATA_OFF)
+/** \brief SERCOM3 DATA register address */
+#define SERCOM3_DATA_ADDR (SERCOM3_ADDR + SERCOM_DATA_OFF)
+/** \brief SERCOM4 DATA register address */
+#define SERCOM4_DATA_ADDR (SERCOM4_ADDR + SERCOM_DATA_OFF)
+/** \brief SERCOM5 DATA register address */
+#define SERCOM5_DATA_ADDR (SERCOM5_ADDR + SERCOM_DATA_OFF)
+
+/** \brief SERCOM0 DATA register */
+#define SERCOM0_DATA (*((volatile sercom_data_t*) SERCOM0_DATA_ADDR))
+/** \brief SERCOM1 DATA register */
+#define SERCOM1_DATA (*((volatile sercom_data_t*) SERCOM1_DATA_ADDR))
+/** \brief SERCOM2 DATA register */
+#define SERCOM2_DATA (*((volatile sercom_data_t*) SERCOM2_DATA_ADDR))
+/** \brief SERCOM3 DATA register */
+#define SERCOM3_DATA (*((volatile sercom_data_t*) SERCOM3_DATA_ADDR))
+/** \brief SERCOM4 DATA register */
+#define SERCOM4_DATA (*((volatile sercom_data_t*) SERCOM4_DATA_ADDR))
+/** \brief SERCOM5 DATA register */
+#define SERCOM5_DATA (*((volatile sercom_data_t*) SERCOM5_DATA_ADDR))
+
+/** \brief SERCOM DATA.DATA bit offset */
+#define SERCOM_DATA_DATA_OFF 0u
+/** \brief SERCOM DATA.DATA bit mask */
+#define SERCOM_DATA_DATA_MSK (0x1FFu << SERCOM_DATA_DATA_MSK)
+
+/**@}*/
+
 #endif /* SAMFD_SERCOM_H */
