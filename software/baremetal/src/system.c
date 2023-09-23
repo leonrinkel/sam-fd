@@ -207,19 +207,19 @@ void task_1000ms(void)
 {
 	/* UART transmit */
 	*((uint32_t*) 0x42000428) = 'h';
-	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	while (!SERCOM0_INTFLAG.B.TXC);
 	*((uint32_t*) 0x42000428) = 'e';
-	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	while (!SERCOM0_INTFLAG.B.TXC);
 	*((uint32_t*) 0x42000428) = 'l';
-	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	while (!SERCOM0_INTFLAG.B.TXC);
 	*((uint32_t*) 0x42000428) = 'l';
-	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	while (!SERCOM0_INTFLAG.B.TXC);
 	*((uint32_t*) 0x42000428) = 'o';
-	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	while (!SERCOM0_INTFLAG.B.TXC);
 	*((uint32_t*) 0x42000428) = '\r';
-	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	while (!SERCOM0_INTFLAG.B.TXC);
 	*((uint32_t*) 0x42000428) = '\n';
-	for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	while (!SERCOM0_INTFLAG.B.TXC);
 }
 
 /**
@@ -416,8 +416,11 @@ void __attribute__((interrupt)) evsys_handler(void) {}
 /** \brief SERCOM0 IRQ handler */
 void __attribute__((interrupt)) sercom0_handler(void)
 {
-	/* Transmit back the received character */
-	*((uint32_t*) 0x42000428) = *((uint32_t*) 0x42000428);
+	if (SERCOM0_INTFLAG.B.RXC)
+	{
+		/* Transmit back the received character */
+		*((uint32_t*) 0x42000428) = *((uint32_t*) 0x42000428);
+	}
 }
 
 /** \brief SERCOM1 IRQ handler */

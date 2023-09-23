@@ -411,6 +411,200 @@ typedef union
 
 /**@}*/
 
+/** \name SERCOM INTFLAG register */
+/**@{*/
+
+/** \brief SERCOM INTFLAG register structure */
+typedef union
+{
+	/** \brief Unsigned access */
+	uint8_t U;
+	/** \brief Bitfield access */
+	struct
+	{
+		/** \brief Data register empty */
+		uint8_t DRE:1;
+		/** \brief Transmit complete */
+		uint8_t TXC:1;
+		/** \brief Receive complete */
+		uint8_t RXC:1;
+		/** \brief Receive start */
+		uint8_t RXS:1;
+		/** \brief Clear to send input change */
+		uint8_t CTSIC:1;
+		/** \brief Receive break */
+		uint8_t RXBRK:1;
+		/** \brief Reserved */
+		uint8_t :1;
+		/** \brief Error */
+		uint8_t ERROR:1;
+	} B;
+} sercom_intflag_t;
+
+/** \brief SERCOM INTFLAG register address offset */
+#define SERCOM_INTFLAG_OFF 0x18u
+
+/** \brief SERCOM0 INTFLAG register address */
+#define SERCOM0_INTFLAG_ADDR (SERCOM0_ADDR + SERCOM_INTFLAG_OFF)
+/** \brief SERCOM1 INTFLAG register address */
+#define SERCOM1_INTFLAG_ADDR (SERCOM1_ADDR + SERCOM_INTFLAG_OFF)
+/** \brief SERCOM2 INTFLAG register address */
+#define SERCOM2_INTFLAG_ADDR (SERCOM2_ADDR + SERCOM_INTFLAG_OFF)
+/** \brief SERCOM3 INTFLAG register address */
+#define SERCOM3_INTFLAG_ADDR (SERCOM3_ADDR + SERCOM_INTFLAG_OFF)
+/** \brief SERCOM4 INTFLAG register address */
+#define SERCOM4_INTFLAG_ADDR (SERCOM4_ADDR + SERCOM_INTFLAG_OFF)
+/** \brief SERCOM5 INTFLAG register address */
+#define SERCOM5_INTFLAG_ADDR (SERCOM5_ADDR + SERCOM_INTFLAG_OFF)
+
+/** \brief SERCOM0 INTFLAG register */
+#define SERCOM0_INTFLAG (*((volatile sercom_intflag_t*) SERCOM0_INTFLAG_ADDR))
+/** \brief SERCOM1 INTFLAG register */
+#define SERCOM1_INTFLAG (*((volatile sercom_intflag_t*) SERCOM1_INTFLAG_ADDR))
+/** \brief SERCOM2 INTFLAG register */
+#define SERCOM2_INTFLAG (*((volatile sercom_intflag_t*) SERCOM2_INTFLAG_ADDR))
+/** \brief SERCOM3 INTFLAG register */
+#define SERCOM3_INTFLAG (*((volatile sercom_intflag_t*) SERCOM3_INTFLAG_ADDR))
+/** \brief SERCOM4 INTFLAG register */
+#define SERCOM4_INTFLAG (*((volatile sercom_intflag_t*) SERCOM4_INTFLAG_ADDR))
+/** \brief SERCOM5 INTFLAG register */
+#define SERCOM5_INTFLAG (*((volatile sercom_intflag_t*) SERCOM5_INTFLAG_ADDR))
+
+/** \brief SERCOM INTFLAG.DRE bit offset */
+#define SERCOM_INTFLAG_DRE_OFF 0u
+/** \brief SERCOM INTFLAG.DRE bit mask */
+#define SERCOM_INTFLAG_DRE_MSK (0x1u << SERCOM_INTFLAG_DRE_OFF)
+
+/** \brief SERCOM INTFLAG.TXC bit offset */
+#define SERCOM_INTFLAG_TXC_OFF 1u
+/** \brief SERCOM INTFLAG.TXC bit mask */
+#define SERCOM_INTFLAG_TXC_MSK (0x1u << SERCOM_INTFLAG_TXC_OFF)
+
+/** \brief SERCOM INTFLAG.RXC bit offset */
+#define SERCOM_INTFLAG_RXC_OFF 2u
+/** \brief SERCOM INTFLAG.RXC bit mask */
+#define SERCOM_INTFLAG_RXC_MSK (0x1u << SERCOM_INTFLAG_RXC_OFF)
+
+/** \brief SERCOM INTFLAG.RXS bit offset */
+#define SERCOM_INTFLAG_RXS_OFF 3u
+/** \brief SERCOM INTFLAG.RXS bit mask */
+#define SERCOM_INTFLAG_RXS_MSK (0x1u << SERCOM_INTFLAG_RXS_OFF)
+
+/** \brief SERCOM INTFLAG.CTSIC bit offset */
+#define SERCOM_INTFLAG_CTSIC_OFF 4u
+/** \brief SERCOM INTFLAG.CTSIC bit mask */
+#define SERCOM_INTFLAG_CTSIC_MSK (0x1u << SERCOM_INTFLAG_CTSIC_OFF)
+
+/** \brief SERCOM INTFLAG.RXBRK bit offset */
+#define SERCOM_INTFLAG_RXBRK_OFF 5u
+/** \brief SERCOM INTFLAG.RXBRK bit mask */
+#define SERCOM_INTFLAG_RXBRK_MSK (0x1u << SERCOM_INTFLAG_RXBRK_OFF)
+
+/** \brief SERCOM INTFLAG.ERROR bit offset */
+#define SERCOM_INTFLAG_ERROR_OFF 7u
+/** \brief SERCOM INTFLAG.ERROR bit mask */
+#define SERCOM_INTFLAG_ERROR_MSK (0x1u << SERCOM_INTFLAG_ERROR_OFF)
+
+/**@}*/
+
+/** \name SERCOM STATUS register */
+/**@{*/
+
+/** \brief SERCOM STATUS register structure */
+typedef union
+{
+	/** \brief Unsigned access */
+	uint16_t U;
+	/** \brief Bitfield access */
+	struct
+	{
+		/** \brief Parity error */
+		uint16_t PERR:1;
+		/** \brief Frame error */
+		uint16_t FERR:1;
+		/** \brief Buffer overflow */
+		uint16_t BUFOVF:1;
+		/** \brief Clear to send */
+		uint16_t CTS:1;
+		/** \brief Inconsistent sync field */
+		uint16_t ISF:1;
+		/** \brief Collision detected */
+		uint16_t COLL:1;
+		/** \brief Transmitter empty */
+		uint16_t TXE:1;
+		/** \brief Reserved */
+		uint16_t :1;
+		/** \brief Reserved */
+		uint16_t :8;
+	} B;
+} sercom_status_t;
+
+/** \brief SERCOM STATUS register address offset */
+#define SERCOM_STATUS_OFF 0x1Au
+
+/** \brief SERCOM0 STATUS register address */
+#define SERCOM0_STATUS_ADDR (SERCOM0_ADDR + SERCOM_STATUS_OFF)
+/** \brief SERCOM1 STATUS register address */
+#define SERCOM1_STATUS_ADDR (SERCOM1_ADDR + SERCOM_STATUS_OFF)
+/** \brief SERCOM2 STATUS register address */
+#define SERCOM2_STATUS_ADDR (SERCOM2_ADDR + SERCOM_STATUS_OFF)
+/** \brief SERCOM3 STATUS register address */
+#define SERCOM3_STATUS_ADDR (SERCOM3_ADDR + SERCOM_STATUS_OFF)
+/** \brief SERCOM4 STATUS register address */
+#define SERCOM4_STATUS_ADDR (SERCOM4_ADDR + SERCOM_STATUS_OFF)
+/** \brief SERCOM5 STATUS register address */
+#define SERCOM5_STATUS_ADDR (SERCOM5_ADDR + SERCOM_STATUS_OFF)
+
+/** \brief SERCOM0 STATUS register */
+#define SERCOM0_STATUS (*((volatile sercom_status_t*) SERCOM0_STATUS_ADDR))
+/** \brief SERCOM1 STATUS register */
+#define SERCOM1_STATUS (*((volatile sercom_status_t*) SERCOM1_STATUS_ADDR))
+/** \brief SERCOM2 STATUS register */
+#define SERCOM2_STATUS (*((volatile sercom_status_t*) SERCOM2_STATUS_ADDR))
+/** \brief SERCOM3 STATUS register */
+#define SERCOM3_STATUS (*((volatile sercom_status_t*) SERCOM3_STATUS_ADDR))
+/** \brief SERCOM4 STATUS register */
+#define SERCOM4_STATUS (*((volatile sercom_status_t*) SERCOM4_STATUS_ADDR))
+/** \brief SERCOM5 STATUS register */
+#define SERCOM5_STATUS (*((volatile sercom_status_t*) SERCOM5_STATUS_ADDR))
+
+/** \brief SERCOM STATUS.PERR bit offset */
+#define SERCOM_STATUS_PERR_OFF 0u
+/** \brief SERCOM STATUS.PERR bit mask */
+#define SERCOM_STATUS_PERR_MSK (0x1u << SERCOM_STATUS_PERR_OFF)
+
+/** \brief SERCOM STATUS.FERR bit offset */
+#define SERCOM_STATUS_FERR_OFF 1u
+/** \brief SERCOM STATUS.FERR bit mask */
+#define SERCOM_STATUS_FERR_MSK (0x1u << SERCOM_STATUS_FERR_OFF)
+
+/** \brief SERCOM STATUS.BUFOVF bit offset */
+#define SERCOM_STATUS_BUFOVF_OFF 2u
+/** \brief SERCOM STATUS.BUFOVF bit mask */
+#define SERCOM_STATUS_BUFOVF_MSK (0x1u << SERCOM_STATUS_BUFOVF_OFF)
+
+/** \brief SERCOM STATUS.CTS bit offset */
+#define SERCOM_STATUS_CTS_OFF 3u
+/** \brief SERCOM STATUS.CTS bit mask */
+#define SERCOM_STATUS_CTS_MSK (0x1u << SERCOM_STATUS_CTS_OFF)
+
+/** \brief SERCOM STATUS.ISF bit offset */
+#define SERCOM_STATUS_ISF_OFF 4u
+/** \brief SERCOM STATUS.ISF bit mask */
+#define SERCOM_STATUS_ISF_MSK (0x1u << SERCOM_STATUS_ISF_OFF)
+
+/** \brief SERCOM STATUS.COLL bit offset */
+#define SERCOM_STATUS_COLL_OFF 5u
+/** \brief SERCOM STATUS.COLL bit mask */
+#define SERCOM_STATUS_COLL_MSK (0x1u << SERCOM_STATUS_COLL_OFF)
+
+/** \brief SERCOM STATUS.TXE bit offset */
+#define SERCOM_STATUS_TXE_OFF 6u
+/** \brief SERCOM STATUS.TXE bit mask */
+#define SERCOM_STATUS_TXE_MSK (0x1u << SERCOM_STATUS_TXE_OFF)
+
+/**@}*/
+
 /** \name SERCOM SYNCBUSY register */
 /**@{*/
 
