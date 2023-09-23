@@ -16,10 +16,52 @@
 #include "oscctrl.h"
 #include "port.h"
 #include "sercom.h"
+#include "syst.h"
 #include "system.h"
+
+void setup_clocks(void);
+void setup_systick(void);
+void setup_uart(void);
+void setup_leds(void);
 
 /** \brief Main function */
 int main(void)
+{
+	setup_clocks();
+	setup_systick();
+	setup_uart();
+	setup_leds();
+
+	for (;;)
+	{
+		/* Toggle TX_ACT/RX_ACT LEDs */
+		PORT_OUT.U ^= PORT_DIR_DIR9_MSK;
+		PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
+
+		/* Delay */
+		for (uint32_t i = 0x000FFFFFu; i > 0; i--);
+
+		/* UART transmit */
+		*((uint32_t*) 0x42000428) = 'h';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = 'e';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = 'l';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = 'l';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = 'o';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = '\r';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+		*((uint32_t*) 0x42000428) = '\n';
+		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
+	}
+
+	return 0;
+}
+
+void setup_clocks(void)
 {
 	/* Enable MCLK, OSCCTRL and GCLK APB clocks */
 	MCLK_APBAMASK.U |=
@@ -78,7 +120,23 @@ int main(void)
 		(0x0u << GCLK_PCHCTRL_GEN_OFF    ) |
 		(0x1u << GCLK_PCHCTRL_CHEN_OFF   ) |
 		(0x0u << GCLK_PCHCTRL_WRTLOCK_OFF);
+}
 
+void setup_systick(void)
+{
+	/* Enable SysTick and interrupt */
+	SYST_CSR.U =
+		(0x1u << SYST_CSR_ENABLE_OFF   ) |
+		(0x1u << SYST_CSR_TICKINT_OFF  ) |
+		(0x1u << SYST_CSR_CLKSOURCE_OFF) |
+		(0x0u << SYST_CSR_COUNTFLAG_OFF);
+
+	/* 1ms tick @ 32MHz clock */
+	SYST_RVR.U = (0x7A12u << SYST_RVR_RELOAD_OFF);
+}
+
+void setup_uart(void)
+{
 	/* Make UART RX/TX pins use port multiplexer */
 	PORT_PINCFG5.U |= PORT_PINCFG_PMUXEN_MSK;
 	PORT_PINCFG6.U |= PORT_PINCFG_PMUXEN_MSK;
@@ -129,7 +187,10 @@ int main(void)
 	/* Enable SERCOM0 */
 	SERCOM0_CTRLA.B.ENABLE = 0x1u;
 	while (SERCOM0_SYNCBUSY.U & SERCOM_SYNCBUSY_ENABLE_MSK);
+}
 
+void setup_leds(void)
+{
 	/* Configure TX_ACT/RX_ACT pins as output */
 	PORT_DIR.U |=
 		PORT_DIR_DIR9_MSK |
@@ -139,34 +200,6 @@ int main(void)
 	PORT_OUT.B.OUT9 = 0;
 	/* Turn RX_ACT LED off (active-low) */
 	PORT_OUT.B.OUT10 = 1;
-
-	for (;;)
-	{
-		/* Toggle TX_ACT/RX_ACT LEDs */
-		PORT_OUT.U ^= PORT_DIR_DIR9_MSK;
-		PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
-
-		/* Delay */
-		for (uint32_t i = 0x000FFFFFu; i > 0; i--);
-
-		/* UART transmit */
-		*((uint32_t*) 0x42000428) = 'h';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = 'e';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = 'l';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = 'l';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = 'o';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = '\r';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-		*((uint32_t*) 0x42000428) = '\n';
-		for (uint32_t i = 0x0000FFFFu; i > 0; i--);
-	}
-
-	return 0;
 }
 
 /**
@@ -297,6 +330,9 @@ void __attribute__((interrupt)) system_handler(void)
 		/* Enable SERCOM0 */
 		SERCOM0_CTRLA.B.ENABLE = 0x1u;
 		while (SERCOM0_SYNCBUSY.U & SERCOM_SYNCBUSY_ENABLE_MSK);
+
+		/* 1ms tick @ 48MHz clock */
+		SYST_RVR.U = (0xBA04u << SYST_RVR_RELOAD_OFF);
 
 		/* Acknowledge interrupt */
 		*((uint32_t*) (0x40001000u + 0x08u)) = 2;
