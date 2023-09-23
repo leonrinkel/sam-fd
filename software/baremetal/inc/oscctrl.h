@@ -6,6 +6,135 @@
 /** \brief OSCCTRL registers base address */
 #define OSCCTRL_ADDR 0x40001000u
 
+/** \name OSCCTRL INTENSET register */
+/**@{*/
+
+/** \brief OSCCTRL INTENSET register structure */
+typedef union
+{
+	/** \brief Unsigned access */
+	uint32_t U;
+	/** \brief Bitfield access */
+	struct
+	{
+		/** \brief XOSC ready interrupt enable */
+		uint32_t XOSCRDY:1;
+		/** \brief XOSC clock failure interrupt enable */
+		uint32_t CLKFAIL:1;
+		/** \brief Reserved */
+		uint32_t :2;
+		/** \brief OSC48M ready interrupt enable */
+		uint32_t OSC48MRDY:1;
+		/** \brief Reserved */
+		uint32_t :3;
+		/** \brief DPLL lock rise interrupt enable */
+		uint32_t DPLLLCKR:1;
+		/** \brief DPLL lock fall interrupt enable */
+		uint32_t DPLLLCKF:1;
+		/** \brief DPLL lock timeout interrupt enable */
+		uint32_t DPLLLTO:1;
+		/** \brief DPLL loop divider ratio update complete interrupt enable */
+		uint32_t DPLLLDRTO:1;
+		/** \brief Reserved */
+		uint32_t :4;
+		/** \brief Reserved */
+		uint32_t :16;
+	} B;
+} oscctrl_intenset_t;
+
+/** \brief OSCCTRL INTENSET register address offset */
+#define OSCCTRL_INTENSET_OFF 0x04u
+
+/** \brief OSCCTRL INTENSET register address */
+#define OSCCTRL_INTENSET_ADDR (OSCCTRL_ADDR + OSCCTRL_INTENSET_OFF)
+
+/** \brief OSCCTRL INTENSET register */
+#define OSCCTRL_INTENSET (*((volatile oscctrl_intenset_t*) OSCCTRL_INTENSET_ADDR))
+
+/** \brief OSCCTRL INTENSET.XOSCRDY bit offset */
+#define OSCCTRL_INTENSET_XOSCRDY_OFF 0u
+/** \brief OSCCTRL INTENSET.XOSCRDY bit mask */
+#define OSCCTRL_INTENSET_XOSCRDY_MSK (0x1u << OSCCTRL_INTENSET_XOSCRDY_OFF)
+
+/** \brief OSCCTRL INTENSET.CLKFAIL bit offset */
+#define OSCCTRL_INTENSET_CLKFAIL_OFF 1u
+/** \brief OSCCTRL INTENSET.CLKFAIL bit mask */
+#define OSCCTRL_INTENSET_CLKFAIL_MSK (0x1u << OSCCTRL_INTENSET_CLKFAIL_OFF)
+
+/** \brief OSCCTRL INTENSET.OSC48MRDY bit offset */
+#define OSCCTRL_INTENSET_OSC48MRDY_OFF 4u
+/** \brief OSCCTRL INTENSET.OSC48MRDY bit mask */
+#define OSCCTRL_INTENSET_OSC48MRDY_MSK (0x1u << OSCCTRL_INTENSET_OSC48MRDY_OFF)
+
+/** \brief OSCCTRL INTENSET.DPLLLCKR bit offset */
+#define OSCCTRL_INTENSET_DPLLLCKR_OFF 8
+/** \brief OSCCTRL INTENSET.DPLLLCKR bit mask */
+#define OSCCTRL_INTENSET_DPLLLCKR_MSK (0x1u << OSCCTRL_INTENSET_DPLLLCKR_OFF)
+
+/** \brief OSCCTRL INTENSET.DPLLLCKF bit offset */
+#define OSCCTRL_INTENSET_DPLLLCKF_OFF 9u
+/** \brief OSCCTRL INTENSET.DPLLLCKF bit mask */
+#define OSCCTRL_INTENSET_DPLLLCKF_MSK (0x1u << OSCCTRL_INTENSET_DPLLLCKF_OFF)
+
+/** \brief OSCCTRL INTENSET.DPLLLTO bit offset */
+#define OSCCTRL_INTENSET_DPLLLTO_OFF 10u
+/** \brief OSCCTRL INTENSET.DPLLLTO bit mask */
+#define OSCCTRL_INTENSET_DPLLLTO_MSK (0x1u << OSCCTRL_INTENSET_DPLLLTO_OFF)
+
+/** \brief OSCCTRL INTENSET.DPLLLDRTO bit offset */
+#define OSCCTRL_INTENSET_DPLLLDRTO_OFF 11u
+/** \brief OSCCTRL INTENSET.DPLLLDRTO bit mask */
+#define OSCCTRL_INTENSET_DPLLLDRTO_MSK (0x1u << OSCCTRL_INTENSET_DPLLLDRTO_OFF)
+
+/**@}*/
+
+/** \name OSCCTRL INTFLAG register */
+/**@{*/
+
+/** \brief OSCCTRL INTFLAG register structure */
+typedef union
+{
+	/** \brief Unsigned access */
+	uint32_t U;
+	/** \brief Bitfield access */
+	struct
+	{
+		/** \brief XOSC ready */
+		uint32_t XOSCRDY:1;
+		/** \brief XOSC failure detection */
+		uint32_t CLKFAIL:1;
+		/** \brief Reserved */
+		uint32_t :2;
+		/** \brief OSC48M ready */
+		uint32_t OSC48MRDY:1;
+		/** \brief Reserved */
+		uint32_t :3;
+		/** \brief DPLL lock rise */
+		uint32_t DPLLLCKR:1;
+		/** \brief DPLL lock fall */
+		uint32_t DPLLLCKF:1;
+		/** \brief DPLL lock timeout */
+		uint32_t DPLLLTO:1;
+		/** \brief DPLL loop divider ratio update complete */
+		uint32_t DPLLLDRTO:1;
+		/** \brief Reserved */
+		uint32_t :4;
+		/** \brief Reserved */
+		uint32_t :16;
+	} B;
+} oscctrl_intflag_t;
+
+/** \brief OSCCTRL INTFLAG register address offset */
+#define OSCCTRL_INTFLAG_OFF 0x08u
+
+/** \brief OSCCTRL INTFLAG register address */
+#define OSCCTRL_INTFLAG_ADDR (OSCCTRL_ADDR + OSCCTRL_INTFLAG_OFF)
+
+/** \brief OSCCTRL INTFLAG register */
+#define OSCCTRL_INTFLAG (*((volatile oscctrl_intflag_t*) OSCCTRL_INTFLAG_ADDR))
+
+/**@}*/
+
 /** \name OSCCTRL STATUS register */
 /**@{*/
 

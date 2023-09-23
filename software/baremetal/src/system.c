@@ -49,6 +49,11 @@ int main(void)
 		(0x1u << OSCCTRL_XOSCCTRL_AMPGC_OFF   ) |
 		(0x6u << OSCCTRL_XOSCCTRL_STARTUP_OFF );
 
+	/* Enable OSCCTRL clock fail interrupt */
+	OSCCTRL_INTENSET.U = OSCCTRL_INTENSET_CLKFAIL_MSK;
+	/* Enable OSCCTRL interrupts */
+	NVIC_ISER = 0x1u << 0;
+
 	/* Wait till external oscillator ready */
 	while (!OSCCTRL_STATUS.B.XOSCRDY);
 
@@ -118,7 +123,6 @@ int main(void)
 
 	/* Enable SERCOM0 receive complete interrupt */
 	SERCOM0_INTENSET.U = SERCOM_INTENSET_RXC_MSK;
-
 	/* Enable SERCOM0 interrupts */
 	NVIC_ISER = 0x1u << 9;
 
@@ -278,7 +282,26 @@ void __attribute__((interrupt)) pend_sv_handler(void) {}
 void __attribute__((interrupt)) sys_tick_handler(void) {}
 
 /** \brief System IRQ handler */
-void __attribute__((interrupt)) system_handler(void) {}
+void __attribute__((interrupt)) system_handler(void)
+{
+	if (OSCCTRL_INTFLAG.B.CLKFAIL)
+	{
+		/* XOSC failed, clock switched to OSC48M,
+		 * configure prescalers for the new core clock */
+
+		/* Disable SERCOM0 */
+		SERCOM0_CTRLA.B.ENABLE = 0x0u;
+		while (SERCOM0_SYNCBUSY.U & SERCOM_SYNCBUSY_ENABLE_MSK);
+		/* Baudrate 115200 @ 48MHz core clock */
+		SERCOM0_BAUD = 63019;
+		/* Enable SERCOM0 */
+		SERCOM0_CTRLA.B.ENABLE = 0x1u;
+		while (SERCOM0_SYNCBUSY.U & SERCOM_SYNCBUSY_ENABLE_MSK);
+
+		/* Acknowledge interrupt */
+		*((uint32_t*) (0x40001000u + 0x08u)) = 2;
+	}
+}
 
 /** \brief WDT IRQ handler */
 void __attribute__((interrupt)) wdt_handler(void) {}
