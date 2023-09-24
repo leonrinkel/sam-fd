@@ -5,8 +5,8 @@
  * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
-#ifndef SAMFD_SERCOM_H
-#define SAMFD_SERCOM_H
+#ifndef SAMFD_REG_SERCOM_H
+#define SAMFD_REG_SERCOM_H
 
 #include <stdint.h>
 
@@ -732,4 +732,4 @@ typedef union
 
 /**@}*/
 
-#endif /* SAMFD_SERCOM_H */
+#endif /* SAMFD_REG_SERCOM_H */

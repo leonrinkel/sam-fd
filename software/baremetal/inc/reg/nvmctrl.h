@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MIT */
 /**
- * \file      inc/nvmctrl.h
+ * \file      inc/reg/nvmctrl.h
  * \brief     Definitions regarding NVMCTRL registers structure
  * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
-#ifndef SAMFD_NVMCTRL_H
-#define SAMFD_NVMCTRL_H
+#ifndef SAMFD_REG_NVMCTRL_H
+#define SAMFD_REG_NVMCTRL_H
 
 #include <stdint.h>
 
@@ -83,4 +83,4 @@ typedef union
 
 /**@}*/
 
-#endif /* SAMFD_NVMCTRL_H */
+#endif /* SAMFD_REG_NVMCTRL_H */

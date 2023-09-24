@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MIT */
 /**
- * \file      inc/port.h
+ * \file      inc/reg/port.h
  * \brief     Definitions regarding PORT registers structure
  * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
-#ifndef SAMFD_PORT_H
-#define SAMFD_PORT_H
+#ifndef SAMFD_REG_PORT_H
+#define SAMFD_REG_PORT_H
 
 #include <stdint.h>
 
@@ -883,4 +883,4 @@ typedef union
 
 /**@}*/
 
-#endif /* SAMFD_PORT_H */
+#endif /* SAMFD_REG_PORT_H */

@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MIT */
 /**
- * \file      inc/syst.h
+ * \file      inc/reg/syst.h
  * \brief     Definitions regarding SYST registers structure
  * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
-#ifndef SAMFD_SYST_H
-#define SAMFD_SYST_H
+#ifndef SAMFD_REG_SYST_H
+#define SAMFD_REG_SYST_H
 
 #include <stdint.h>
 
@@ -104,4 +104,4 @@ typedef union
 
 /**@}*/
 
-#endif /* SAMFD_SYST_H */
+#endif /* SAMFD_REG_SYST_H */

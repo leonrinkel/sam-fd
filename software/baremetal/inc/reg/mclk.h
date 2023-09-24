@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MIT */
 /**
- * \file      inc/mclk.h
+ * \file      inc/reg/mclk.h
  * \brief     Definitions regarding MCLK registers structure
  * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
-#ifndef SAMFD_MCLK_H
-#define SAMFD_MCLK_H
+#ifndef SAMFD_REG_MCLK_H
+#define SAMFD_REG_MCLK_H
 
 #include <stdint.h>
 
@@ -567,4 +567,4 @@ typedef union
 
 /**@}*/
 
-#endif /* SAMFD_MCLK_H */
+#endif /* SAMFD_REG_MCLK_H */

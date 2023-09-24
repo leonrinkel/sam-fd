@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MIT */
 /**
- * \file      inc/gclk.h
+ * \file      inc/reg/gclk.h
  * \brief     Definitions regarding GCLK registers structure
  * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
-#ifndef SAMFD_GCLK_H
-#define SAMFD_GCLK_H
+#ifndef SAMFD_REG_GCLK_H
+#define SAMFD_REG_GCLK_H
 
 #include <stdint.h>
 
@@ -468,4 +468,4 @@ typedef union
 
 /**@}*/
 
-#endif /* SAMFD_GCLK_H */
+#endif /* SAMFD_REG_GCLK_H */

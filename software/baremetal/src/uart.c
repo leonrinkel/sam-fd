@@ -7,10 +7,11 @@
 
 #include <stdint.h>
 
-#include <nvic.h>
-#include <port.h>
-#include <sercom.h>
-#include <uart.h>
+#include <drv/uart.h>
+
+#include <reg/nvic.h>
+#include <reg/port.h>
+#include <reg/sercom.h>
 
 #define BUFLEN 128
 

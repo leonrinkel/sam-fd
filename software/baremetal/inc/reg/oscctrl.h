@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MIT */
 /**
- * \file      inc/oscctrl.h
+ * \file      inc/reg/oscctrl.h
  * \brief     Definitions regarding OSCCTRL registers structure
  * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
-#ifndef SAMFD_OSCCTRL_H
-#define SAMFD_OSCCTRL_H
+#ifndef SAMFD_REG_OSCCTRL_H
+#define SAMFD_REG_OSCCTRL_H
 
 #include <stdint.h>
 
@@ -515,4 +515,4 @@ typedef union
 
 /**@}*/
 
-#endif /* SAMFD_OSCCTRL_H */
+#endif /* SAMFD_REG_OSCCTRL_H */

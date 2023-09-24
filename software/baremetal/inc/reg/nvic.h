@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MIT */
 /**
- * \file      inc/nvic.h
+ * \file      inc/reg/nvic.h
  * \brief     Definitions regarding NVIC registers structure
  * \copyright Copyright (c) 2023 Leon Rinkel
  */
 
-#ifndef SAMFD_NVIC_H
-#define SAMFD_NVIC_H
+#ifndef SAMFD_REG_NVIC_H
+#define SAMFD_REG_NVIC_H
 
 #include <stdint.h>
 
@@ -27,4 +27,4 @@
 
 /**@}*/
 
-#endif /* SAMFD_NVIC_H */
+#endif /* SAMFD_REG_NVIC_H */

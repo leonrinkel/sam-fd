@@ -8,17 +8,21 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include <gclk.h>
+#include <drv/uart.h>
+#include <drv/can.h>
+
+#include <reg/can.h>
+#include <reg/gclk.h>
+#include <reg/mclk.h>
+#include <reg/nvic.h>
+#include <reg/nvmctrl.h>
+#include <reg/oscctrl.h>
+#include <reg/port.h>
+#include <reg/sercom.h>
+#include <reg/syst.h>
+
 #include <linked.h>
-#include <mclk.h>
-#include <nvic.h>
-#include <nvmctrl.h>
-#include <oscctrl.h>
-#include <port.h>
-#include <sercom.h>
-#include <syst.h>
 #include <system.h>
-#include <uart.h>
 
 void setup_clocks(void);
 void setup_systick(void);
@@ -36,6 +40,7 @@ int main(void)
 	setup_systick();
 	setup_uart();
 	setup_leds();
+	setup_can();
 
 	while (true)
 	{
@@ -47,6 +52,9 @@ int main(void)
 
 void setup_clocks(void)
 {
+	/* Enable CAN0 AHB clock */
+	MCLK_AHBMASK.U |=
+		MCLK_AHBMASK_CAN0_MSK;
 	/* Enable MCLK, OSCCTRL and GCLK APB clocks */
 	MCLK_APBAMASK.U |=
 		MCLK_APBAMASK_MCLK_MSK |
@@ -56,7 +64,7 @@ void setup_clocks(void)
 	MCLK_APBBMASK.U |=
 		MCLK_APBBMASK_PORT_MSK |
 		MCLK_APBBMASK_NVMCTRL_MSK;
-	/* Enable SERCOM0 APB clocks */
+	/* Enable SERCOM0 APB clock */
 	MCLK_APBCMASK.U |=
 		MCLK_APBCMASK_SERCOM0_MSK;
 
@@ -104,6 +112,12 @@ void setup_clocks(void)
 		(0x0u << GCLK_PCHCTRL_GEN_OFF    ) |
 		(0x1u << GCLK_PCHCTRL_CHEN_OFF   ) |
 		(0x0u << GCLK_PCHCTRL_WRTLOCK_OFF);
+
+	/* Clock CAN0 using generator 0 (32MHz XOSC) */
+	GCLK_PCHCTRL26.U =
+		(0x0u << GCLK_PCHCTRL_GEN_OFF    ) |
+		(0x1u << GCLK_PCHCTRL_CHEN_OFF   ) |
+		(0x0u << GCLK_PCHCTRL_WRTLOCK_OFF);
 }
 
 void setup_systick(void)
@@ -146,9 +160,23 @@ void task_10ms(void)
 
 void task_100ms(void)
 {
+	static uint8_t cycle = 0;
+
 	/* Toggle TX_ACT/RX_ACT LEDs */
 	PORT_OUT.U ^= PORT_DIR_DIR9_MSK;
 	PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
+
+	/* Fill CAN TX buffer 0 */
+	can_tx_buffer[0].U[0] =
+		(0x123u << CAN_TX_BUFFER_STD_ID_OFF);
+	can_tx_buffer[0].U[1] =
+		(0x3u << CAN_TX_BUFFER_DLC_OFF);
+	can_tx_buffer[0].B.DB[0] = cycle;
+	can_tx_buffer[0].B.DB[1] = cycle;
+	can_tx_buffer[0].B.DB[2] = cycle++;
+
+	/* Transmit message */
+	CAN0_TXBAR = 0x1u << 0;
 }
 
 void task_1000ms(void)
@@ -324,6 +352,25 @@ void __attribute__((interrupt)) system_handler(void)
 
 		/* 1ms tick @ 48MHz clock */
 		SYST_RVR.U = (0xBA04u << SYST_RVR_RELOAD_OFF);
+
+		/* Set CAN0 initialization */
+		CAN0_CCCR.U |= CAN_CCCR_INIT_MSK;
+		while (!CAN0_CCCR.B.INIT);
+		/* Set CAN0 configuration change enable */
+		CAN0_CCCR.U |= CAN_CCCR_CCE_MSK;
+		while (!CAN0_CCCR.B.CCE);
+		/* Configure nominal timing for 500kbit/s @ 48MHz core clock */
+		CAN0_NBTP.U =
+			(0x17u << CAN_NBTP_NTSEG2_OFF) |
+			(0x46u << CAN_NBTP_NTSEG1_OFF) |
+			(0x00u << CAN_NBTP_NBRP_OFF  ) |
+			(0x17u << CAN_NBTP_NSJW_OFF  );
+		/* Clear CAN0 configuration change enable */
+		CAN0_CCCR.U &= ~CAN_CCCR_CCE_MSK;
+		while (CAN0_CCCR.B.CCE);
+		/* Clear CAN0 initialization */
+		CAN0_CCCR.U &= ~CAN_CCCR_INIT_MSK;
+		while (CAN0_CCCR.B.INIT);
 
 		/* Acknowledge interrupt */
 		*((uint32_t*) (0x40001000u + 0x08u)) = 2;
