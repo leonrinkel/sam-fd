@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 /** \brief MCLK registers base address */
-#define MCLK_ADDR 0x40000800u
+#define MCLK_BASE_ADDR 0x40000800u
 
 /** \name MCLK AHBMASK register */
 /**@{*/
@@ -63,7 +63,7 @@ typedef union
 #define MCLK_AHBMASK_OFF 0x10u
 
 /** \brief MCLK AHBMASK register address */
-#define MCLK_AHBMASK_ADDR (MCLK_ADDR + MCLK_AHBMASK_OFF)
+#define MCLK_AHBMASK_ADDR (MCLK_BASE_ADDR + MCLK_AHBMASK_OFF)
 
 /** \brief MCLK AHBMASK register */
 #define MCLK_AHBMASK (*((volatile mclk_ahbmask_t*) MCLK_AHBMASK_ADDR))
@@ -183,7 +183,7 @@ typedef union
 #define MCLK_APBAMASK_OFF 0x14u
 
 /** \brief MCLK APBAMASK register address */
-#define MCLK_APBAMASK_ADDR (MCLK_ADDR + MCLK_APBAMASK_OFF)
+#define MCLK_APBAMASK_ADDR (MCLK_BASE_ADDR + MCLK_APBAMASK_OFF)
 
 /** \brief MCLK APBAMASK register */
 #define MCLK_APBAMASK (*((volatile mclk_apbamask_t*) MCLK_APBAMASK_ADDR))
@@ -289,7 +289,7 @@ typedef union
 #define MCLK_APBBMASK_OFF 0x18u
 
 /** \brief MCLK APBBMASK register address */
-#define MCLK_APBBMASK_ADDR (MCLK_ADDR + MCLK_APBBMASK_OFF)
+#define MCLK_APBBMASK_ADDR (MCLK_BASE_ADDR + MCLK_APBBMASK_OFF)
 
 /** \brief MCLK APBBMASK register */
 #define MCLK_APBBMASK (*((volatile mclk_apbbmask_t*) MCLK_APBBMASK_ADDR))
@@ -384,7 +384,7 @@ typedef union
 #define MCLK_APBCMASK_OFF 0x1Cu
 
 /** \brief MCLK APBCMASK register address */
-#define MCLK_APBCMASK_ADDR (MCLK_ADDR + MCLK_APBCMASK_OFF)
+#define MCLK_APBCMASK_ADDR (MCLK_BASE_ADDR + MCLK_APBCMASK_OFF)
 
 /** \brief MCLK APBCMASK register */
 #define MCLK_APBCMASK (*((volatile mclk_apbcmask_t*) MCLK_APBCMASK_ADDR))
@@ -535,7 +535,7 @@ typedef union
 #define MCLK_APBDMASK_OFF 0x20u
 
 /** \brief MCLK APBDMASK register address */
-#define MCLK_APBDMASK_ADDR (MCLK_ADDR + MCLK_APBDMASK_OFF)
+#define MCLK_APBDMASK_ADDR (MCLK_BASE_ADDR + MCLK_APBDMASK_OFF)
 
 /** \brief MCLK APBDMASK register */
 #define MCLK_APBDMASK (*((volatile mclk_apbdmask_t*) MCLK_APBDMASK_ADDR))

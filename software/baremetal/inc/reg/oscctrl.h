@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 /** \brief OSCCTRL registers base address */
-#define OSCCTRL_ADDR 0x40001000u
+#define OSCCTRL_BASE_ADDR 0x40001000u
 
 /** \name OSCCTRL INTENSET register */
 /**@{*/
@@ -53,7 +53,7 @@ typedef union
 #define OSCCTRL_INTENSET_OFF 0x04u
 
 /** \brief OSCCTRL INTENSET register address */
-#define OSCCTRL_INTENSET_ADDR (OSCCTRL_ADDR + OSCCTRL_INTENSET_OFF)
+#define OSCCTRL_INTENSET_ADDR (OSCCTRL_BASE_ADDR + OSCCTRL_INTENSET_OFF)
 
 /** \brief OSCCTRL INTENSET register */
 #define OSCCTRL_INTENSET (*((volatile oscctrl_intenset_t*) OSCCTRL_INTENSET_ADDR))
@@ -135,7 +135,7 @@ typedef union
 #define OSCCTRL_INTFLAG_OFF 0x08u
 
 /** \brief OSCCTRL INTFLAG register address */
-#define OSCCTRL_INTFLAG_ADDR (OSCCTRL_ADDR + OSCCTRL_INTFLAG_OFF)
+#define OSCCTRL_INTFLAG_ADDR (OSCCTRL_BASE_ADDR + OSCCTRL_INTFLAG_OFF)
 
 /** \brief OSCCTRL INTFLAG register */
 #define OSCCTRL_INTFLAG (*((volatile oscctrl_intflag_t*) OSCCTRL_INTFLAG_ADDR))
@@ -184,7 +184,7 @@ typedef union
 #define OSCCTRL_STATUS_OFF 0x0Cu
 
 /** \brief OSCCTRL STATUS register address */
-#define OSCCTRL_STATUS_ADDR (OSCCTRL_ADDR + OSCCTRL_STATUS_OFF)
+#define OSCCTRL_STATUS_ADDR (OSCCTRL_BASE_ADDR + OSCCTRL_STATUS_OFF)
 
 /** \brief OSCCTRL STATUS register */
 #define OSCCTRL_STATUS (*((volatile oscctrl_status_t*) OSCCTRL_STATUS_ADDR))
@@ -271,10 +271,10 @@ typedef union
 #define OSCCTRL_XOSCCTRL_OFF 0x10u
 
 /** \brief OSCCTRL XOSCCTRL register address */
-#define OSCCTRL_XOSCCTRL_ADDR (OSCCTRL_ADDR + OSCCTRL_XOSCCTRL_OFF)
+#define OSCCTRL_XOSCCTRL_BASE_ADDR (OSCCTRL_BASE_ADDR + OSCCTRL_XOSCCTRL_OFF)
 
 /** \brief OSCCTRL XOSCCTRL register */
-#define OSCCTRL_XOSCCTRL (*((volatile oscctrl_xoscctrl_t*) OSCCTRL_XOSCCTRL_ADDR))
+#define OSCCTRL_XOSCCTRL (*((volatile oscctrl_xoscctrl_t*) OSCCTRL_XOSCCTRL_BASE_ADDR))
 
 /** \brief OSCCTRL XOSCCTRL.ENABLE bit offset */
 #define OSCCTRL_XOSCCTRL_ENABLE_OFF 1u
@@ -345,7 +345,7 @@ typedef union
 #define OSCCTRL_CFDPRESC_OFF 0x12u
 
 /** \brief OSCCTRL CFDPRESC register address */
-#define OSCCTRL_CFDPRESC_ADDR (OSCCTRL_ADDR + OSCCTRL_CFDPRESC_OFF)
+#define OSCCTRL_CFDPRESC_ADDR (OSCCTRL_BASE_ADDR + OSCCTRL_CFDPRESC_OFF)
 
 /** \brief OSCCTRL CFDPRESC register */
 #define OSCCTRL_CFDPRESC (*((volatile oscctrl_cfdpresc_t*) OSCCTRL_CFDPRESC_ADDR))
@@ -379,7 +379,7 @@ typedef union
 #define OSCCTRL_EVCTRL_OFF 0x13u
 
 /** \brief OSCCTRL EVCTRL register address */
-#define OSCCTRL_EVCTRL_ADDR (OSCCTRL_ADDR + OSCCTRL_EVCTRL_OFF)
+#define OSCCTRL_EVCTRL_ADDR (OSCCTRL_BASE_ADDR + OSCCTRL_EVCTRL_OFF)
 
 /** \brief OSCCTRL EVCTRL register */
 #define OSCCTRL_EVCTRL (*((volatile oscctrl_evctrl_t*) OSCCTRL_EVCTRL_ADDR))
@@ -419,7 +419,7 @@ typedef union
 #define OSCCTRL_OSC48MCTRL_OFF 0x14u
 
 /** \brief OSCCTRL OSC48MCTRL register address */
-#define OSCCTRL_OSC48MCTRL_ADDR (OSCCTRL_ADDR + OSCCTRL_OSC48MCTRL_OFF)
+#define OSCCTRL_OSC48MCTRL_ADDR (OSCCTRL_BASE_ADDR + OSCCTRL_OSC48MCTRL_OFF)
 
 /** \brief OSCCTRL OSC48MCTRL register */
 #define OSCCTRL_OSC48MCTRL (*((volatile oscctrl_osc48mctrl_t*) OSCCTRL_OSC48MCTRL_ADDR))
@@ -463,7 +463,7 @@ typedef union
 #define OSCCTRL_OSC48MDIV_OFF 0x15u
 
 /** \brief OSCCTRL OSC48MDIV register address */
-#define OSCCTRL_OSC48MDIV_ADDR (OSCCTRL_ADDR + OSCCTRL_OSC48MDIV_OFF)
+#define OSCCTRL_OSC48MDIV_ADDR (OSCCTRL_BASE_ADDR + OSCCTRL_OSC48MDIV_OFF)
 
 /** \brief OSCCTRL OSC48MDIV register */
 #define OSCCTRL_OSC48MDIV (*((volatile oscctrl_osc48mdiv_t*) OSCCTRL_OSC48MDIV_ADDR))
@@ -503,7 +503,7 @@ typedef union
 #define OSCCTRL_OSC48MSYNCBUSY_OFF 0x18u
 
 /** \brief OSCCTRL OSC48MSYNCBUSY register address */
-#define OSCCTRL_OSC48MSYNCBUSY_ADDR (OSCCTRL_ADDR + OSCCTRL_OSC48MSYNCBUSY_OFF)
+#define OSCCTRL_OSC48MSYNCBUSY_ADDR (OSCCTRL_BASE_ADDR + OSCCTRL_OSC48MSYNCBUSY_OFF)
 
 /** \brief OSCCTRL OSC48MSYNCBUSY register */
 #define OSCCTRL_OSC48MSYNCBUSY (*((volatile oscctrl_osc48msyncbusy_t*) OSCCTRL_OSC48MSYNCBUSY_ADDR))

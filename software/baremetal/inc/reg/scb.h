@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 /** \brief SCB registers base address */
-#define SCB_ADDR 0xE000ED00u
+#define SCB_BASE_ADDR 0xE000ED00u
 
 /** \name SCB VTOR register */
 /**@{*/
@@ -20,7 +20,7 @@
 #define SCB_VTOR_OFF 0x08u
 
 /** \brief SCB VTOR register address */
-#define SCB_VTOR_ADDR (SCB_ADDR + SCB_VTOR_OFF)
+#define SCB_VTOR_ADDR (SCB_BASE_ADDR + SCB_VTOR_OFF)
 
 /** \brief SCB VTOR register */
 #define SCB_VTOR (*((volatile uint32_t*) SCB_VTOR_ADDR))

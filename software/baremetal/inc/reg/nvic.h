@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 /** \brief NVIC registers base address */
-#define NVIC_ADDR 0xE000E100u
+#define NVIC_BASE_ADDR 0xE000E100u
 
 /** \name NVIC ISER register */
 /**@{*/
@@ -20,7 +20,7 @@
 #define NVIC_ISER_OFF 0x000u
 
 /** \brief NVIC ISER register address */
-#define NVIC_ISER_ADDR (NVIC_ADDR + NVIC_ISER_OFF)
+#define NVIC_ISER_ADDR (NVIC_BASE_ADDR + NVIC_ISER_OFF)
 
 /** \brief NVIC ISER register */
 #define NVIC_ISER (*((volatile uint32_t*) NVIC_ISER_ADDR))

@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 /** \brief SYST registers base address */
-#define SYST_ADDR 0xE000E010u
+#define SYST_BASE_ADDR 0xE000E010u
 
 /** \name SYST CSR register */
 /**@{*/
@@ -43,7 +43,7 @@ typedef union
 #define SYST_CSR_OFF 0x00u
 
 /** \brief SYST CSR register address */
-#define SYST_CSR_ADDR (SYST_ADDR + SYST_CSR_OFF)
+#define SYST_CSR_ADDR (SYST_BASE_ADDR + SYST_CSR_OFF)
 
 /** \brief SYST CSR register */
 #define SYST_CSR (*((volatile syst_csr_t*) SYST_CSR_ADDR))
@@ -92,7 +92,7 @@ typedef union
 #define SYST_RVR_OFF 0x04u
 
 /** \brief SYST RVR register address */
-#define SYST_RVR_ADDR (SYST_ADDR + SYST_RVR_OFF)
+#define SYST_RVR_ADDR (SYST_BASE_ADDR + SYST_RVR_OFF)
 
 /** \brief SYST RVR register */
 #define SYST_RVR (*((volatile syst_rvr_t*) SYST_RVR_ADDR))

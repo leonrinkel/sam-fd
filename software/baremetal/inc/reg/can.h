@@ -11,9 +11,9 @@
 #include <stdint.h>
 
 /** \brief CAN0 registers base address */
-#define CAN0_ADDR 0x42001C00u
+#define CAN0_BASE_ADDR 0x42001C00u
 /** \brief CAN1 registers base address */
-#define CAN1_ADDR 0x42002000u
+#define CAN1_BASE_ADDR 0x42002000u
 
 /** \name CAN DBTP register */
 /**@{*/
@@ -49,9 +49,9 @@ typedef union
 #define CAN_DBTP_OFF 0x0Cu
 
 /** \brief CAN0 DBTP register address */
-#define CAN0_DBTP_ADDR (CAN0_ADDR + CAN_DBTP_OFF)
+#define CAN0_DBTP_ADDR (CAN0_BASE_ADDR + CAN_DBTP_OFF)
 /** \brief CAN1 DBTP register address */
-#define CAN1_DBTP_ADDR (CAN1_ADDR + CAN_DBTP_OFF)
+#define CAN1_DBTP_ADDR (CAN1_BASE_ADDR + CAN_DBTP_OFF)
 
 /** \brief CAN0 DBTP register */
 #define CAN0_DBTP (*((volatile can_dbtp_t*) CAN0_DBTP_ADDR))
@@ -115,9 +115,9 @@ typedef union
 #define CAN_TEST_OFF 0x10u
 
 /** \brief CAN0 TEST register address */
-#define CAN0_TEST_ADDR (CAN0_ADDR + CAN_TEST_OFF)
+#define CAN0_TEST_ADDR (CAN0_BASE_ADDR + CAN_TEST_OFF)
 /** \brief CAN1 TEST register address */
-#define CAN1_TEST_ADDR (CAN1_ADDR + CAN_TEST_OFF)
+#define CAN1_TEST_ADDR (CAN1_BASE_ADDR + CAN_TEST_OFF)
 
 /** \brief CAN0 TEST register */
 #define CAN0_TEST (*((volatile can_test_t*) CAN0_TEST_ADDR))
@@ -191,9 +191,9 @@ typedef union
 #define CAN_CCCR_OFF 0x18u
 
 /** \brief CAN0 CCCR register address */
-#define CAN0_CCCR_ADDR (CAN0_ADDR + CAN_CCCR_OFF)
+#define CAN0_CCCR_ADDR (CAN0_BASE_ADDR + CAN_CCCR_OFF)
 /** \brief CAN1 CCCR register address */
-#define CAN1_CCCR_ADDR (CAN1_ADDR + CAN_CCCR_OFF)
+#define CAN1_CCCR_ADDR (CAN1_BASE_ADDR + CAN_CCCR_OFF)
 
 /** \brief CAN0 CCCR register */
 #define CAN0_CCCR (*((volatile can_cccr_t*) CAN0_CCCR_ADDR))
@@ -300,9 +300,9 @@ typedef union
 #define CAN_NBTP_OFF 0x1Cu
 
 /** \brief CAN0 NBTP register address */
-#define CAN0_NBTP_ADDR (CAN0_ADDR + CAN_NBTP_OFF)
+#define CAN0_NBTP_ADDR (CAN0_BASE_ADDR + CAN_NBTP_OFF)
 /** \brief CAN1 NBTP register address */
-#define CAN1_NBTP_ADDR (CAN1_ADDR + CAN_NBTPOFF)
+#define CAN1_NBTP_ADDR (CAN1_BASE_ADDR + CAN_NBTPOFF)
 
 /** \brief CAN0 NBTP register */
 #define CAN0_NBTP (*((volatile can_nbtp_t*) CAN0_NBTP_ADDR))
@@ -355,9 +355,9 @@ typedef union
 #define CAN_SIDFC_OFF 0x84u
 
 /** \brief CAN0 SIDFC register address */
-#define CAN0_SIDFC_ADDR (CAN0_ADDR + CAN_SIDFC_OFF)
+#define CAN0_SIDFC_ADDR (CAN0_BASE_ADDR + CAN_SIDFC_OFF)
 /** \brief CAN1 SIDFC register address */
-#define CAN1_SIDFC_ADDR (CAN1_ADDR + CAN_SIDFC_OFF)
+#define CAN1_SIDFC_ADDR (CAN1_BASE_ADDR + CAN_SIDFC_OFF)
 
 /** \brief CAN0 SIDFC register */
 #define CAN0_SIDFC (*((volatile can_sidfc_t*) CAN0_SIDFC_ADDR))
@@ -398,9 +398,9 @@ typedef union
 #define CAN_RXBC_OFF 0xACu
 
 /** \brief CAN0 RXBC register address */
-#define CAN0_RXBC_ADDR (CAN0_ADDR + CAN_RXBC_OFF)
+#define CAN0_RXBC_ADDR (CAN0_BASE_ADDR + CAN_RXBC_OFF)
 /** \brief CAN1 RXBC register address */
-#define CAN1_RXBC_ADDR (CAN1_ADDR + CAN_RXBC_OFF)
+#define CAN1_RXBC_ADDR (CAN1_BASE_ADDR + CAN_RXBC_OFF)
 
 /** \brief CAN0 RXBC register */
 #define CAN0_RXBC (*((volatile can_rxbc_t*) CAN0_RXBC_ADDR))
@@ -446,9 +446,9 @@ typedef union
 #define CAN_RXESC_OFF 0xBCu
 
 /** \brief CAN0 RXESC register address */
-#define CAN0_RXESC_ADDR (CAN0_ADDR + CAN_RXESC_OFF)
+#define CAN0_RXESC_ADDR (CAN0_BASE_ADDR + CAN_RXESC_OFF)
 /** \brief CAN1 RXESC register address */
-#define CAN1_RXESC_ADDR (CAN1_ADDR + CAN_RXESC_OFF)
+#define CAN1_RXESC_ADDR (CAN1_BASE_ADDR + CAN_RXESC_OFF)
 
 /** \brief CAN0 RXESC register */
 #define CAN0_RXESC (*((volatile can_rxesc_t*) CAN0_RXESC_ADDR))
@@ -502,9 +502,9 @@ typedef union
 #define CAN_TXBC_OFF 0xC0u
 
 /** \brief CAN0 TXBC register address */
-#define CAN0_TXBC_ADDR (CAN0_ADDR + CAN_TXBC_OFF)
+#define CAN0_TXBC_ADDR (CAN0_BASE_ADDR + CAN_TXBC_OFF)
 /** \brief CAN1 RXESC register address */
-#define CAN1_TXBC_ADDR (CAN1_ADDR + CAN_TXBC_OFF)
+#define CAN1_TXBC_ADDR (CAN1_BASE_ADDR + CAN_TXBC_OFF)
 
 /** \brief CAN0 TXBC register */
 #define CAN0_TXBC (*((volatile can_txbc_t*) CAN0_TXBC_ADDR))
@@ -559,9 +559,9 @@ typedef union
 #define CAN_TXESC_OFF 0xC8u
 
 /** \brief CAN0 TXESC register address */
-#define CAN0_TXESC_ADDR (CAN0_ADDR + CAN_TXESC_OFF)
+#define CAN0_TXESC_ADDR (CAN0_BASE_ADDR + CAN_TXESC_OFF)
 /** \brief CAN1 TXESC register address */
-#define CAN1_TXESC_ADDR (CAN1_ADDR + CAN_TXESC_OFF)
+#define CAN1_TXESC_ADDR (CAN1_BASE_ADDR + CAN_TXESC_OFF)
 
 /** \brief CAN0 TXESC register */
 #define CAN0_TXESC (*((volatile can_txesc_t*) CAN0_TXESC_ADDR))
@@ -582,9 +582,9 @@ typedef union
 #define CAN_TXBAR_OFF 0xD0u
 
 /** \brief CAN0 TXBAR register address */
-#define CAN0_TXBAR_ADDR (CAN0_ADDR + CAN_TXBAR_OFF)
+#define CAN0_TXBAR_ADDR (CAN0_BASE_ADDR + CAN_TXBAR_OFF)
 /** \brief CAN1 TXBAR register address */
-#define CAN1_TXBAR_ADDR (CAN1_ADDR + CAN_TXBAR_OFF)
+#define CAN1_TXBAR_ADDR (CAN1_BASE_ADDR + CAN_TXBAR_OFF)
 
 /** \brief CAN0 TXBAR register */
 #define CAN0_TXBAR (*((volatile uint32_t*) CAN0_TXBAR_ADDR))
