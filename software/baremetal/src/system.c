@@ -18,6 +18,7 @@
 #include <reg/nvmctrl.h>
 #include <reg/oscctrl.h>
 #include <reg/port.h>
+#include <reg/scb.h>
 #include <reg/sercom.h>
 #include <reg/syst.h>
 
@@ -207,6 +208,8 @@ void reset_handler(void)
 	uint32_t* dst;
 	uint32_t  cnt;
 	uint32_t  idx;
+
+	SCB_VTOR = (uint32_t) &_stext;
 
 	/* Relocate data section */
 	src = &_sdata;
