@@ -9,6 +9,7 @@
 #include <stdbool.h>
 
 #include <drv/uart.h>
+#include <drv/flash.h>
 #include <drv/can.h>
 
 #include <reg/can.h>
@@ -55,6 +56,7 @@ void setup_clocks(void)
 {
 	/* Enable CAN0 AHB clock */
 	MCLK_AHBMASK.U |=
+		MCLK_AHBMASK_NVMCTRL_MSK |
 		MCLK_AHBMASK_CAN0_MSK;
 	/* Enable MCLK, OSCCTRL and GCLK APB clocks */
 	MCLK_APBAMASK.U |=
@@ -167,6 +169,24 @@ void task_1ms(void)
 			uart_write_char(' ');
 			uart_write_char('a');
 			uart_write_char(' ');
+			break;
+
+		case 'e':
+			if (flash_erase_row(0xF00u))
+			{
+				uart_write_char(' ');
+				uart_write_char('o');
+				uart_write_char('k');
+				uart_write_char(' ');
+			}
+			else
+			{
+				uart_write_char(' ');
+				uart_write_char('n');
+				uart_write_char('o');
+				uart_write_char('k');
+				uart_write_char(' ');
+			}
 			break;
 		}
 	}

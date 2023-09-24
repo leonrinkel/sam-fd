@@ -41,6 +41,7 @@ add_link_options(
 add_executable(
 	${PROJECT_NAME}
 	src/can.c
+	src/flash.c
 	src/system.c
 	src/uart.c
 )
