@@ -13,6 +13,7 @@
 void setup_uart(void);
 
 uint8_t uart_write_char(uint8_t c);
+uint8_t uart_read_char(uint8_t* c);
 
 /** \brief SERCOM0 IRQ handler */
 void __attribute__((interrupt)) sercom0_handler(void);

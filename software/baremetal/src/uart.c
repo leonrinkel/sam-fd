@@ -19,6 +19,10 @@ static uint8_t write_buf[BUFLEN];
 static uint16_t write_buf_read_idx = 0;
 static uint16_t write_buf_write_idx = 0;
 
+static uint8_t read_buf[BUFLEN];
+static uint16_t read_buf_read_idx = 0;
+static uint16_t read_buf_write_idx = 0;
+
 void setup_uart(void)
 {
 	/* Make UART RX/TX pins use port multiplexer */
@@ -120,6 +124,35 @@ uint8_t uart_write_char(uint8_t c)
 	}
 }
 
+uint8_t uart_read_char(uint8_t* c)
+{
+	/* Disable interrupts */
+	__asm__ volatile ("cpsid i");
+
+	if (
+		/* Read buffer not empty */
+		read_buf_write_idx != read_buf_read_idx
+	)
+	{
+		/* Read char from buffer */
+		*c = read_buf[read_buf_read_idx];
+		read_buf_read_idx =
+			(read_buf_read_idx + 1) % BUFLEN;
+
+		/* Enable interrupts */
+		__asm__ volatile ("cpsie i");
+
+		return 1;
+	}
+	else /* Read buffer empty */
+	{
+		/* Enable interrupts */
+		__asm__ volatile ("cpsie i");
+
+		return 0;
+	}
+}
+
 void __attribute__((interrupt)) sercom0_handler(void)
 {
 	if (
@@ -143,5 +176,26 @@ void __attribute__((interrupt)) sercom0_handler(void)
 			/* Only acknowledge interrupt */
 			SERCOM0_INTFLAG.U = SERCOM_INTFLAG_TXC_MSK;
 		}
+	}
+
+	if (
+		/* Receive complete */
+		SERCOM0_INTFLAG.B.RXC
+	)
+	{
+		if (
+			/* Read buffer not full */
+			(read_buf_write_idx + 1) % BUFLEN !=
+				read_buf_read_idx
+		)
+		{
+			/* Put char in buffer */
+			read_buf[read_buf_write_idx] = SERCOM0_DATA.U & 0xFFu;
+			read_buf_write_idx =
+				(read_buf_write_idx + 1) % BUFLEN;
+		}
+
+		/* Acknowledge interrupt */
+		SERCOM0_INTFLAG.U = SERCOM_INTFLAG_RXC_MSK;
 	}
 }

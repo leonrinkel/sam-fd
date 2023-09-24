@@ -149,7 +149,27 @@ void setup_leds(void)
 
 void task_1ms(void)
 {
+	uint8_t c;
 
+	if (uart_read_char(&c) == 1)
+	{
+		switch (c)
+		{
+		case 'a':
+			uart_write_char(' ');
+			uart_write_char('p');
+			uart_write_char('r');
+			uart_write_char('e');
+			uart_write_char('s');
+			uart_write_char('s');
+			uart_write_char('e');
+			uart_write_char('d');
+			uart_write_char(' ');
+			uart_write_char('a');
+			uart_write_char(' ');
+			break;
+		}
+	}
 }
 
 void task_10ms(void)
