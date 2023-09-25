@@ -149,6 +149,9 @@ void setup_leds(void)
 	PORT_OUT.B.OUT10 = 1;
 }
 
+static uint8_t data[FLASH_PAGE_SIZE] =
+	"hello world lets write this to flash";
+
 void task_1ms(void)
 {
 	uint8_t c;
@@ -171,8 +174,28 @@ void task_1ms(void)
 			uart_write_char(' ');
 			break;
 
+		/* Test erasing flash */
 		case 'e':
 			if (flash_erase_row(0xF00u))
+			{
+				uart_write_char(' ');
+				uart_write_char('o');
+				uart_write_char('k');
+				uart_write_char(' ');
+			}
+			else
+			{
+				uart_write_char(' ');
+				uart_write_char('n');
+				uart_write_char('o');
+				uart_write_char('k');
+				uart_write_char(' ');
+			}
+			break;
+
+		/* Test writing flash */
+		case 'w':
+			if (flash_write_page(0xF00u, data))
 			{
 				uart_write_char(' ');
 				uart_write_char('o');
