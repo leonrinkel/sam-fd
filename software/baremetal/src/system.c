@@ -30,7 +30,7 @@
 
 void setup_clocks(void);
 void setup_systick(void);
-void setup_leds(void);
+void setup_pins(void);
 
 void task_1ms(void);
 void task_10ms(void);
@@ -63,7 +63,7 @@ int main(void)
 	setup_clocks();
 	setup_systick();
 	setup_uart();
-	setup_leds();
+	setup_pins();
 	setup_can();
 
 	while (true)
@@ -161,8 +161,15 @@ void setup_systick(void)
 	SYST_RVR.U = (0x7A12u << SYST_RVR_RELOAD_OFF);
 }
 
-void setup_leds(void)
+void setup_pins(void)
 {
+	/* Configure pin 8 as input with pull-up */
+	PORT_DIR.U &= ~PORT_DIR_DIR8_MSK;
+	PORT_PINCFG8.U =
+		PORT_PINCFG_PULLEN_MSK |
+		PORT_PINCFG_INEN_MSK;
+	PORT_OUT.U |= PORT_OUT_OUT8_MSK;
+
 	/* Configure TX_ACT/RX_ACT pins as output */
 	PORT_DIR.U |=
 		PORT_DIR_DIR9_MSK |
@@ -176,7 +183,7 @@ void setup_leds(void)
 
 void task_1ms(void)
 {
-	uint8_t cmd[2];
+	char cmd[2];
 	uint32_t crc;
 
 	if (uart_available() == 2)
@@ -258,9 +265,12 @@ void task_100ms(void)
 {
 	static uint8_t cycle = 0;
 
-	/* Toggle TX_ACT/RX_ACT LEDs */
-	PORT_OUT.U ^= PORT_DIR_DIR9_MSK;
-	PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
+	if (PORT_IN.B.IN8)
+	{
+		/* Toggle TX_ACT/RX_ACT LEDs */
+		PORT_OUT.U ^= PORT_DIR_DIR9_MSK;
+		PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
+	}
 
 	/* Fill CAN TX buffer 0 */
 	can_tx_buffer[0].U[0] =
@@ -277,6 +287,13 @@ void task_100ms(void)
 
 void task_1000ms(void)
 {
+	if (!PORT_IN.B.IN8)
+	{
+		/* Toggle TX_ACT/RX_ACT LEDs */
+		PORT_OUT.U ^= PORT_DIR_DIR9_MSK;
+		PORT_OUT.U ^= PORT_DIR_DIR10_MSK;
+	}
+
 	/* UART transmit */
 	uart_write(" hello ", 8);
 }

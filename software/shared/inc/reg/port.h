@@ -511,6 +511,255 @@ typedef union
 
 /**@}*/
 
+/** \name PORT IN register */
+/**@{*/
+
+/** \brief PORT IN register structure */
+typedef union
+{
+	/** \brief Unsigned access */
+	uint32_t U;
+	/** \brief Bitfield access */
+	struct
+	{
+		/** \brief Port data input value for pin 0 */
+		uint32_t IN0:1;
+		/** \brief Port data input value for pin 1 */
+		uint32_t IN1:1;
+		/** \brief Port data input value for pin 2 */
+		uint32_t IN2:1;
+		/** \brief Port data input value for pin 3 */
+		uint32_t IN3:1;
+		/** \brief Port data input value for pin 4 */
+		uint32_t IN4:1;
+		/** \brief Port data input value for pin 5 */
+		uint32_t IN5:1;
+		/** \brief Port data input value for pin 6 */
+		uint32_t IN6:1;
+		/** \brief Port data input value for pin 7 */
+		uint32_t IN7:1;
+		/** \brief Port data input value for pin 8 */
+		uint32_t IN8:1;
+		/** \brief Port data input value for pin 9 */
+		uint32_t IN9:1;
+		/** \brief Port data input value for pin 10 */
+		uint32_t IN10:1;
+		/** \brief Port data input value for pin 11 */
+		uint32_t IN11:1;
+		/** \brief Port data input value for pin 12 */
+		uint32_t IN12:1;
+		/** \brief Port data input value for pin 13 */
+		uint32_t IN13:1;
+		/** \brief Port data input value for pin 14 */
+		uint32_t IN14:1;
+		/** \brief Port data input value for pin 15 */
+		uint32_t IN15:1;
+		/** \brief Port data input value for pin 16 */
+		uint32_t IN16:1;
+		/** \brief Port data input value for pin 17 */
+		uint32_t IN17:1;
+		/** \brief Port data input value for pin 18 */
+		uint32_t IN18:1;
+		/** \brief Port data input value for pin 19 */
+		uint32_t IN19:1;
+		/** \brief Port data input value for pin 20 */
+		uint32_t IN20:1;
+		/** \brief Port data input value for pin 21 */
+		uint32_t IN21:1;
+		/** \brief Port data input value for pin 22 */
+		uint32_t IN22:1;
+		/** \brief Port data input value for pin 23 */
+		uint32_t IN23:1;
+		/** \brief Port data input value for pin 24 */
+		uint32_t IN24:1;
+		/** \brief Port data input value for pin 25 */
+		uint32_t IN25:1;
+		/** \brief Port data input value for pin 26 */
+		uint32_t IN26:1;
+		/** \brief Port data input value for pin 27 */
+		uint32_t IN27:1;
+		/** \brief Port data input value for pin 28 */
+		uint32_t IN28:1;
+		/** \brief Port data input value for pin 29 */
+		uint32_t IN29:1;
+		/** \brief Port data input value for pin 30 */
+		uint32_t IN30:1;
+		/** \brief Port data input value for pin 31 */
+		uint32_t IN31:1;
+	} B;
+} port_in_t;
+
+/** \brief PORT IN register address offset */
+#define PORT_IN_OFF 0x20u
+
+/** \brief PORT IN register address */
+#define PORT_IN_ADDR (PORT_BASE_ADDR + PORT_IN_OFF)
+
+/** \brief PORT IN register */
+#define PORT_IN (*((volatile port_in_t*) PORT_IN_ADDR))
+
+/** \brief PORT IN.IN0 bit offset */
+#define PORT_IN_IN0_OFF 0u
+/** \brief PORT IN.IN0 bit mask */
+#define PORT_IN_IN0_MSK (0x1u << PORT_IN_IN0_OFF)
+
+/** \brief PORT IN.IN1 bit offset */
+#define PORT_IN_IN1_OFF 1u
+/** \brief PORT IN.IN1 bit mask */
+#define PORT_IN_IN1_MSK (0x1u << PORT_IN_IN1_OFF)
+
+/** \brief PORT IN.IN2 bit offset */
+#define PORT_IN_IN2_OFF 2u
+/** \brief PORT IN.IN2 bit mask */
+#define PORT_IN_IN2_MSK (0x1u << PORT_IN_IN2_OFF)
+
+/** \brief PORT IN.IN3 bit offset */
+#define PORT_IN_IN3_OFF 3u
+/** \brief PORT IN.IN3 bit mask */
+#define PORT_IN_IN3_MSK (0x1u << PORT_IN_IN3_OFF)
+
+/** \brief PORT IN.IN4 bit offset */
+#define PORT_IN_IN4_OFF 4u
+/** \brief PORT IN.IN4 bit mask */
+#define PORT_IN_IN4_MSK (0x1u << PORT_IN_IN4_OFF)
+
+/** \brief PORT IN.IN5 bit offset */
+#define PORT_IN_IN5_OFF 5u
+/** \brief PORT IN.IN5 bit mask */
+#define PORT_IN_IN5_MSK (0x1u << PORT_IN_IN5_OFF)
+
+/** \brief PORT IN.IN6 bit offset */
+#define PORT_IN_IN6_OFF 6u
+/** \brief PORT IN.IN6 bit mask */
+#define PORT_IN_IN6_MSK (0x1u << PORT_IN_IN6_OFF)
+
+/** \brief PORT IN.IN7 bit offset */
+#define PORT_IN_IN7_OFF 7u
+/** \brief PORT IN.IN7 bit mask */
+#define PORT_IN_IN7_MSK (0x1u << PORT_IN_IN7_OFF)
+
+/** \brief PORT IN.IN8 bit offset */
+#define PORT_IN_IN8_OFF 8u
+/** \brief PORT IN.IN8 bit mask */
+#define PORT_IN_IN8_MSK (0x1u << PORT_IN_IN8_OFF)
+
+/** \brief PORT IN.IN9 bit offset */
+#define PORT_IN_IN9_OFF 9u
+/** \brief PORT IN.IN9 bit mask */
+#define PORT_IN_IN9_MSK (0x1u << PORT_IN_IN9_OFF)
+
+/** \brief PORT IN.IN10 bit offset */
+#define PORT_IN_IN10_OFF 10u
+/** \brief PORT IN.IN10 bit mask */
+#define PORT_IN_IN10_MSK (0x1u << PORT_IN_IN10_OFF)
+
+/** \brief PORT IN.IN11 bit offset */
+#define PORT_IN_IN11_OFF 11u
+/** \brief PORT IN.IN11 bit mask */
+#define PORT_IN_IN11_MSK (0x1u << PORT_IN_IN11_OFF)
+
+/** \brief PORT IN.IN12 bit offset */
+#define PORT_IN_IN12_OFF 12u
+/** \brief PORT IN.IN12 bit mask */
+#define PORT_IN_IN12_MSK (0x1u << PORT_IN_IN12_OFF)
+
+/** \brief PORT IN.IN13 bit offset */
+#define PORT_IN_IN13_OFF 13u
+/** \brief PORT IN.IN13 bit mask */
+#define PORT_IN_IN13_MSK (0x1u << PORT_IN_IN13_OFF)
+
+/** \brief PORT IN.IN14 bit offset */
+#define PORT_IN_IN14_OFF 14u
+/** \brief PORT IN.IN14 bit mask */
+#define PORT_IN_IN14_MSK (0x1u << PORT_IN_IN14_OFF)
+
+/** \brief PORT IN.IN15 bit offset */
+#define PORT_IN_IN15_OFF 15u
+/** \brief PORT IN.IN15 bit mask */
+#define PORT_IN_IN15_MSK (0x1u << PORT_IN_IN15_OFF)
+
+/** \brief PORT IN.IN16 bit offset */
+#define PORT_IN_IN16_OFF 16u
+/** \brief PORT IN.IN16 bit mask */
+#define PORT_IN_IN16_MSK (0x1u << PORT_IN_IN16_OFF)
+
+/** \brief PORT IN.IN17 bit offset */
+#define PORT_IN_IN17_OFF 17u
+/** \brief PORT IN.IN17 bit mask */
+#define PORT_IN_IN17_MSK (0x1u << PORT_IN_IN17_OFF)
+
+/** \brief PORT IN.IN18 bit offset */
+#define PORT_IN_IN18_OFF 18u
+/** \brief PORT IN.IN18 bit mask */
+#define PORT_IN_IN18_MSK (0x1u << PORT_IN_IN18_OFF)
+
+/** \brief PORT IN.IN19 bit offset */
+#define PORT_IN_IN19_OFF 19u
+/** \brief PORT IN.IN19 bit mask */
+#define PORT_IN_IN19_MSK (0x1u << PORT_IN_IN19_OFF)
+
+/** \brief PORT IN.IN20 bit offset */
+#define PORT_IN_IN20_OFF 20u
+/** \brief PORT IN.IN20 bit mask */
+#define PORT_IN_IN20_MSK (0x1u << PORT_IN_IN20_OFF)
+
+/** \brief PORT IN.IN21 bit offset */
+#define PORT_IN_IN21_OFF 21u
+/** \brief PORT IN.IN21 bit mask */
+#define PORT_IN_IN21_MSK (0x1u << PORT_IN_IN21_OFF)
+
+/** \brief PORT IN.IN22 bit offset */
+#define PORT_IN_IN22_OFF 22u
+/** \brief PORT IN.IN22 bit mask */
+#define PORT_IN_IN22_MSK (0x1u << PORT_IN_IN22_OFF)
+
+/** \brief PORT IN.IN23 bit offset */
+#define PORT_IN_IN23_OFF 23u
+/** \brief PORT IN.IN23 bit mask */
+#define PORT_IN_IN23_MSK (0x1u << PORT_IN_IN23_OFF)
+
+/** \brief PORT IN.IN24 bit offset */
+#define PORT_IN_IN24_OFF 24u
+/** \brief PORT IN.IN24 bit mask */
+#define PORT_IN_IN24_MSK (0x1u << PORT_IN_IN24_OFF)
+
+/** \brief PORT IN.IN25 bit offset */
+#define PORT_IN_IN25_OFF 25u
+/** \brief PORT IN.IN25 bit mask */
+#define PORT_IN_IN25_MSK (0x1u << PORT_IN_IN25_OFF)
+
+/** \brief PORT IN.IN26 bit offset */
+#define PORT_IN_IN26_OFF 26u
+/** \brief PORT IN.IN26 bit mask */
+#define PORT_IN_IN26_MSK (0x1u << PORT_IN_IN26_OFF)
+
+/** \brief PORT IN.IN27 bit offset */
+#define PORT_IN_IN27_OFF 27u
+/** \brief PORT IN.IN27 bit mask */
+#define PORT_IN_IN27_MSK (0x1u << PORT_IN_IN27_OFF)
+
+/** \brief PORT IN.IN28 bit offset */
+#define PORT_IN_IN28_OFF 28u
+/** \brief PORT IN.IN28 bit mask */
+#define PORT_IN_IN28_MSK (0x1u << PORT_IN_IN28_OFF)
+
+/** \brief PORT IN.IN29 bit offset */
+#define PORT_IN_IN29_OFF 29u
+/** \brief PORT IN.IN29 bit mask */
+#define PORT_IN_IN29_MSK (0x1u << PORT_IN_IN29_OFF)
+
+/** \brief PORT IN.IN30 bit offset */
+#define PORT_IN_IN30_OFF 30u
+/** \brief PORT IN.IN30 bit mask */
+#define PORT_IN_IN30_MSK (0x1u << PORT_IN_IN30_OFF)
+
+/** \brief PORT IN.IN31 bit offset */
+#define PORT_IN_IN31_OFF 31u
+/** \brief PORT IN.IN31 bit mask */
+#define PORT_IN_IN31_MSK (0x1u << PORT_IN_IN31_OFF)
+
+/**@}*/
+
 /** \name PORT PINCFG register */
 /**@{*/
 
