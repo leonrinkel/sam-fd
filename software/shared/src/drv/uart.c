@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT */
 /**
- * \file      src/uart.c
+ * \file      src/drv/uart.c
  * \brief     Implementation of the UART driver
  * \copyright Copyright (c) 2023 Leon Rinkel
  */

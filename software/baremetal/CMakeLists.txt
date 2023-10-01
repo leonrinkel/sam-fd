@@ -40,15 +40,17 @@ add_link_options(
 
 add_executable(
 	${PROJECT_NAME}
-	src/can.c
-	src/flash.c
 	src/system.c
-	src/uart.c
+	../shared/src/drv/can.c
+	../shared/src/drv/flash.c
+	../shared/src/drv/uart.c
 )
 
 target_include_directories(
 	${PROJECT_NAME}
-	PRIVATE inc
+	PRIVATE
+		inc
+		../shared/inc
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX .elf)

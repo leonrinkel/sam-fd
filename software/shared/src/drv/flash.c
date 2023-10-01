@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT */
 /**
- * \file      src/flash.c
+ * \file      src/drv/flash.c
  * \brief     Implementation of the FLASH driver
  * \copyright Copyright (c) 2023 Leon Rinkel
  */
