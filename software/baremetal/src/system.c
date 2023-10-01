@@ -174,9 +174,6 @@ void setup_leds(void)
 	PORT_OUT.B.OUT10 = 1;
 }
 
-static uint8_t data[FLASH_PAGE_SIZE] =
-	"hello world lets write this to flash";
-
 void task_1ms(void)
 {
 	uint8_t c;
@@ -221,7 +218,7 @@ void task_1ms(void)
 
 		/* Test writing flash */
 		case 'w':
-			if (flash_write_page(0xF00u, data))
+			if (flash_write_row(0xF00u, some_data))
 			{
 				uart_write_char(' ');
 				uart_write_char('o');

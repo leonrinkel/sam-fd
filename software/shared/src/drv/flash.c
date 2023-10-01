@@ -95,3 +95,22 @@ bool flash_write_page(uint32_t page_addr, uint8_t* buffer)
 		!NVMCTRL_STATUS.B.NVME
 	);
 }
+
+bool flash_write_row(uint32_t row_addr, uint8_t* buffer)
+{
+	bool ret;
+
+	for (uint8_t page = 0; page < FLASH_PAGES_PER_ROW; page++)
+	{
+		ret = flash_write_page(
+			row_addr + page * FLASH_PAGE_SIZE,
+			buffer + page * FLASH_PAGE_SIZE
+		);
+		if (!ret)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}

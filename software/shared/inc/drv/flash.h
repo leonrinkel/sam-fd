@@ -19,4 +19,6 @@ bool flash_erase_row(uint32_t row_addr);
 
 bool flash_write_page(uint32_t page_addr, uint8_t* buffer);
 
+bool flash_write_row(uint32_t row_addr, uint8_t* buffer);
+
 #endif /* SAMFD_DRV_FLASH_H */
