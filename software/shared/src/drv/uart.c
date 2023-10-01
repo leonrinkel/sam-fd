@@ -78,7 +78,36 @@ void setup_uart(void)
 	while (SERCOM0_SYNCBUSY.U & SERCOM_SYNCBUSY_ENABLE_MSK);
 }
 
-uint8_t uart_write_char(uint8_t c)
+uint8_t uart_read_char(char* c)
+{
+	/* Disable interrupts */
+	__asm__ volatile ("cpsid i");
+
+	if (
+		/* Read buffer not empty */
+		read_buf_write_idx != read_buf_read_idx
+	)
+	{
+		/* Read char from buffer */
+		*c = read_buf[read_buf_read_idx];
+		read_buf_read_idx =
+			(read_buf_read_idx + 1) % BUFLEN;
+
+		/* Enable interrupts */
+		__asm__ volatile ("cpsie i");
+
+		return 1;
+	}
+	else /* Read buffer empty */
+	{
+		/* Enable interrupts */
+		__asm__ volatile ("cpsie i");
+
+		return 0;
+	}
+}
+
+uint8_t uart_write_char(char c)
 {
 	/* Disable interrupts */
 	__asm__ volatile ("cpsid i");
@@ -124,33 +153,48 @@ uint8_t uart_write_char(uint8_t c)
 	}
 }
 
-uint8_t uart_read_char(uint8_t* c)
+uint16_t uart_available(void)
 {
-	/* Disable interrupts */
-	__asm__ volatile ("cpsid i");
-
-	if (
-		/* Read buffer not empty */
-		read_buf_write_idx != read_buf_read_idx
-	)
+	if (read_buf_write_idx >= read_buf_read_idx)
 	{
-		/* Read char from buffer */
-		*c = read_buf[read_buf_read_idx];
-		read_buf_read_idx =
-			(read_buf_read_idx + 1) % BUFLEN;
-
-		/* Enable interrupts */
-		__asm__ volatile ("cpsie i");
-
-		return 1;
+		return read_buf_write_idx - read_buf_read_idx;
 	}
-	else /* Read buffer empty */
+	else
 	{
-		/* Enable interrupts */
-		__asm__ volatile ("cpsie i");
-
-		return 0;
+		return BUFLEN + read_buf_write_idx - read_buf_read_idx;
 	}
+}
+
+uint16_t uart_read(char* buf, uint16_t len)
+{
+	uint16_t nread = 0;
+
+	while (nread < len)
+	{
+		if (uart_read_char(buf) == 1)
+		{
+			buf++;
+			nread++;
+		}
+	}
+
+	return nread;
+}
+
+uint16_t uart_write(char* buf, uint16_t len)
+{
+	uint16_t nwriten = 0;
+
+	while (nwriten < len)
+	{
+		if (uart_write_char(*buf) == 1)
+		{
+			buf++;
+			nwriten++;
+		}
+	}
+
+	return nwriten;
 }
 
 void __attribute__((interrupt)) sercom0_handler(void)

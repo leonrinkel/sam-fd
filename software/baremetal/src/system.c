@@ -176,67 +176,48 @@ void setup_leds(void)
 
 void task_1ms(void)
 {
-	uint8_t c;
+	uint8_t cmd[2];
 	uint32_t crc;
 
-	if (uart_read_char(&c) == 1)
+	if (uart_available() == 2)
 	{
-		switch (c)
+		if (uart_read(cmd, 2) != 2)
 		{
-		case 'a':
-			uart_write_char(' ');
-			uart_write_char('p');
-			uart_write_char('r');
-			uart_write_char('e');
-			uart_write_char('s');
-			uart_write_char('s');
-			uart_write_char('e');
-			uart_write_char('d');
-			uart_write_char(' ');
-			uart_write_char('a');
-			uart_write_char(' ');
-			break;
+			return;
+		}
 
-		/* Test erasing flash */
-		case 'e':
+		if (cmd[0] == 'u' && cmd[1] == 'a')
+		{
+			uart_write(" pressed a ", 12);
+		}
+		else if (cmd[0] == 'f' && cmd[1] == 'e')
+		{
+			/* Test erasing flash */
 			if (flash_erase_row(0xF00u))
 			{
-				uart_write_char(' ');
-				uart_write_char('o');
-				uart_write_char('k');
-				uart_write_char(' ');
+				uart_write(" ok ", 5);
 			}
 			else
 			{
-				uart_write_char(' ');
-				uart_write_char('n');
-				uart_write_char('o');
-				uart_write_char('k');
-				uart_write_char(' ');
+				uart_write(" nok ", 6);
 			}
-			break;
-
-		/* Test writing flash */
-		case 'w':
+		}
+		else if (cmd[0] == 'f' && cmd[1] == 'w')
+		{
+			/* Test writing flash */
 			if (flash_write_row(0xF00u, some_data))
 			{
-				uart_write_char(' ');
-				uart_write_char('o');
-				uart_write_char('k');
-				uart_write_char(' ');
+				uart_write(" ok ", 5);
 			}
 			else
 			{
-				uart_write_char(' ');
-				uart_write_char('n');
-				uart_write_char('o');
-				uart_write_char('k');
-				uart_write_char(' ');
+				uart_write(" nok ", 6);
 			}
-			break;
+		}
+		else if (cmd[0] == 'h' && cmd[1] == 'c')
+		{
+			/* Test hardware accelerated CRC */
 
-		/* Test hardware accelerated CRC */
-		case 'c':
 			/* Unlock DSU write control */
 			PAC_WRCTRL.U =
 				(0x21 << PAC_WRCTRL_PERID_OFF) |
@@ -257,20 +238,12 @@ void task_1ms(void)
 			crc = DSU_DATA ^ 0xFFFFFFFFu; /* Final XOR value */
 			if (crc == 0x8E663A3Du)
 			{
-				uart_write_char(' ');
-				uart_write_char('o');
-				uart_write_char('k');
-				uart_write_char(' ');
+				uart_write(" ok ", 5);
 			}
 			else
 			{
-				uart_write_char(' ');
-				uart_write_char('n');
-				uart_write_char('o');
-				uart_write_char('k');
-				uart_write_char(' ');
+				uart_write(" nok ", 6);
 			}
-			break;
 		}
 	}
 }
@@ -278,8 +251,7 @@ void task_1ms(void)
 void task_10ms(void)
 {
 	/* UART transmit */
-	uart_write_char('y');
-	uart_write_char('o');
+	uart_write("yo", 2);
 }
 
 void task_100ms(void)
@@ -306,13 +278,7 @@ void task_100ms(void)
 void task_1000ms(void)
 {
 	/* UART transmit */
-	uart_write_char(' ');
-	uart_write_char('h');
-	uart_write_char('e');
-	uart_write_char('l');
-	uart_write_char('l');
-	uart_write_char('o');
-	uart_write_char(' ');
+	uart_write(" hello ", 8);
 }
 
 /**
