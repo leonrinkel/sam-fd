@@ -40,6 +40,7 @@ add_link_options(
 
 add_executable(
 	${PROJECT_NAME}
+	src/main.c
 	src/system.c
 	../shared/src/drv/can.c
 	../shared/src/drv/flash.c
