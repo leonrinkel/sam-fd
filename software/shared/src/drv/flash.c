@@ -44,7 +44,7 @@ bool flash_erase_row(uint32_t row_addr)
 	);
 }
 
-bool flash_write_page(uint32_t page_addr, uint8_t* buffer)
+bool flash_write_page(uint32_t page_addr, const uint8_t* buffer)
 {
 	uint32_t temp_addr = page_addr / 2;
 
@@ -96,7 +96,7 @@ bool flash_write_page(uint32_t page_addr, uint8_t* buffer)
 	);
 }
 
-bool flash_write_row(uint32_t row_addr, uint8_t* buffer)
+bool flash_write_row(uint32_t row_addr, const uint8_t* buffer)
 {
 	bool ret;
 

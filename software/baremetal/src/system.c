@@ -183,7 +183,7 @@ void setup_pins(void)
 
 void task_1ms(void)
 {
-	char cmd[2];
+	uint8_t cmd[2];
 	uint32_t crc;
 
 	if (uart_available() == 2)
@@ -195,18 +195,18 @@ void task_1ms(void)
 
 		if (cmd[0] == 'u' && cmd[1] == 'a')
 		{
-			uart_write(" pressed a ", 12);
+			uart_write((uint8_t*) " pressed a ", 12);
 		}
 		else if (cmd[0] == 'f' && cmd[1] == 'e')
 		{
 			/* Test erasing flash */
 			if (flash_erase_row(0xF00u))
 			{
-				uart_write(" ok ", 5);
+				uart_write((uint8_t*) " ok ", 5);
 			}
 			else
 			{
-				uart_write(" nok ", 6);
+				uart_write((uint8_t*) " nok ", 6);
 			}
 		}
 		else if (cmd[0] == 'f' && cmd[1] == 'w')
@@ -214,11 +214,11 @@ void task_1ms(void)
 			/* Test writing flash */
 			if (flash_write_row(0xF00u, some_data))
 			{
-				uart_write(" ok ", 5);
+				uart_write((uint8_t*) " ok ", 5);
 			}
 			else
 			{
-				uart_write(" nok ", 6);
+				uart_write((uint8_t*) " nok ", 6);
 			}
 		}
 		else if (cmd[0] == 'h' && cmd[1] == 'c')
@@ -245,11 +245,11 @@ void task_1ms(void)
 			crc = DSU_DATA ^ 0xFFFFFFFFu; /* Final XOR value */
 			if (crc == 0x8E663A3Du)
 			{
-				uart_write(" ok ", 5);
+				uart_write((uint8_t*) " ok ", 5);
 			}
 			else
 			{
-				uart_write(" nok ", 6);
+				uart_write((uint8_t*) " nok ", 6);
 			}
 		}
 	}
@@ -258,7 +258,7 @@ void task_1ms(void)
 void task_10ms(void)
 {
 	/* UART transmit */
-	uart_write("yo", 2);
+	uart_write((uint8_t*) "yo", 2);
 }
 
 void task_100ms(void)
@@ -295,7 +295,7 @@ void task_1000ms(void)
 	}
 
 	/* UART transmit */
-	uart_write(" hello ", 8);
+	uart_write((uint8_t*) " hello ", 8);
 }
 
 /**

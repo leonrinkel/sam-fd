@@ -12,15 +12,15 @@
 
 void setup_uart(void);
 
-uint8_t uart_read_char(char* c);
+uint8_t uart_read_char(uint8_t* c);
 
-uint8_t uart_write_char(char c);
+uint8_t uart_write_char(uint8_t c);
 
 uint16_t uart_available(void);
 
-uint16_t uart_read(char* buf, uint16_t len);
+uint16_t uart_read(uint8_t* buf, uint16_t len);
 
-uint16_t uart_write(char* buf, uint16_t len);
+uint16_t uart_write(const uint8_t* buf, uint16_t len);
 
 /** \brief SERCOM0 IRQ handler */
 void __attribute__((interrupt)) sercom0_handler(void);
