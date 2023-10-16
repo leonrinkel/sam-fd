@@ -2,7 +2,7 @@
 
 ATSAMC21 based CAN-FD interface
 
-![Render of the interface PCB](hardware/sam-fd.png)
+![Render of the interface PCB](rev1/sam-fd.png)
 
 ## Initialization
 
@@ -43,4 +43,4 @@ mcumgr \
 
 ## License
 
-Please see [hardware/LICENSE](hardware/LICENSE) and [sam-fd-sdk](https://git.leon.fyi/sam-fd-sdk). The software side of this project is based on [Zephyr](https://www.zephyrproject.org) which is mostly licensed under the [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0) license.
+Please see [hardware/LICENSE](rev1/LICENSE) and [sam-fd-sdk](https://git.leon.fyi/sam-fd-sdk). The software side of this project is based on [Zephyr](https://www.zephyrproject.org) which is mostly licensed under the [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0) license.
